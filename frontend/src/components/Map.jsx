@@ -13,7 +13,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import Loading from "./Loading";
-
+import TemporaryDrawer from "./Drawer";
 const MapComponent = () => {
   //5. Initialize local state.
   const [inputValue, setInputValue] = useState("");
@@ -109,6 +109,7 @@ const MapComponent = () => {
             <Popup>
               <h2>{marker.title}</h2>
               <p>{marker.description}</p>
+              <TemporaryDrawer markerObj={marker} />
             </Popup>
           </Marker>
         ))}

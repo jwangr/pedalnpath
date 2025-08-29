@@ -16,7 +16,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { NavLink } from 'react-router-dom';
 import Link from "next/link";
 
 const drawerWidth = 240;
@@ -39,8 +38,7 @@ function DrawerAppBar(props) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <NavLink to={`/${item}`}>
-              {item}</NavLink>
+            <Link href={`/${item.toLowerCase()}`}>{item}</Link>
           </ListItem>
         ))}
       </List>
@@ -79,9 +77,7 @@ function DrawerAppBar(props) {
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button key={item} sx={{ color: "#fff" }}>
-                <Link to={`/${item}`}>
-                  {item}
-                </Link>
+                <Link href={`/${item.toLowerCase()}`}>{item}</Link>
               </Button>
             ))}
           </Box>
