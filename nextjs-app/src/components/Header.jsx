@@ -80,13 +80,16 @@ function DrawerAppBar(props) {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography sx={{ textAlign: "center" }}>
-              <Link href={`/${setting.toLowerCase()}`}>{setting}</Link>
-            </Typography>
-          </MenuItem>
-        ))}
+        <MenuItem onClick={handleCloseUserMenu}>
+          <Typography sx={{ textAlign: "center" }}>
+            <Link href={`/profile`}>Profile</Link>
+          </Typography>
+        </MenuItem>
+        <MenuItem onClick={handleCloseUserMenu}>
+          <Typography sx={{ textAlign: "center" }}>
+            <Link href={`/api/auth/logout`}>Logout</Link>
+          </Typography>
+        </MenuItem>
       </Menu>
     </Box>
   );
