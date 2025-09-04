@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import { db } from "@/lib/db"; // Prisma client
+import { redirect } from "next/navigation";
 
 export async function GET(req) {
   return new Response(JSON.stringify({ message: "GET received" }), { status: 200 });
@@ -29,7 +30,7 @@ export async function POST(req) {
   });
 
   // set cookie (stored in user's browser. ON each request, browser reads the cookie, looks up session in DB and checks if valid)
-  cookies().set("sessionId", sessionId, {
+  await cookies().set("sessionId", sessionId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

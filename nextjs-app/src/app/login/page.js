@@ -21,7 +21,7 @@ export default function LoginPage() {
     })
 
     if (response.ok) {
-      router.push('/home') // add endpoint [id] for user
+      router.push('/') // add endpoint [id] for user
     } else {
       // Handle errors
     }
