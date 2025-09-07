@@ -30,7 +30,9 @@ export async function POST(req) {
     });
 
     // set cookie (stored in user's browser. ON each request, browser reads the cookie, looks up session in DB and checks if valid)
-    cookies().set("sessionId", sessionId, {
+    const cookieStore = await cookies();
+
+    cookieStore.set("sessionId", sessionId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",

@@ -5,7 +5,7 @@ import { Button, Stack, TextField } from '@mui/material';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -14,16 +14,21 @@ export default function LoginPage() {
     const email = formData.get('email')
     const password = formData.get('password')
 
-    const response = await fetch('/api/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     })
+    const data = response.json();
+
+    console.log(response)
+    console.log(data);
 
     if (response.ok) {
-      router.push('/') // add endpoint [id] for user
+      console.log("Login successful")
+      router.push('/profile') // add endpoint [id] for user
     } else {
-      // Handle errors
+      alert("Login failed")
     }
   }
 

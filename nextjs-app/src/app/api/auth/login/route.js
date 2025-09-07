@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import { db } from "@/lib/db"; // Prisma client
+import { NextResponse } from "next/server";
 
 export async function GET(req) {
   return new Response(JSON.stringify({ message: "GET received" }), { status: 200 });
@@ -23,14 +24,15 @@ export async function POST(req) {
 
   // create session
   const sessionId = uuid();
-    const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);  // expires in 14 days
+  const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);  // expires in 14 days
   await db.session.create({
     data: { id: sessionId, userId: user.id, expiresAt },
   });
 
   // set cookie (stored in user's browser. ON each request, browser reads the cookie, looks up session in DB and checks if valid)
+  const cookieStore = await cookies();
 
-  cookies().set("sessionId", sessionId, {
+  cookieStore.set("sessionId", sessionId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -38,5 +40,7 @@ export async function POST(req) {
     expires: expiresAt,
   });
 
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
+  return NextResponse.json(
+    { success: true, message: "Login successful", redirectTo: "/home" },
+    { status: 200 });
 }

@@ -41,6 +41,17 @@ function DrawerAppBar(props) {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const handleLogout = async () => {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    if (response.sucess) {
+      router.push("/home"); // add endpoint [id] for user
+    } else {
+      // Handle errors
+    }
+  };
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -87,14 +98,18 @@ function DrawerAppBar(props) {
         </MenuItem>
         <MenuItem onClick={handleCloseUserMenu}>
           <Typography sx={{ textAlign: "center" }}>
-            <Link href={`/api/auth/logout`}>Logout</Link>
+            <Button onClick={handleLogout}>Logout</Button>
           </Typography>
         </MenuItem>
       </Menu>
     </Box>
   );
 
-  const logIn = <Link href={`/login`}>Login</Link>;
+  const logIn = (
+    <Button sx={{ color: "#fff" }}>
+      <Link href={`/login`}>Login</Link>
+    </Button>
+  );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
