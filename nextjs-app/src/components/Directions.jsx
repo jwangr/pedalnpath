@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
-  GeoJSON,
   Marker,
   Popup,
   useMapEvents,
@@ -14,7 +13,6 @@ import {
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import polyline from "@mapbox/polyline";
 
@@ -36,8 +34,8 @@ const MapComponent = () => {
 
   const [coordinates, setCoordinates] = useState([]);
   const [markers, setMarkers] = useState([]);
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
+  const [start, setStart] = useState("Queenstown");
+  const [end, setEnd] = useState("Frankton");
   const [loading, setLoading] = useState(false);
 
   async function handleSearch(e) {
@@ -64,6 +62,7 @@ const MapComponent = () => {
 
     const startCoords = await geocode(start); // [-45.0321923,168.661]
     const endCoords = await geocode(end);
+    const waypoints = [startCoords, endCoords];
 
     // fetch data from api
     const response = await fetch("/api/directions", {
@@ -71,14 +70,15 @@ const MapComponent = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ start: startCoords, end: endCoords }),
+      body: JSON.stringify({ waypoints }),
     });
 
     //Parse and set the response data back in json.
     const data = await response.json();
+    console.log("client sided data getting processed")
 
     // fill the coordinates
-    const encoded = data.routes[0]?.geometry;
+    const encoded = data?.routes[0]?.geometry;
     const geometry = polyline.decode(encoded);
     console.log(geometry);
     setCoordinates(geometry);

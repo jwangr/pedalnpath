@@ -1,11 +1,9 @@
-import axios from "axios";
+import OSRMController from "@/lib/controllers/OSRMController";
+const osrmController = new OSRMController();
 
 export async function POST(req, res) {
-  const { start, end } = await req.json(); // destructure the body into start and finish coordinates (of format [lat, long])
-
-  const url =`http://localhost:5000/route/v1/bicycle/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&steps=true`;
-  
-  const response = await axios.get(url);
-  const data = response.data;
-  return new Response(JSON.stringify(data), { status: 200 });
+  const {waypoints} = await req.json(); // destructure the body into start and finish coordinates (of format [lat, long])
+  console.log(waypoints);
+  const response = await osrmController.getDirections(waypoints);
+  return new Response(JSON.stringify(response), { status: 200 });
 }
