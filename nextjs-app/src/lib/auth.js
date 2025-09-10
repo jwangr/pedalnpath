@@ -1,4 +1,5 @@
-// lib/auth.js
+// @/lib/auth.js
+// allows you to get user info based on cookie sessions
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 

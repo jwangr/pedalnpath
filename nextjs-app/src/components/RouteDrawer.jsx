@@ -1,11 +1,12 @@
-import React from "react";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 
+import WishlistSwitch from "./WishlistSwitch";
+
 export default function RouteDrawer({ BikeRoute }) {
+
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
       {/* Summary Card */}
@@ -33,6 +34,7 @@ export default function RouteDrawer({ BikeRoute }) {
             {BikeRoute.title}
           </Box>
         </CardContent>
+        <WishlistSwitch />
         <Divider />
 
         {/* Overall Rating and Comments */}
@@ -171,7 +173,7 @@ export default function RouteDrawer({ BikeRoute }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.distanceKm}
+              {BikeRoute.distanceKm} km
             </Box>
           </Box>
           <Box
@@ -215,7 +217,7 @@ export default function RouteDrawer({ BikeRoute }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.duration || '--'}
+              {BikeRoute.duration || "--"}
             </Box>
           </Box>
         </Box>
@@ -408,7 +410,7 @@ export default function RouteDrawer({ BikeRoute }) {
           </Box>
         </CardContent>
         <Divider />
-      </Card> 
+      </Card>
 
       {/* Reviews Card */}
       <Card

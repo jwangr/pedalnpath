@@ -13,7 +13,7 @@ export default class GeminiDao {
                     {
                         parts: [
                             {
-                                text: `List of bicycle tracks around ${location}? Return the result in valid JSON format, like this:
+                                text: `List of bicycle tracks around ${location}? Return the result in JSON format,
                                 [{
                                 title: "",
                                 description: "",

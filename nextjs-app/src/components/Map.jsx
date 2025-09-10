@@ -19,7 +19,7 @@ import TemporaryDrawer from "./Drawer";
 
 const MapComponent = () => {
   //5. Initialize local state.
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("Dunedin");
   const [markerData, setMarkerData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
@@ -78,11 +78,11 @@ const MapComponent = () => {
     setLoading(true);
 
     try {
-      //13. Set loading state and clear the input.
+      // Set loading state and clear the input.
       setSubmittedQuestion(inputValue);
       setInputValue("");
 
-      //14. Make the API request using fetch.
+      // Make the API request to Gemini.
       const response = await fetch("/api/gemini", {
         method: "POST",
         headers: {
@@ -124,30 +124,6 @@ const MapComponent = () => {
     console.log(geometry);
     setCoordinates(geometry);
   };
-
-  //     {
-  //   "coordinates": [
-  //     [-44.9889, 168.7044],
-  //     [-44.9909, 168.7070],
-  //     [-44.9926, 168.7095],
-  //     [-44.9938, 168.7123],
-  //     [-44.9944, 168.7154],
-  //     [-44.9943, 168.7187],
-  //     [-44.9935, 168.7217],
-  //     [-44.9920, 168.7245],
-  //     [-44.9900, 168.7269],
-  //     [-44.9875, 168.7287]
-  //   ],
-  //   "title": "Lake Hayes Loop (Partial - Northern Side)",
-  //   "description": "A segment of the Lake Hayes Loop focusing on the northern portion. Mostly flat with some gentle undulations. Gravel surface.",
-  //   "startCoordinate": [-44.9889, 168.7044],
-  //   "endCoordinate": [-44.9875, 168.7287],
-  //   "distanceKm": 2.5,
-  //   "difficulty": "Easy",
-  //   "surface": "Gravel",
-  //   "suitableFor": ["Mountain Bikes", "Hybrid Bikes", "E-bikes"],
-  //   "imageUrl": "https://example.com/lake-hayes-north.jpg"
-  // }
 
   //17. Return the JSX for rendering.
   return (
