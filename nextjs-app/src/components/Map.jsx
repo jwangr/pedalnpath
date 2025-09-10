@@ -98,7 +98,7 @@ const MapComponent = () => {
       console.log(data);
     } catch (error) {
       //16. Log errors.
-      console.error(error);
+      console.error(error + "unable to explore currently");
     } finally {
       setLoading(false);
     }
@@ -189,7 +189,7 @@ const MapComponent = () => {
       </MapContainer>
 
       {/* 24. Include the form input, submit button and area for submitted question. */}
-      <div className="absolute bottom-5 left-0 w-full z-[10000] p-3">
+      <div className="absolute bottom-5 left-0 w-full z-[500] p-3">
         <div className="flex justify-center">
           {/* {submittedQuestion && (
             <div className="flex items-center justify-center bottom-16 absolute w-full z-[100000]">

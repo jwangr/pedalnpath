@@ -13,7 +13,21 @@ export default class GeminiDao {
                     {
                         parts: [
                             {
-                                text: `List of bicycle tracks around ${location}? Respond in JSON like this: [{coordinates: [[0, 0], [0, 0], [0,0]], title: 'Example', description: '', startCoordinate: [0, 0], endCoordinate: [0, 0], ...].,`,
+                                text: `List of bicycle tracks around ${location}? Return the result in valid JSON format, like this:
+                                [{
+                                title: "",
+                                description: "",
+                                difficulty: "",
+                                distanceKm: number,
+                                duration: "",
+                                startCoordinate: [0, 0],
+                                endCoordinate: [0, 0],
+                                coordinates: [ [0, 0], [0, 0], [0, 0]]
+                                highlights: ["", "", ""],
+                                notes: "",
+                                trackType: "",
+                                suitableFor: ["", "", ""],
+                                }]`
                             },
                         ],
                     },
