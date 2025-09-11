@@ -17,22 +17,11 @@ export default async function Explore() {
   const allPaths = await allPathsController.getAllPaths();
   console.log(allPaths);
 
-  const allPathsAdd = async (newPath) => {
-    await allPathsController.createPath(newPath);
-  };
-  
-  const allPathsDelete = async (pathId) => {
-    await allPathsController.deletePath(pathId);
-  };
-  
-
   return (
     <>
       <ExplorePage
         userPaths={userPaths}
         allPaths={allPaths}
-        allPathsAdd={allPathsAdd}
-        allPathsDelete={allPathsDelete}
       />
     </>
   );

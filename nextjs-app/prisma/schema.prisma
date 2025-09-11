@@ -42,17 +42,10 @@ model Bikepath {
   trackType    String?
 
   highlights   Json? 
-  coordinates Json   // store as [[lat, lng], [lat, lng], ...]
+  coordinates  Json   // store as [[lat, lng], [lat, lng], ...]
 
-  suitableFor  BikepathSuitableFor[]
-  users         UserBikepath[]
-}
-
-model BikepathSuitableFor {
-  id          Int      @id @default(autoincrement())
-  suitableFor String
-  bikepathId  Int
-  bikepath    Bikepath @relation(fields: [bikepathId], references: [id], onDelete: Cascade)
+  suitableFor  Json?
+  users        UserBikepath[]
 }
 
 model UserBikepath {
