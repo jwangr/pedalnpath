@@ -4,9 +4,9 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 
 import WishlistSwitch from "./WishlistSwitch";
+import { LinearProgress } from "@mui/material";
 
-export default function RouteDrawer({ BikeRoute }) {
-
+export default function RouteDrawer({ BikeRoute, Loading, toggleLoad }) {
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
       {/* Summary Card */}
@@ -34,7 +34,10 @@ export default function RouteDrawer({ BikeRoute }) {
             {BikeRoute.title}
           </Box>
         </CardContent>
-        <WishlistSwitch />
+        <LinearProgress color='secondary' sx={{ width: '100%' }} />
+        <CardContent className="flex flex-row-reverse">
+          <WishlistSwitch bikeRoute={BikeRoute} Loading={Loading} toggleLoad={toggleLoad}/>
+        </CardContent>
         <Divider />
 
         {/* Overall Rating and Comments */}

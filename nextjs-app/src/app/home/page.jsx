@@ -116,7 +116,7 @@ const DunedinRoutes = [
   },
 ];
 
-const bikeRoute = DunedinRoutes[1];
+const bikeRoute = DunedinRoutes[2];
 
 export default function Home() {
   return (

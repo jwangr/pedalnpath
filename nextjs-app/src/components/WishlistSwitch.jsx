@@ -1,19 +1,18 @@
 "use client";
 
-import { FormControlLabel, FormGroup } from "@mui/material";
+import { FormControlLabel, FormGroup, LinearProgress } from "@mui/material";
 import Switch from "@mui/material/Switch";
-import { findPathByName, toggleAddDelete } from "@/actions/bikepath";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function WishlistSwitch({ bikeRoute }) {
+export default function WishlistSwitch({ bikeRoute, Loading, toggleLoading }) {
   const [added, setAdded] = useState(true); // set default as true instead of null (for controlled switch)
   const [errorMsg, setError] = useState(""); // set default as true instead of null (for controlled switch)
 
   // Load the initial value of added state
   useEffect(() => {
     async function fetchData() {
-      // fetch boolean from server action
+      // fetch from API route
       await axios
         .get(`/api/bikepath/findbyname`, {
           params: {
@@ -31,7 +30,9 @@ export default function WishlistSwitch({ bikeRoute }) {
   }, [bikeRoute.title]);
 
   const handleChange = async () => {
+    toggleLoading();
     // it will change the added state of the variable while updating the database
+    // send complex objects via POST instead of GET
     axios
       .post("/api/bikepath/toggleadd", bikeRoute)
       .then((response) => {
@@ -43,7 +44,9 @@ export default function WishlistSwitch({ bikeRoute }) {
       .catch((err) => {
         setError(err.message);
         console.log(err);
-      });
+      })
+      .finally(()=> {toggleLoading()})
+      
     setError(error);
   };
 
@@ -52,6 +55,7 @@ export default function WishlistSwitch({ bikeRoute }) {
 
   return (
     <FormGroup>
+      {Loading && <LinearProgress color='secondary' sx={{ width: '100%' }} />}
       <FormControlLabel
         label={label + error}
         control={

@@ -12,13 +12,14 @@ import RouteDrawer from './RouteDrawer';
 
 export default function TemporaryDrawer({markerObj}) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
   const DrawerList = (
-    <Box sx={{ width: "50vw" }} className="p-3 " role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: "50vw", minWidth: 250 }} className="p-3 " role="presentation" onClick={toggleDrawer(false)}>
       <div>{markerObj.title || "Example"}</div>
       <div>{markerObj.distance || "100m"}</div>
       <div>{markerObj.waypoints || "No waypoints"}</div>
@@ -50,12 +51,15 @@ export default function TemporaryDrawer({markerObj}) {
     "suitableFor": ["Families", "Beginners", "Casual cyclists"]
   }
 
+  const handleLoading = () => {
+    setLoading(prev => !prev)
+  }
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>Expand</Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {/* {DrawerList} */}
-        <RouteDrawer BikeRoute={markerObj}/>
+        <RouteDrawer BikeRoute={markerObj} Loading={loading} toggleLoad={handleLoading}/>
       </Drawer>
     </div>
   );

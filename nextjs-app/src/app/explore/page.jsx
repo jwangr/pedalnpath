@@ -3,10 +3,15 @@ import { db } from "@/lib/db";
 
 import { getSession } from "@/lib/auth"; // make sure this points to your next-auth options
 import BikePathDBController from "@/lib/controllers/BikePathDBController";
+import { redirect } from "next/navigation";
 const allPathsController = new BikePathDBController();
 
 export default async function Explore() {
   const user = await getSession();
+  console.log(user);
+  if (!user) {
+    return (redirect('home'))
+  }
 
   const userPaths = await db.userBikepath.findMany({
     where: { userId: user.id },
