@@ -5,9 +5,9 @@ import Switch from "@mui/material/Switch";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function WishlistSwitch({ bikeRoute, Loading, toggleLoading }) {
-  const [added, setAdded] = useState(true); // set default as true instead of null (for controlled switch)
-  const [errorMsg, setError] = useState(""); // set default as true instead of null (for controlled switch)
+export default function WishlistSwitch({ bikeRoute, Loading, toggleLoad }) {
+  const [added, setAdded] = useState(false); // set default as false instead of null (for controlled switch)
+  const [errorMsg, setError] = useState("");
 
   // Load the initial value of added state
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function WishlistSwitch({ bikeRoute, Loading, toggleLoading }) {
   }, [bikeRoute.title]);
 
   const handleChange = async () => {
-    toggleLoading();
+    toggleLoad(true);
     // it will change the added state of the variable while updating the database
     // send complex objects via POST instead of GET
     axios
@@ -45,8 +45,10 @@ export default function WishlistSwitch({ bikeRoute, Loading, toggleLoading }) {
         setError(err.message);
         console.log(err);
       })
-      .finally(()=> {toggleLoading()})
-      
+      .finally(() => {
+        toggleLoad(false);
+      });
+
     setError(error);
   };
 
@@ -54,20 +56,22 @@ export default function WishlistSwitch({ bikeRoute, Loading, toggleLoading }) {
   const error = errorMsg ? errorMsg : "";
 
   return (
-    <FormGroup>
-      {Loading && <LinearProgress color='secondary' sx={{ width: '100%' }} />}
-      <FormControlLabel
-        label={label + error}
-        control={
-          <Switch
-            color="secondary"
-            checked={added}
-            onChange={handleChange}
-            slotProps={{ input: { "aria-label": "controlled" } }}
-          />
-        }
-      />
-      <div>{error}</div>
-    </FormGroup>
+    <>
+      {Loading && <LinearProgress color="secondary" sx={{ width: "100%" }} />}
+      <FormGroup className="flex flex-row-reverse">
+        <FormControlLabel
+          label={label + error}
+          control={
+            <Switch
+              color="secondary"
+              checked={added}
+              onChange={handleChange}
+              slotProps={{ input: { "aria-label": "controlled" } }}
+            />
+          }
+        />
+        <div>{error}</div>
+      </FormGroup>
+    </>
   );
 }
