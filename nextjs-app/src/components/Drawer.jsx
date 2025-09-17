@@ -6,7 +6,7 @@ import RouteDrawer from './RouteDrawer';
 
 export default function TemporaryDrawer({markerObj}) {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
