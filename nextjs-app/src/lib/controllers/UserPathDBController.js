@@ -9,6 +9,8 @@ export default class UserPathDBController {
         const title = searchParams?.get('title');
         const userId = Number(searchParams?.get('id'));
 
+        console.log(`Searching for user ${userId}, title ${title}`)
+
         // returns specific UserPath with 'title'
         if (title) {
             return await dao.findPathByName(title, userId)
@@ -48,6 +50,7 @@ export default class UserPathDBController {
 
     async toggleAddDelete(req) {
         const { userId, path } = await req.json();
+        console.log(`UserPath controller received ${userId, path}`)
 
         // check if path is in global database
         const bikepath = await pathDao.findPathByName(path.title)
@@ -55,10 +58,11 @@ export default class UserPathDBController {
         if (!bikepath) {
             // add to global database and user's profile
             const newPath = await pathDao.createPath(path);
-            dao.savePath(newPath.id, userId)
+            console.log('Created new path in global database. Adding to user list.')
+            return await dao.savePath(newPath.id, userId)
         }
 
-        // check if path is in user's database
+        // else path exists but check if path is in user's database
         const saved = await dao.findPathByName(path.title, userId)
 
         console.log(`In the global database: ${saved}`)

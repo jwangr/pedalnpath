@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 
-import WishlistSwitch from "./WishlistSwitch";
+import UserPathsToggle from "./UserPathsToggle";
 
 export default function RouteDrawer({ BikeRoute, Loading, toggleLoad }) {
   return (
@@ -34,7 +34,7 @@ export default function RouteDrawer({ BikeRoute, Loading, toggleLoad }) {
           </Box>
         </CardContent>
         <CardContent>
-          <WishlistSwitch
+          <UserPathsToggle
             bikeRoute={BikeRoute}
             Loading={Loading}
             toggleLoad={toggleLoad}

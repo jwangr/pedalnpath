@@ -38,13 +38,14 @@ export default class UserPathDao {
             },
         });
 
-        return newPath;
+        return { newPath, added: true };
     }
 
     async deletePath(id, userId) {
-        return await db.userPath.delete({
+        const path = await db.userPath.delete({
             where: { id, userId }
         })
+        return { path, added: false }
     }
 
     async toggleCompleted(id, completedStatus) {

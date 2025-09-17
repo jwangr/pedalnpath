@@ -4,8 +4,13 @@ const controller = new UserPathDBController();
 
 // finds all paths in userPathsDB or specified path
 export async function GET(req) {
-    const response = await controller.getPaths(req);
-    return new Response(JSON.stringify(response), { status: 200 })
+    try {
+        const response = await controller.getPaths(req);
+        return new Response(JSON.stringify(response), { status: 200 })
+    } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }, { status: 404 }))
+    }
+
 }
 
 export async function DELETE(req) {

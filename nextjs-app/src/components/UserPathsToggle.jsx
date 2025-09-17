@@ -5,23 +5,28 @@ import Switch from "@mui/material/Switch";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function WishlistSwitch({ bikeRoute, Loading, toggleLoad }) {
-  const [added, setAdded] = useState(false); // set default as false instead of null (for controlled switch)
+export default function UserPathsToggle({
+  bikeRoute,
+  Loading,
+  toggleLoad,
+  // userId,
+}) {
+  const [added, setAdded] = useState(true); // set default as false instead of null (for controlled switch)
   const [errorMsg, setError] = useState("");
 
-  // Load the initial value of added state
+  // Load the initial value of 'added'
   useEffect(() => {
     async function fetchData() {
-      // fetch from API route
       await axios
-        .get(`/api/bikepath/findbyname`, {
+        .get(`/api/userpath`, {
           params: {
             title: bikeRoute.title,
+            id: 4,
           },
         })
         .then((response) => {
           console.log(
-            `Path found in global database ${JSON.stringify(response.data)}`
+            `Path found in user's database ${JSON.stringify(response.data)}`
           );
           setAdded(!!response.data);
         });
@@ -34,11 +39,12 @@ export default function WishlistSwitch({ bikeRoute, Loading, toggleLoad }) {
     // it will change the added state of the variable while updating the database
     // send complex objects via POST instead of GET
     axios
-      .post("/api/bikepath/toggleadd", bikeRoute)
+      .post("/api/userpath", {
+        userId: 4,
+        path: bikeRoute,
+      })
       .then((response) => {
-        console.log(
-          `Response from wishlist toggle: ${JSON.stringify(response.data)}`
-        );
+        console.log(`Response from toggle: ${JSON.stringify(response.data)}`);
         setAdded(!!response.data.added);
       })
       .catch((err) => {

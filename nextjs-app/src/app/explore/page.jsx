@@ -13,7 +13,7 @@ export default async function Explore() {
     return (redirect('home'))
   }
 
-  const userPaths = await db.userBikepath.findMany({
+  const userPaths = await db.userPath.findMany({
     where: { userId: user.id },
     include: { bikepath: true },
   });
