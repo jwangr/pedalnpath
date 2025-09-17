@@ -16,3 +16,9 @@ export async function DELETE(req) {
         return new Response(JSON.stringify({ error: error.message }), { status: 404 })
     }
 }
+
+export async function POST(req) {
+    const response = await controller.toggleAddDelete(req);
+    return new Response(JSON.stringify(response), { status: 200 })
+
+}

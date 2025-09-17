@@ -1,5 +1,7 @@
+import BikePathDao from "../dao/BikePathDao";
 import UserPathDao from "../dao/UserPathDao";
 const dao = new UserPathDao();
+const pathDao = new BikePathDao();
 
 export default class UserPathDBController {
     async getPaths(req) {
@@ -23,7 +25,7 @@ export default class UserPathDBController {
         return await dao.findPathByName()
     }
 
-    async savePath(userId, bikepathId) {
+    async savePath(bikepathId, userId) {
         return await dao.savePath()
     }
 
@@ -41,6 +43,30 @@ export default class UserPathDBController {
 
         // else return error message if path is not in database
         return await dao.deletePath(id, userId)
+
+    }
+
+    async toggleAddDelete(req) {
+        const { userId, path } = await req.json();
+
+        // check if path is in global database
+        const bikepath = await pathDao.findPathByName(path.title)
+
+        if (!bikepath) {
+            // add to global database and user's profile
+            const newPath = await pathDao.createPath(path);
+            dao.savePath(newPath.id, userId)
+        }
+
+        // check if path is in user's database
+        const saved = await dao.findPathByName(path.title, userId)
+
+        console.log(`In the global database: ${saved}`)
+
+        if (saved) {
+            return await dao.deletePath(saved.id, userId)
+        }
+        return await dao.savePath(bikepath.id, userId)
 
     }
 }
