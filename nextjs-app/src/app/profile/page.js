@@ -17,7 +17,7 @@ export default async function ProfilePage() {
     if (user) {
         return (
             <div>ProfilePage for {user?.email}
-                <UserPathsContainer displayPaths={userPaths}/>
+                <UserPathsContainer displayPaths={userPaths} userId={user.id}/>
             </div>
         )
     } else {

@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PathsItem from "./PathsItem";
 
-export default function PathsContainer({ displayPaths }) {
+export default function PathsContainer({ displayPaths, userId }) {
   return (
     <Box sx={{ flexGrow: 1, margin: 3 }}>
       {displayPaths.map((bikeRoute) => (
@@ -19,7 +19,7 @@ export default function PathsContainer({ displayPaths }) {
         }}
       >
         {displayPaths.map((path) => (
-          <PathsItem key={path.id} path={path} />
+          <PathsItem key={path.id} path={path} userId={userId} />
         ))}
       </Grid>
     </Box>

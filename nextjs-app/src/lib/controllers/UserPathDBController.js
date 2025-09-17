@@ -9,8 +9,6 @@ export default class UserPathDBController {
         const title = searchParams?.get('title');
         const userId = Number(searchParams?.get('id'));
 
-        console.log(`Searching for user ${userId}, title ${title}`)
-
         // returns specific UserPath with 'title'
         if (title) {
             return await dao.findPathByName(title, userId)

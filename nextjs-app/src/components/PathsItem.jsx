@@ -1,8 +1,21 @@
-import React from "react";
-import { Box, CardContent, Grid, Typography, Paper } from "@mui/material";
+"use client";
+
+import React, { useState } from "react";
+import {
+  Box,
+  CardContent,
+  Grid,
+  Typography,
+  Paper,
+  LinearProgress,
+} from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 
-export default function PathsItem({ path }) {
+export default function PathsItem({ path, userId }) {
+  const [loading, setLoading] = useState(false);
+  const toggleLoad = (status) => {
+    setLoading(status);
+  };
   return (
     <Grid size={{ xs: 12, sm: 6 }}>
       <Paper
@@ -32,7 +45,11 @@ export default function PathsItem({ path }) {
         </Box>
 
         <CardContent sx={{ flex: 1 }}>
-            <ToggleCompleted />
+          <ToggleCompleted
+            bikeRoute={path}
+            userId={userId}
+            toggleLoad={toggleLoad}
+          />
           {/* <Typography
             gutterBottom
             sx={{ color: "text.secondary", fontSize: 14 }}
@@ -68,6 +85,9 @@ export default function PathsItem({ path }) {
           >
             {path.bikepath.description}
           </Typography>
+          {loading && (
+            <LinearProgress color="secondary" sx={{ width: "100%" }} />
+          )}
         </CardContent>
       </Paper>
     </Grid>

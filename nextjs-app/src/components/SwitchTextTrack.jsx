@@ -15,7 +15,7 @@ export const SwitchTextTrack = styled(Switch)({
     backgroundColor: "#fff",
   },
   [`& .${switchClasses.track}`]: {
-    background: "linear-gradient(to right, #ee0979, #ff6a00)",
+    background: "linear-gradient(90deg, #cf37dcff, #261f86ff)",
     opacity: "1 !important",
     borderRadius: 20,
     position: "relative",
@@ -31,12 +31,12 @@ export const SwitchTextTrack = styled(Switch)({
       fontWeight: 500,
     },
     "&:before": {
-      content: '"ON"',
+      content: '"Done"',
       left: 4,
       opacity: 0,
     },
     "&:after": {
-      content: '"OFF"',
+      content: '"To-do"',
       right: 4,
     },
   },
@@ -52,7 +52,7 @@ export const SwitchTextTrack = styled(Switch)({
       backgroundColor: "#fff",
     },
     [`& + .${switchClasses.track}`]: {
-      background: "linear-gradient(to right, #43cea2, #185a9d)",
+      background: "linear-gradient(to right, #75f479ff, #2d8181ff)",
       "&:before": {
         opacity: 1,
       },
