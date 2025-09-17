@@ -10,8 +10,9 @@ import {
   LinearProgress,
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
+import UserPathsToggle from "./UserPathsToggle";
 
-export default function PathsItem({ path, userId }) {
+export default function PathsItem({ path, userId, displayUserPathsToggle }) {
   const [loading, setLoading] = useState(false);
   const toggleLoad = (status) => {
     setLoading(status);
@@ -45,17 +46,22 @@ export default function PathsItem({ path, userId }) {
         </Box>
 
         <CardContent sx={{ flex: 1 }}>
-          <ToggleCompleted
-            bikeRoute={path}
-            userId={userId}
-            toggleLoad={toggleLoad}
-          />
-          {/* <Typography
-            gutterBottom
-            sx={{ color: "text.secondary", fontSize: 14 }}
-          >
-            {path.completed ? "✔️ Completed" : "Not completed"}
-          </Typography> */}
+          {!displayUserPathsToggle && (
+            <ToggleCompleted
+              bikeRoute={path}
+              userId={userId}
+              toggleLoad={toggleLoad}
+            />
+          )}
+
+          {displayUserPathsToggle && (
+            <UserPathsToggle
+              bikeRoute={path}
+              Loading={loading}
+              toggleLoad={toggleLoad}
+            />
+          )}
+
           <Typography
             variant="h5"
             component="div"
@@ -67,10 +73,10 @@ export default function PathsItem({ path, userId }) {
               textOverflow: "ellipsis",
             }}
           >
-            {path.bikepath.title}
+            {path.bikepath?.title || path.title}
           </Typography>
           <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            {path.bikepath.distanceKm || "?"} km
+            {path.bikepath?.distanceKm || path.distanceKm || "?"} km
           </Typography>
 
           <Typography
@@ -83,7 +89,7 @@ export default function PathsItem({ path, userId }) {
               textOverflow: "ellipsis",
             }}
           >
-            {path.bikepath.description}
+            {path.bikepath?.description || path.description}
           </Typography>
           {loading && (
             <LinearProgress color="secondary" sx={{ width: "100%" }} />

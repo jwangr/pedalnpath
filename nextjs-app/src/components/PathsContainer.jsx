@@ -5,12 +5,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PathsItem from "./PathsItem";
 
-export default function PathsContainer({ displayPaths, userId }) {
+export default function PathsContainer({ displayPaths, userId, displayUserPathsToggle }) {
   return (
     <Box sx={{ flexGrow: 1, margin: 3 }}>
-      {displayPaths.map((bikeRoute) => (
-        <div key={bikeRoute.id}>{bikeRoute.title}</div>
-      ))}
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -19,7 +16,7 @@ export default function PathsContainer({ displayPaths, userId }) {
         }}
       >
         {displayPaths.map((path) => (
-          <PathsItem key={path.id} path={path} userId={userId} />
+          <PathsItem key={path.id} path={path} userId={userId} displayUserPathsToggle={displayUserPathsToggle} />
         ))}
       </Grid>
     </Box>
