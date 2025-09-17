@@ -17,7 +17,7 @@ model User {
   password String
 
   sessions Session[]
-  bikepaths      UserBikepath[]  // back-relation to UserBikepath
+  bikepaths      UserPath[]  // back-relation to UserPath
 }
 
 model Session {
@@ -45,15 +45,18 @@ model Bikepath {
   coordinates  Json   // store as [[lat, lng], [lat, lng], ...]
 
   suitableFor  Json?
-  users        UserBikepath[]
+  users        UserPath[]
 }
 
-model UserBikepath {
+model UserPath {
   id         Int      @id @default(autoincrement())
   userId     Int
   bikepathId Int
-  assignedAt DateTime @default(now())
+  dateAdded DateTime @default(now())
+  completed Boolean @default(false)
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   bikepath Bikepath @relation(fields: [bikepathId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bikepathId])
 }
