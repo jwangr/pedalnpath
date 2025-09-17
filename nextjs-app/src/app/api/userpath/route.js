@@ -41,6 +41,7 @@ export async function POST(req) {
 export async function PUT(req) {
     // Example payload: {
     //     "userId": 4,
+    //      "pathId": 30,
     //     "path": {
     //     "title": "test run",
     //         "startCoordinate": [0, 0],

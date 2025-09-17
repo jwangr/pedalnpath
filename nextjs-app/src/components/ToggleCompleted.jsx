@@ -17,7 +17,7 @@ export default function ToggleCompleted({ bikeRoute, userId, toggleLoad }) {
     axios
       .put("/api/userpath", {
         userId,
-        path: bikeRoute,
+        pathId: bikeRoute.id
       })
       .then((response) => {
         console.log(`Response from toggle: ${JSON.stringify(response.data)}`);

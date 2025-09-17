@@ -73,16 +73,10 @@ export default class UserPathDBController {
     }
 
     async toggleCompleted(req) {
-        const { userId, path } = await req.json();
+        const { userId, pathId } = await req.json();
+        const current = await dao.findPathById(Number(pathId), userId);
 
-        // find the UserPath which matches userId and Path
-        const saved = await dao.findPathByName(path.title, userId)
-
-        if (!saved) {
-            throw new Error("Not saved in user's list")
-        }
-
-        return await dao.toggleCompleted(saved.id, !saved.completed)
+        return await dao.toggleCompleted(Number(pathId), !current.completed)
     }
 
 }
