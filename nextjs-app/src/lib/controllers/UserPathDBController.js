@@ -27,7 +27,20 @@ export default class UserPathDBController {
         return await dao.savePath()
     }
 
-    async deletePath(id) {
-        return await dao.deletePath()
+    async deletePath(req) {
+        const { searchParams } = new URL(req.url)
+        const userId = Number(searchParams?.get('id'));
+        const id = Number(searchParams.get('id'))
+
+        // check that this path is in database
+        const route = dao.findPathById(id, userId)
+
+        if (!route) {
+            throw new Error("Path isn't saved to user's profile")
+        }
+
+        // else return error message if path is not in database
+        return await dao.deletePath(id, userId)
+
     }
 }

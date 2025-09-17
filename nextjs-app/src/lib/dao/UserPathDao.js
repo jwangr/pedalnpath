@@ -20,7 +20,16 @@ export default class UserPathDao {
         })
     }
 
-    async savePath(userId, bikepathId) {
+    async findPathById(id, userId) {
+        return await db.userPath.findFirst({
+            where: {
+                id,
+                userId
+            }
+        })
+    }
+
+    async savePath(bikepathId, userId) {
 
         const newPath = await db.userPath.create({
             data: {
@@ -32,9 +41,9 @@ export default class UserPathDao {
         return newPath;
     }
 
-    async deletePath(id) {
+    async deletePath(id, userId) {
         return await db.userPath.delete({
-            where: { id }
+            where: { id, userId }
         })
     }
 }
