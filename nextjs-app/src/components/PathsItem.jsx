@@ -30,7 +30,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         }}
       >
         <Box
-          sx={{ width: { xs: "100%", sm: 200 }, height: 150, flexShrink: 0 }}
+          sx={{ width: { xs: "100%", sm: 200 }, height: "auto", flexShrink: 0 }}
         >
           <img
             src={
@@ -40,7 +40,6 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              borderRadius: 4,
             }}
           />
         </Box>
