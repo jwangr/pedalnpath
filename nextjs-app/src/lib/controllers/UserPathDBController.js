@@ -69,4 +69,18 @@ export default class UserPathDBController {
         return await dao.savePath(bikepath.id, userId)
 
     }
+
+    async toggleCompleted(req) {
+        const { userId, path } = await req.json();
+
+        // find the UserPath which matches userId and Path
+        const saved = await dao.findPathByName(path.title, userId)
+
+        if (!saved) {
+            throw new Error("Not saved in user's list")
+        }
+
+        return await dao.toggleCompleted(saved.id, !saved.completed)
+    }
+
 }

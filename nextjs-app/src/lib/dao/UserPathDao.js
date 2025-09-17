@@ -46,4 +46,16 @@ export default class UserPathDao {
             where: { id, userId }
         })
     }
+
+    async toggleCompleted(id, completedStatus) {
+        return await db.userPath.update({
+            where: {
+                id
+            },
+            data: {
+                completed: completedStatus
+            }
+        })
+    }
+
 }
