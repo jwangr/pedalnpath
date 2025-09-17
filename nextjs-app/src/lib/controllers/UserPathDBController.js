@@ -79,7 +79,7 @@ export default class UserPathDBController {
         if (!saved) {
             throw new Error("Not saved in user's list")
         }
-        
+
         return await dao.toggleCompleted(saved.id, !saved.completed)
     }
 
