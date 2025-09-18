@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Box from "@mui/material/Box";
 import { getSession } from "@/lib/auth";
+import { StoreProvider } from "@/store/StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,13 +24,15 @@ export default async function RootLayout({ children }) {
   const user = await getSession();
 
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header session={user}/>
-        <Box sx={{ mt: 8 }}>{children}</Box>
-      </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Header session={user} />
+          <Box sx={{ mt: 8 }}>{children}</Box>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
