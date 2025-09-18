@@ -142,7 +142,7 @@ function DrawerAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Pedal N' Path
+            <Link href={`/home`}>Pedal N' Path</Link> 
           </Typography>
 
           {/* Page Name */}

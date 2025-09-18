@@ -16,10 +16,11 @@ import "leaflet-defaulticon-compatibility";
 import Loading from "./Loading";
 import polyline from "@mapbox/polyline";
 import TemporaryDrawer from "./Drawer";
+import { TextField } from "@mui/material";
 
 const MapComponent = () => {
   //5. Initialize local state.
-  const [inputValue, setInputValue] = useState("Dunedin");
+  const [inputValue, setInputValue] = useState("");
   const [markerData, setMarkerData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
@@ -50,9 +51,10 @@ const MapComponent = () => {
     //10. useEffect to trigger the map fly when markerData changes.
     useEffect(() => {
       if (
-        markerData.length >= 1 &&
+        markerData.length >= 2 &&
         typeof markerData[0].coordinates[0] !== "undefined"
       ) {
+        console.log(`Flying to next markers: Note marker data is longer than 2 items long.`)
         const index = markerData.length - 2;
         flyToMarker(markerData[index].startCoordinate, 10);
       }
@@ -62,7 +64,7 @@ const MapComponent = () => {
     useEffect(() => {
       if (coordinates?.[0]) {
         map.flyToBounds(coordinates, {
-          padding: [80,80],
+          padding: [80, 80],
           animate: true,
           duration: 1
         })
@@ -76,6 +78,9 @@ const MapComponent = () => {
   //12. Function to handle form submission.
   const handleSubmit = async () => {
     setLoading(true);
+    console.log('Clearing marker data and coordinates');
+    setMarkerData([]);
+    setCoordinates([]);
 
     try {
       // Set loading state and clear the input.
@@ -94,8 +99,8 @@ const MapComponent = () => {
       //15. Parse and set the response data.
       const data = await response.json();
 
-      setMarkerData([...markerData, ...data]);
-      console.log(data);
+      setMarkerData([...data]);
+      console.log(`MarkerData: ${markerData}`);
     } catch (error) {
       //16. Log errors.
       console.error(error + "unable to explore currently");
@@ -165,21 +170,13 @@ const MapComponent = () => {
       </MapContainer>
 
       {/* 24. Include the form input, submit button and area for submitted question. */}
-      <div className="absolute bottom-5 left-0 w-full z-[500] p-3">
+      <div className="absolute bottom-15 left-0 w-full z-[500] p-3">
         <div className="flex justify-center">
-          {/* {submittedQuestion && (
-            <div className="flex items-center justify-center bottom-16 absolute w-full z-[100000]">
-              <h1 className="text-3xl font-bold text-black p-2 bg-white rounded-md">
-                {submittedQuestion}
-              </h1>
-            </div>
-          )} */}
 
-          <input
-            type="text"
+          <TextField id="filled-basic" label="Explore with Gemini" color="secondary" variant="outlined"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="flex-grow p-2 border rounded-md"
+            className="flex-grow p-2 border rounded-md bg-white/75"
             onKeyUp={(e) => {
               if (e.key === "Enter") {
                 handleSubmit();

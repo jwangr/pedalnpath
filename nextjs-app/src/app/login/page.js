@@ -33,7 +33,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Stack spacing={2} margin={5}>
+    <Stack spacing={2} margin={10}>
       <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <TextField type="email" name="email" label="Email" variant="outlined" placeholder="Email" required />

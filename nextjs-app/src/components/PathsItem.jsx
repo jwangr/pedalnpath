@@ -2,6 +2,18 @@
 
 import React, { useState } from "react";
 import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+  useMap,
+  Polyline,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
+import "leaflet-defaulticon-compatibility";
+import {
   Box,
   CardContent,
   Grid,
@@ -18,7 +30,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
     setLoading(status);
   };
   return (
-    <Grid size={{ xs: 12, sm: 6 }}>
+    <Grid size={{ xs: 12, md: 6 }}>
       <Paper
         sx={{
           display: "flex",
@@ -30,9 +42,9 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         }}
       >
         <Box
-          sx={{ width: { xs: "100%", sm: 200 }, height: "auto", flexShrink: 0 }}
+          sx={{ width: { xs: "100%", sm: 200 }, height: "200px", flexShrink: 0 }}
         >
-          <img
+          {/* <img
             src={
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ5KKUj1VxzVKe_B_T3uyO27L5gqVO0SCnog&s"
             }
@@ -41,7 +53,18 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
               height: "100%",
               objectFit: "contain",
             }}
-          />
+          /> */}
+          <MapContainer
+            center={[-45.0302, 168.6615]}
+            zoom={12}
+            style={{ height: "100%", width: "100%" }}
+          >
+            {/* 21. Set the tile layer for the map. */}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </MapContainer>
         </Box>
 
         <CardContent sx={{ flex: 1 }}>
