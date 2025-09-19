@@ -44,16 +44,6 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         <Box
           sx={{ width: { xs: "100%", sm: 200 }, height: "200px", flexShrink: 0 }}
         >
-          {/* <img
-            src={
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ5KKUj1VxzVKe_B_T3uyO27L5gqVO0SCnog&s"
-            }
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          /> */}
           <MapContainer
             center={[-45.0302, 168.6615]}
             zoom={12}

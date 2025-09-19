@@ -3,7 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Box from "@mui/material/Box";
 import { getSession } from "@/lib/auth";
-import { StoreProvider } from "@/store/StoreProvider";
+
+import StoreProvider from "@/store/StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

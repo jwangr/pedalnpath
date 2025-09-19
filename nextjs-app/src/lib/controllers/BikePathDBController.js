@@ -2,31 +2,38 @@ import BikePathDao from "../dao/BikePathDao";
 const dao = new BikePathDao();
 
 export default class BikePathDBController {
-    async getAllPaths() {
-        return await dao.getAllPaths()
+  async getPaths(req) {
+    const { searchParams } = new URL(req.url);
+    const title = searchParams?.get("title");
+
+    if (title) {
+      return await dao.findPathByName(title);
     }
 
-    async createPath(path) {
-        return await dao.createPath(path);
-    }
+    return await dao.getAllPaths();
+  }
 
-    async deletePath(id) {
-        return await dao.deletePath(id);
-    }
+  async createPath(req) {
+    const path = await req.json();
+    return await dao.createPath(path);
+  }
 
-    async findPathByName(name) {
-        return await dao.findPathByName(name);
-    }
+  async deletePath(req) {
+    const { searchParams } = new URL(req.url);
+    const id = Number(searchParams?.get("id"));
 
-    async toggleAddDelete(path) {
-        const checkPath = await this.findPathByName(path.title);
+    return await dao.deletePath(id);
+  }
 
-        if (checkPath) {
-            await this.deletePath(checkPath.id);
-            return { added: false };
-        } else {
-            await this.createPath(path);
-            return { added: true };
-        }
+  async toggleAddDelete(path) {
+    const checkPath = await dao.findPathByName(path.title);
+
+    if (checkPath) {
+      await dao.deletePath(checkPath.id);
+      return { added: false };
+    } else {
+      await dao.createPath(path);
+      return { added: true };
     }
+  }
 }

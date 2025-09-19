@@ -22,7 +22,7 @@ export default class UserPathDBController {
     }
 
     async findPathByName(title) {
-        return await dao.findPathByName()
+        return await dao.findPathByName(title)
     }
 
     async savePath(bikepathId, userId) {
