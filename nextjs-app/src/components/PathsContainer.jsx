@@ -19,6 +19,8 @@ export default function PathsContainer({
     isLoading,
     isError,
   } = useGetBikePathsQuery();
+
+  
   
   console.log('Error' + error)
   console.log('Data' + JSON.stringify(data))

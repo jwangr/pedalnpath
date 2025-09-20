@@ -25,14 +25,10 @@ export default class UserPathDBController {
         return await dao.findPathByName(title)
     }
 
-    async savePath(bikepathId, userId) {
-        return await dao.savePath()
-    }
-
     async deletePath(req) {
         const { searchParams } = new URL(req.url)
         const userId = Number(searchParams?.get('id'));
-        const id = Number(searchParams.get('id'))
+        const id = Number(searchParams.get('pathId'))
 
         // check that this path is in database
         const route = dao.findPathById(id, userId)
