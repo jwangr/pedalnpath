@@ -9,11 +9,11 @@ export default async function ProfilePage() {
     const user = await getSession();
     console.log(user);
 
-    const userPaths = await db.userPath.findMany({
-        where: { userId: user.id },
-        include: { bikepath: true },
-    });
-    console.log(userPaths);
+    // const userPaths = await db.userPath.findMany({
+    //     where: { userId: user.id },
+    //     include: { bikepath: true },
+    // });
+    // console.log(userPaths);
 
     if (user) {
         return (
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
                     </Card>
                 </Box>
 
-                <UserPathsContainer displayPaths={userPaths} userId={user.id} displayUserPathsToggle={false} />
+                <UserPathsContainer displayPaths={"user"} userId={user.id} displayUserPathsToggle={false} />
             </div>
         )
     } else {
