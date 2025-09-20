@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import AllPathsContainer from "@/components/PathsContainer";
 
 
-export default async function ProfilePage() {
+export default async function HomePage() {
     const user = await getSession();
     console.log(user);
 
