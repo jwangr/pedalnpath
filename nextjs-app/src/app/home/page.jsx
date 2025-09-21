@@ -8,14 +8,14 @@ export default async function HomePage() {
     const user = await getSession();
     console.log(user);
 
-    const AllPaths = await db.bikepath.findMany({});
-    console.log(AllPaths);
+    // const AllPaths = await db.bikepath.findMany({});
+    // console.log(AllPaths);
 
     if (user) {
         return (
             <div>
                 {/* <h1 className="my-5 text-xl text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">{user.email}</h1> */}
-                <AllPathsContainer displayPaths={AllPaths} userId={user.id} displayUserPathsToggle={true} />
+                <AllPathsContainer displayPaths={"AllPaths"} userId={user.id} displayUserPathsToggle={true} />
             </div>
         )
     } else {
