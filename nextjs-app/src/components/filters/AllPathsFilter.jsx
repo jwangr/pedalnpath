@@ -1,11 +1,19 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select} from "@mui/material";
-import React, { useState } from "react";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  useTheme,
+} from "@mui/material";
+import { useState } from "react";
 
 export default function AllPathsFilter({ handleFilter }) {
   // handleFilter is a callback function that has props: applyFilters(path)
 
   const [filter, setFilter] = useState("");
-  const [age, setAge] = React.useState('');
+  const [age, setAge] = useState("");
+  const [difficulty, setDifficulty] = useState("all");
 
   const handleChange = (event, newValue) => {
     setFilter(newValue);
@@ -25,23 +33,26 @@ export default function AllPathsFilter({ handleFilter }) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }} disabled>
-        <InputLabel id="demo-simple-select-disabled-label">Age</InputLabel>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
+
+        {/* Filter by difficulty */}
+        <InputLabel id="suitableFor">Difficulty</InputLabel>
         <Select
-          labelId="demo-simple-select-disabled-label"
-          id="demo-simple-select-disabled"
-          value={age}
-          label="Age"
-          onChange={handleChange}
+          labelId="suitableFor"
+          id="demo-suitableFor"
+          value={difficulty}
+          label="Difficulty"
+          onChange={(e) => {
+            setDifficulty(e.target.value);
+          }}
         >
-          <MenuItem value="">
-            <em>None</em>
+          <MenuItem value="all">
+            <em>ALL</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value="beginner">Beginner</MenuItem>
+          <MenuItem value="intermediate">Intermediate</MenuItem>
+          <MenuItem value="advanced">Advanced</MenuItem>
         </Select>
-        <FormHelperText>Disabled</FormHelperText>
       </FormControl>
       <FormControl sx={{ m: 1, minWidth: 120 }} error>
         <InputLabel id="demo-simple-select-error-label">Age</InputLabel>
