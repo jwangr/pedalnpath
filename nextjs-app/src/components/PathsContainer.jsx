@@ -9,6 +9,7 @@ import SkeletonPathsContainer from "./SkeletonPathsContainer";
 import { useGetUserPathsQuery } from "@/services/userPaths";
 import { useEffect, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
+import AllPathsFilter from "./filters/AllPathsFilter";
 
 export default function PathsContainer({
   displayPaths,
@@ -48,7 +49,7 @@ export default function PathsContainer({
   }, [data]);
 
   const handleFilter = (applyFilters) => {
-    setFilteredList([...data].filter(path => applyFilters(path)));
+    setFilteredList([...data].filter((path) => applyFilters(path)));
   };
 
   return (
@@ -59,7 +60,11 @@ export default function PathsContainer({
         </Alert>
       )}
 
-      <UserPathsFilter handleFilter={handleFilter} />
+      {displayPaths === "user" ? (
+        <UserPathsFilter handleFilter={handleFilter} />
+      ) : (
+        <AllPathsFilter handleFilter={handleFilter} />
+      )}
 
       <Grid
         container
