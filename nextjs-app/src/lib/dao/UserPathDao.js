@@ -5,6 +5,9 @@ export default class UserPathDao {
         return await db.userPath.findMany({
             where: {
                 userId
+            },
+            include: {
+                bikepath: true // includes related field, bikepaths
             }
         })
     }

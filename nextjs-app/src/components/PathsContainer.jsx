@@ -4,9 +4,11 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PathsItem from "./PathsItem";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
-import { Alert } from "@mui/material";
+import { Alert, Tab, Tabs } from "@mui/material";
 import SkeletonPathsContainer from "./SkeletonPathsContainer";
 import { useGetUserPathsQuery } from "@/services/userPaths";
+import { useEffect, useState } from "react";
+import UserPathsFilter from "./filters/UserPathsFilter";
 
 export default function PathsContainer({
   displayPaths,
@@ -29,21 +31,36 @@ export default function PathsContainer({
     id: userId,
   });
 
-  const data = displayPaths="user" ? userPaths : allPaths;
-  const error = displayPaths="user" ? userPathsError : allPathsError;
-  const isLoading = displayPaths="user" ? userPathsisLoading : allPathsisLoading;
-  const isError = displayPaths="user" ? userPathsisError : allPathsisError;
+  const data = displayPaths === "user" ? userPaths : allPaths;
+  const error = displayPaths === "user" ? userPathsError : allPathsError;
+  const isLoading =
+    displayPaths === "user" ? userPathsisLoading : allPathsisLoading;
+  const isError = displayPaths === "user" ? userPathsisError : allPathsisError;
 
   console.log("Error" + error);
   console.log("Data" + JSON.stringify(data));
 
-  // create query for user's bikepaths
+  const [filteredList, setFilteredList] = useState([]);
+  useEffect(() => {
+    if (data) {
+      setFilteredList([...data]);
+    }
+  }, [data]);
+
+  const handleFilter = (applyFilters) => {
+    setFilteredList([...data].filter(path => applyFilters(path)));
+  };
 
   return (
     <Box sx={{ flexGrow: 1, margin: 3 }}>
       {isError && (
-        <Alert severity="error" className="my-3">Error: Unable to get bike paths.</Alert>
+        <Alert severity="error" className="my-3">
+          Error: Unable to get bike paths.
+        </Alert>
       )}
+
+      <UserPathsFilter handleFilter={handleFilter} />
+
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -52,7 +69,7 @@ export default function PathsContainer({
         }}
       >
         {isLoading && <SkeletonPathsContainer />}
-        {data?.map((path) => (
+        {filteredList?.map((path) => (
           <PathsItem
             key={path.id}
             path={path}

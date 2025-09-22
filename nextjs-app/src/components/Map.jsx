@@ -11,8 +11,8 @@ import {
   Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
-import "leaflet-defaulticon-compatibility";
+// import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
+// import "leaflet-defaulticon-compatibility";
 import Loading from "./Loading";
 import polyline from "@mapbox/polyline";
 import TemporaryDrawer from "./Drawer";

@@ -1,38 +1,49 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { db } from "@/lib/db";
 import UserPathsContainer from "@/components/PathsContainer";
-import { Box, Card } from "@mui/material";
-
+import { Box, Typography } from "@mui/material";
 
 export default async function ProfilePage() {
-    const user = await getSession();
-    console.log(user);
+  const user = await getSession();
+  console.log(user);
 
-    // const userPaths = await db.userPath.findMany({
-    //     where: { userId: user.id },
-    //     include: { bikepath: true },
-    // });
-    // console.log(userPaths);
+  if (user) {
+    return (
+      <div className="py-10">
+        <Box sx={{ width: "100%" }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: { xs: "2em", sm: "4em", md: "5em" }, // responsive sizes
+            }}
+            gutterBottom
+          >
+            DASHBOARD
+          </Typography>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontSize: { xs: "1.5.em", sm: "2em", md: "3em" }, // responsive sizes
+            }}
+          >
+            Welcome, {user.email}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            Explore your list of bike paths.
+          </Typography>
+        </Box>
 
-    if (user) {
-        return (
-            <div className="py-10">
-                <Box className='flex align-items-center' sx={{ width: '90%', margin:'auto' }}>
-                    <Card variant="outlined" sx={{ width: '100%' }}>
-                        <h1 className="my-5 text-xl text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">DASHBOARD</h1>
-                        <h2 className="my-5 text-l text-center leading-none tracking-tight text-gray-700">{user.email}</h2>
-                    </Card>
-                </Box>
-
-                <UserPathsContainer displayPaths={"user"} userId={user.id} displayUserPathsToggle={false} />
-            </div>
-        )
-    } else {
-        redirect('/login')
-    }
-
-
+        <UserPathsContainer
+          displayPaths={"user"}
+          userId={user.id}
+          displayUserPathsToggle={false}
+        />
+      </div>
+    );
+  } else {
+    redirect("/login");
+  }
 }
 
 //  userPaths Returns a response like this:

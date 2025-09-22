@@ -1,15 +1,11 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { db } from "@/lib/db";
 import AllPathsContainer from "@/components/PathsContainer";
 
 
 export default async function HomePage() {
     const user = await getSession();
-    console.log(user);
-
-    // const AllPaths = await db.bikepath.findMany({});
-    // console.log(AllPaths);
+    console.log(`Loading homepage for ${user?.email || 'anon'}`)
 
     if (user) {
         return (

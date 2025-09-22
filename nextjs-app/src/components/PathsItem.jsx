@@ -1,18 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-  useMap,
-  Polyline,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
-import "leaflet-defaulticon-compatibility";
+import { useState } from "react";
 import {
   Box,
   CardContent,
@@ -23,12 +11,18 @@ import {
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
+import MapBoxContainer from "./MapBoxContainer";
+
+const MapView = MapBoxContainer(() => import("./MapBoxContainer.jsx"), {
+  ssr: false,
+});
 
 export default function PathsItem({ path, userId, displayUserPathsToggle }) {
   const [loading, setLoading] = useState(false);
   const toggleLoad = (status) => {
     setLoading(status);
   };
+
   return (
     <Grid size={{ xs: 12, md: 6 }}>
       <Paper
@@ -41,23 +35,9 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
           height: "100%",
         }}
       >
-        <Box
-          sx={{ width: { xs: "100%", sm: 200 }, height: "200px", flexShrink: 0 }}
-        >
-          <MapContainer
-            center={[-45.0302, 168.6615]}
-            zoom={12}
-            style={{ height: "100%", width: "100%" }}
-          >
-            {/* 21. Set the tile layer for the map. */}
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-          </MapContainer>
-        </Box>
+        {/* <MapView /> */}
 
-        <CardContent sx={{ flex: 1 }}>
+        <CardContent sx={{ flex: 1, width: "100%" }}>
           {!displayUserPathsToggle && (
             <ToggleCompleted
               bikeRoute={path}
