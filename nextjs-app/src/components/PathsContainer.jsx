@@ -42,7 +42,7 @@ export default function PathsContainer({
   return (
     <Box sx={{ flexGrow: 1, margin: 3 }}>
       {isError && (
-        <Alert severity="error">Error: Unable to get all bike paths.</Alert>
+        <Alert severity="error" className="my-3">Error: Unable to get bike paths.</Alert>
       )}
       <Grid
         container
