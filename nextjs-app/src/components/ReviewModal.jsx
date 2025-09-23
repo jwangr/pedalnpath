@@ -44,7 +44,7 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ReviewModal() {
+export default function ReviewModal({ path = "haha" }) {
   // Open modal toggle
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -68,7 +68,7 @@ export default function ReviewModal() {
       >
         <Box sx={style}>
           <Typography variant="h5" component="div">
-            Path Title
+            {path.title || "Unknown title"}
           </Typography>
 
           {/* Star rating */}
@@ -114,8 +114,12 @@ export default function ReviewModal() {
           />
 
           {/* Save and submit button */}
-          <Button variant="contained" color="secondary" startIcon={<DirectionsBikeOutlined />}>
-            Save
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DirectionsBikeOutlined />}
+          >
+            Post
           </Button>
         </Box>
       </Modal>
