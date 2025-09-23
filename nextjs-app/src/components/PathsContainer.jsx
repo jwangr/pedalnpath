@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import PathsItem from "./PathsItem";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
 import { Alert, Tab, Tabs } from "@mui/material";
-import SkeletonPathsContainer from "./SkeletonPathsContainer";
+import SkeletonPathsContainer from "./skeletons/SkeletonPathsContainer";
 import { useGetUserPathsQuery } from "@/services/userPaths";
 import { useEffect, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
