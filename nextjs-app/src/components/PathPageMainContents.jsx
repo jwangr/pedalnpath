@@ -137,6 +137,7 @@ export default function MainContent({ path = examplePath }) {
         image={cardData[0].img}
         sx={{
           aspectRatio: "16 / 9",
+          maxHeight: "50vh",
           borderBottom: "1px solid",
           borderColor: "divider",
         }}
