@@ -12,48 +12,64 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
   password String
 
-  sessions Session[]
-  bikepaths      UserPath[]  // back-relation to UserPath
+  sessions  Session[]
+  bikepaths UserPath[] // back-relation to UserPath
+  Review    Review[]
 }
 
 model Session {
-  id String @id
-  userId Int
-  user User @relation(fields:[userId], references: [id])
+  id        String   @id
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   expiresAt DateTime
 }
 
 model Bikepath {
-  id           Int                   @id @default(autoincrement())
-  title        String
-  description  String?
-  difficulty   String?
-  distanceKm   Float?
-  duration     String?
-  startLat     Float
-  startLng     Float
-  endLat       Float
-  endLng       Float
-  notes        String?
-  trackType    String?
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  difficulty  String?
+  distanceKm  Float?
+  duration    String?
+  startLat    Float
+  startLng    Float
+  endLat      Float
+  endLng      Float
+  notes       String?
+  trackType   String?
 
-  highlights   Json? 
-  coordinates  Json   // store as [[lat, lng], [lat, lng], ...]
+  highlights  Json?
+  coordinates Json // store as [[lat, lng], [lat, lng], ...]
 
-  suitableFor  Json?
-  users        UserPath[]
+  suitableFor Json?
+  users       UserPath[]
+  Review      Review[]
 }
 
 model UserPath {
   id         Int      @id @default(autoincrement())
   userId     Int
   bikepathId Int
-  dateAdded DateTime @default(now())
-  completed Boolean @default(false)
+  dateAdded  DateTime @default(now())
+  completed  Boolean  @default(false)
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bikepath Bikepath @relation(fields: [bikepathId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bikepathId])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  score      Float
+  comment    String?
+  userId     Int
+  bikepathId Int
+  createdAt  DateTime @default(now())
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   bikepath Bikepath @relation(fields: [bikepathId], references: [id], onDelete: Cascade)
