@@ -20,20 +20,24 @@ export default class ReviewDao {
 
   async onePathStats(bikepathId) {
     const count = await db.review.count({
-      where: {bikepathId,
+      where: {
+        bikepathId,
         comment: {
-          not: null
-        }
+          not: null,
+        },
       },
-    })
+    });
 
     const rating = await db.review.aggregate({
       _avg: {
-        score: true
-      }
-    })
+        score: true,
+      },
+      where: {
+        bikepathId,
+      },
+    });
 
-    return {count, rating}
+    return { count, rating };
   }
 
   async onePathOneReview(id) {
