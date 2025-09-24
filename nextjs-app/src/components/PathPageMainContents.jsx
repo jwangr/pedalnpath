@@ -16,6 +16,8 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import ReviewModal from "./ReviewModal";
 import { deepPurple } from "@mui/material/colors";
+import AuthorReviews from "./reviews/AuthorReviewsContainer";
+import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 
 const cardData = [
   {
@@ -128,7 +130,7 @@ const examplePath = {
   suitableFor: ["Families", "Beginners", "Experienced cyclists"],
 };
 
-export default function MainContent({ path = examplePath }) {
+export default function MainContent({ path = examplePath}) {
   return (
     <SyledCard variant="outlined" tabIndex={0}>
       <CardMedia
@@ -143,9 +145,6 @@ export default function MainContent({ path = examplePath }) {
         }}
       />
       <SyledCardContent>
-        {/* <Typography gutterBottom variant="caption" component="div">
-          {cardData[0].tag}
-        </Typography> */}
         <Typography gutterBottom variant="h3" component="div">
           {path.title}
         </Typography>
@@ -279,42 +278,7 @@ export default function MainContent({ path = examplePath }) {
           </Box>
 
           {/* Reviews left by authors*/}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              padding: "16px",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: 1,
-                alignItems: "center",
-              }}
-            >
-              <Avatar sx={{ bgcolor: deepPurple[500] }}>A</Avatar>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                  alignItems: "baseline",
-                }}
-              >
-                <Typography variant="h6" component="div">
-                  Author's Name
-                </Typography>
-                <Typography variant="caption">Date time</Typography>
-              </Box>
-            </Box>
-            <Box>Comments asdfkj;laksjdfjasjdfas;dfkj;lakjsdf</Box>
-            <Divider />
-          </Box>
+          <AuthorReviewsContainer />
         </SyledCardContent>
       </SyledCard>
     </SyledCard>

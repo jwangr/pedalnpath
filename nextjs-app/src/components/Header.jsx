@@ -151,7 +151,7 @@ function DrawerAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            🚴‍♂️ {pathname?.toUpperCase().slice(1)}
+            🚴‍♂️ {decodeURI(pathname)?.toUpperCase().slice(1)}
           </Typography>
 
           {/* Page Links */}

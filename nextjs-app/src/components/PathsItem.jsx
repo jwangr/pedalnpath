@@ -8,6 +8,7 @@ import {
   Typography,
   Paper,
   LinearProgress,
+  Link,
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
@@ -65,7 +66,13 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
               textOverflow: "ellipsis",
             }}
           >
-            {path.bikepath?.title || path.title}
+            <Link
+              color="inherit"
+              underline="hover"
+              href={`/path/${encodeURIComponent(path.bikepath?.title || path.title)}`}
+            >
+              {path.bikepath?.title || path.title}
+            </Link>
           </Typography>
           <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
             {path.bikepath?.distanceKm || path.distanceKm || "?"} km
