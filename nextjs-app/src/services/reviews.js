@@ -8,13 +8,17 @@ export const reviewsApi = createApi({
   reducerPath: "reviewsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
   endpoints: (builder) => ({
-    getComments: builder.query({
-      query: (bikepathId) => `${bikepathId}/comments`,
+    getReviews: builder.query({
+      query: (bikepathId) => `${bikepathId}/reviews`,
+    }),
+
+    getOverallStats: builder.query({
+      query: (bikepathId) => `${bikepathId}/reviews/stats`,
     }),
 
     createReview: builder.mutation({
       query: ({ bikepathId, userId, score, comment }) => ({
-        url: `${bikepathId}/comments`,
+        url: `${bikepathId}/reviews`,
         method: "POST",
         body: { score, comment, userId }, // JSON body sent to API
       }),
@@ -22,7 +26,7 @@ export const reviewsApi = createApi({
 
     deleteReview: builder.mutation({
       query: ({ bikepathId, userId, reviewId }) => ({
-        url: `${bikepathId}/comments`,
+        url: `${bikepathId}/reviews`,
         method: "DELETE",
         body: { userId, reviewId }, // JSON body sent to API
       }),
@@ -35,5 +39,6 @@ export const reviewsApi = createApi({
 export const {
   useCreateReviewMutation,
   useDeleteReviewMutation,
-  useGetCommentsQuery,
+  useGetReviewsQuery,
+  useGetOverallStatsQuery
 } = reviewsApi;

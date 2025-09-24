@@ -1,6 +1,5 @@
 "use client";
 import MainContent from "@/components/PathPageMainContents";
-import ReviewModal from "@/components/ReviewModal";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
 import { useParams } from "next/navigation";
 

@@ -8,6 +8,10 @@ export default class ReviewController {
     return await dao.onePathAllReviews(bikepathId);
   }
 
+  async getStats(bikepathId) {
+    return await dao.onePathStats(bikepathId);
+  }
+
   async createReview(score, comment, userId, bikepathId) {
     // TO DO: validate rating, userid, pathid
 

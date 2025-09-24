@@ -19,6 +19,7 @@ import ReviewModal from "./ReviewModal";
 import { deepPurple } from "@mui/material/colors";
 import AuthorReviews from "./reviews/AuthorReviewsContainer";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
+import OverallCount from "./reviews/OverallCount";
 
 const cardData = [
   {
@@ -298,37 +299,36 @@ export default function MainContent({ path = examplePath, loading = true }) {
 
       {/* Review Panel */}
       <SyledCard>
-        {loading ? (<Skeleton
-          animation="wave"
-          width={"100%"}
-          sx={{
-            aspectRatio: 16 / 9,
-            transform: "scale(1)",
-            maxHeight: "50vh",
-          }}
-        />) : (        <SyledCardContent>
-          <Typography gutterBottom variant="h3" component="div">
-            Reviews
-          </Typography>
-
-          {/* Overall count */}
-          <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+        {loading ? (
+          <Skeleton
+            animation="wave"
+            width={"100%"}
+            sx={{
+              aspectRatio: 16 / 9,
+              transform: "scale(1)",
+              maxHeight: "50vh",
+            }}
+          />
+        ) : (
+          <SyledCardContent>
             <Typography gutterBottom variant="h3" component="div">
-              0 <StarOutline />
+              Reviews
             </Typography>
-            <Typography gutterBottom variant="h3" component="div">
-              180 <CommentBank />
-            </Typography>
-          </Box>
 
-          {/* Add a review */}
-          <Box sx={{ margin: "auto" }}>
-            <ReviewModal path={examplePath} />
-          </Box>
+            {/* Overall count */}
+            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+              <OverallCount bikepathId={path.id} />
+            </Box>
 
-          {/* Reviews left by authors*/}
-          <AuthorReviewsContainer />
-        </SyledCardContent>)}
+            {/* Add a review */}
+            <Box sx={{ margin: "auto" }}>
+              <ReviewModal path={examplePath} />
+            </Box>
+
+            {/* Reviews left by authors*/}
+            <AuthorReviewsContainer bikePathId={path.id} />
+          </SyledCardContent>
+        )}
       </SyledCard>
     </SyledCard>
   );

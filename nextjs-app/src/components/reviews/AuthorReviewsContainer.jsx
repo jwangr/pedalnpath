@@ -1,9 +1,37 @@
-import { Box } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import AuthorReviewsEach from "./AuthorReviewsEach";
+import { useGetReviewsQuery } from "@/services/reviews";
+import ShakeLoading from "../loadingBikes/Shake";
 
-export default function AuthorReviewsContainer() {
+export default function AuthorReviewsContainer({ bikePathId }) {
+  console.log(bikePathId);
+  const {
+    data: reviews,
+    error: reviewsFetchError,
+    isLoading: reviewsIsLoading,
+    isError: reviewsIsError,
+  } = useGetReviewsQuery(bikePathId);
+
+  if (reviewsIsLoading)
+    return (
+      <div>
+        <p>Loading reviews...</p>
+        <ShakeLoading />
+      </div>
+    );
+  if (reviewsIsError)
+    return <p>Error loading reviews: {reviewsFetchError.message}</p>;
+
+  console.log(`${reviews} reviews found`);
+
+  const NoReviews = () => (
+    <Typography variant="body1" gutterBottom>
+      No reviews yet. Be the first explorer!
+    </Typography>
+  );
+
   return (
-    <Box
+    <Card
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -11,9 +39,14 @@ export default function AuthorReviewsContainer() {
         alignItems: "baseline",
         justifyContent: "space-between",
         padding: "16px",
+        width: "100%",
       }}
     >
-      <AuthorReviewsEach />
-    </Box>
+      {reviews.length === 0 ? (
+        <NoReviews />
+      ) : (
+        reviews.map((review) => <AuthorReviewsEach review={review} key={review.id} />)
+      )}
+    </Card>
   );
 }

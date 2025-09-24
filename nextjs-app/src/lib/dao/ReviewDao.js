@@ -18,6 +18,24 @@ export default class ReviewDao {
     });
   }
 
+  async onePathStats(bikepathId) {
+    const count = await db.review.count({
+      where: {bikepathId,
+        comment: {
+          not: null
+        }
+      },
+    })
+
+    const rating = await db.review.aggregate({
+      _avg: {
+        score: true
+      }
+    })
+
+    return {count, rating}
+  }
+
   async onePathOneReview(id) {
     return await db.review.findUnique({
       where: {
