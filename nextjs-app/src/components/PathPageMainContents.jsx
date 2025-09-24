@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Skeleton,
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -130,26 +131,40 @@ const examplePath = {
   suitableFor: ["Families", "Beginners", "Experienced cyclists"],
 };
 
-export default function MainContent({ path = examplePath}) {
+export default function MainContent({ path = examplePath, loading = true }) {
   return (
     <SyledCard variant="outlined" tabIndex={0}>
-      <CardMedia
-        component="img"
-        alt="green iguana"
-        image={cardData[0].img}
-        sx={{
-          aspectRatio: "16 / 9",
-          maxHeight: "50vh",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-        }}
-      />
+      {loading ? (
+        <Skeleton
+          animation="wave"
+          width={"100%"}
+          sx={{
+            aspectRatio: 16 / 9,
+            transform: "scale(1)",
+            maxHeight: "50vh",
+          }}
+        />
+      ) : (
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          image={cardData[0].img}
+          sx={{
+            aspectRatio: "16 / 9",
+            maxHeight: "50vh",
+            borderBottom: "1px solid",
+            borderColor: "divider",
+          }}
+        />
+      )}
+
+      {/* Title and Description */}
       <SyledCardContent>
         <Typography gutterBottom variant="h3" component="div">
-          {path.title}
+          {loading ? <Skeleton animation="wave" /> : path.title}
         </Typography>
         <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-          {path.description}
+          {loading ? <Skeleton animation="wave" /> : path.description}
         </StyledTypography>
       </SyledCardContent>
 
@@ -163,101 +178,135 @@ export default function MainContent({ path = examplePath}) {
       >
         {/* General stats */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            sx={{
-              width: "98%",
-              margin: "auto",
-              padding: 2,
-              backgroundColor: "#fbf4ff",
-              height: "100%",
-            }}
-          >
-            <Grid container spacing={1}>
-              <Grid size={{ xs: 6 }}>
-                <Typography gutterBottom variant="h6" component="div">
-                  Distance
-                </Typography>
-                <StyledTypography
-                  variant="body2"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {path.distanceKm} km
-                </StyledTypography>
+          {loading ? (
+            <Skeleton
+              animation="wave"
+              width={"98%"}
+              sx={{
+                aspectRatio: 16 / 9,
+                maxHeight: "50vh",
+                transform: "scale(1)",
+                margin: "auto",
+              }}
+            />
+          ) : (
+            <Card
+              sx={{
+                width: "98%",
+                margin: "auto",
+                padding: 2,
+                backgroundColor: "#fbf4ff",
+                height: "100%",
+              }}
+            >
+              <Grid container spacing={1}>
+                <Grid size={{ xs: 6 }}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    Distance
+                  </Typography>
+                  <StyledTypography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {path.distanceKm} km
+                  </StyledTypography>
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    Duration
+                  </Typography>
+                  <StyledTypography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {path.duration}
+                  </StyledTypography>
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    Difficulty
+                  </Typography>
+                  <StyledTypography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {path.difficulty}
+                  </StyledTypography>
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    Suitable For
+                  </Typography>
+                  <StyledTypography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {path.suitableFor.join(", ")}
+                  </StyledTypography>
+                </Grid>
               </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Typography gutterBottom variant="h6" component="div">
-                  Duration
-                </Typography>
-                <StyledTypography
-                  variant="body2"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {path.duration}
-                </StyledTypography>
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Typography gutterBottom variant="h6" component="div">
-                  Difficulty
-                </Typography>
-                <StyledTypography
-                  variant="body2"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {path.difficulty}
-                </StyledTypography>
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Typography gutterBottom variant="h6" component="div">
-                  Suitable For
-                </Typography>
-                <StyledTypography
-                  variant="body2"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {path.suitableFor.join(", ")}
-                </StyledTypography>
-              </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          )}
         </Grid>
 
         {/* Highlights */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            sx={{
-              width: "98%",
-              margin: "auto",
-              padding: 2,
-              backgroundColor: "#fbf4ff",
-              height: "100%",
-            }}
-          >
-            <Typography gutterBottom variant="h6" component="div">
-              Highlights
-            </Typography>
+          {loading ? (
+            <Skeleton
+              animation="wave"
+              width={"98%"}
+              sx={{
+                aspectRatio: 16 / 9,
+                maxHeight: "50vh",
+                transform: "scale(1)",
+                margin: "auto",
+              }}
+            />
+          ) : (
+            <Card
+              sx={{
+                width: "98%",
+                margin: "auto",
+                padding: 2,
+                backgroundColor: "#fbf4ff",
+                height: "100%",
+              }}
+            >
+              <Typography gutterBottom variant="h6" component="div">
+                Highlights
+              </Typography>
 
-            <List>
-              {path.highlights.map((highlight) => (
-                <ListItem key={highlight}>
-                  <ListItemIcon>
-                    <StarOutline />
-                  </ListItemIcon>
+              <List>
+                {path.highlights.map((highlight) => (
+                  <ListItem key={highlight}>
+                    <ListItemIcon>
+                      <StarOutline />
+                    </ListItemIcon>
 
-                  <ListItemText primary={highlight} />
-                </ListItem>
-              ))}
-            </List>
-          </Card>
+                    <ListItemText primary={highlight} />
+                  </ListItem>
+                ))}
+              </List>
+            </Card>
+          )}
         </Grid>
       </Grid>
 
       {/* Review Panel */}
       <SyledCard>
-        <SyledCardContent>
+        {loading ? (<Skeleton
+          animation="wave"
+          width={"100%"}
+          sx={{
+            aspectRatio: 16 / 9,
+            transform: "scale(1)",
+            maxHeight: "50vh",
+          }}
+        />) : (        <SyledCardContent>
           <Typography gutterBottom variant="h3" component="div">
             Reviews
           </Typography>
@@ -279,7 +328,7 @@ export default function MainContent({ path = examplePath}) {
 
           {/* Reviews left by authors*/}
           <AuthorReviewsContainer />
-        </SyledCardContent>
+        </SyledCardContent>)}
       </SyledCard>
     </SyledCard>
   );
