@@ -73,6 +73,4 @@ model Review {
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   bikepath Bikepath @relation(fields: [bikepathId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, bikepathId])
 }

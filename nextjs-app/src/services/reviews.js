@@ -7,13 +7,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const reviewsApi = createApi({
   reducerPath: "reviewsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
+  tagTypes: ["Reviews"],
   endpoints: (builder) => ({
     getReviews: builder.query({
       query: (bikepathId) => `${bikepathId}/reviews`,
+      providesTags: ["Reviews"],
     }),
 
     getOverallStats: builder.query({
       query: (bikepathId) => `${bikepathId}/reviews/stats`,
+      providesTags: ["Reviews"],
     }),
 
     createReview: builder.mutation({
@@ -22,6 +25,7 @@ export const reviewsApi = createApi({
         method: "POST",
         body: { score, comment, userId }, // JSON body sent to API
       }),
+      invalidatesTags: ["Reviews"],
     }),
 
     deleteReview: builder.mutation({
@@ -30,6 +34,7 @@ export const reviewsApi = createApi({
         method: "DELETE",
         body: { userId, reviewId }, // JSON body sent to API
       }),
+      invalidatesTags: ["Reviews"],
     }),
   }),
 });
@@ -40,5 +45,5 @@ export const {
   useCreateReviewMutation,
   useDeleteReviewMutation,
   useGetReviewsQuery,
-  useGetOverallStatsQuery
+  useGetOverallStatsQuery,
 } = reviewsApi;

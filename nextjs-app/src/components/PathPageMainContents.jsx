@@ -15,7 +15,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import ReviewModal from "./ReviewModal";
+import ReviewModal from "./reviews/ReviewModal";
 import { deepPurple } from "@mui/material/colors";
 import AuthorReviews from "./reviews/AuthorReviewsContainer";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
@@ -322,7 +322,7 @@ export default function MainContent({ path = examplePath, loading = true }) {
 
             {/* Add a review */}
             <Box sx={{ margin: "auto" }}>
-              <ReviewModal path={examplePath} />
+              <ReviewModal path={path} />
             </Box>
 
             {/* Reviews left by authors*/}

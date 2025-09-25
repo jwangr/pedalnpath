@@ -9,7 +9,8 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import { TextField } from "@mui/material";
-import { DirectionsBikeOutlined } from "@mui/icons-material";
+import { DirectionsBikeOutlined, WindowSharp } from "@mui/icons-material";
+import { useCreateReviewMutation } from "@/services/reviews";
 
 const style = {
   position: "absolute",
@@ -44,15 +45,42 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ReviewModal({ path = "haha" }) {
+export default function ReviewModal({ path, userId = 4 }) {
   // Open modal toggle
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   // Rating Scale
-  const [value, setValue] = useState(3);
+  const [score, setScore] = useState(3);
   const [hover, setHover] = useState(-1);
+
+  // Contents
+  const [comment, setComment] = useState("");
+
+  const [createPost, { data, error, isLoading, isError }] =
+    useCreateReviewMutation();
+
+  const handleSubmit = async (event) => {
+    // event.preventDefault();
+
+    try {
+      const response = await createPost({
+        bikepathId: path.id,
+        userId,
+        score,
+        comment,
+      }).unwrap();
+      console.log(response);
+
+      // Close model and clear comment / score to default
+      setOpen(false);
+      setScore(3);
+      setComment("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -83,11 +111,11 @@ export default function ReviewModal({ path = "haha" }) {
             <Rating
               name="hover-feedback"
               size="large"
-              value={value}
+              value={score}
               precision={0.5}
               getLabelText={getLabelText}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setScore(newValue);
               }}
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
@@ -96,8 +124,8 @@ export default function ReviewModal({ path = "haha" }) {
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            {value !== null && (
-              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+            {score !== null && (
+              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : score]}</Box>
             )}
           </Box>
 
@@ -111,6 +139,10 @@ export default function ReviewModal({ path = "haha" }) {
             multiline="true"
             minRows={3}
             sx={{ width: "100%", marginBottom: 2 }}
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
           />
 
           {/* Save and submit button */}
@@ -118,9 +150,13 @@ export default function ReviewModal({ path = "haha" }) {
             variant="contained"
             color="secondary"
             startIcon={<DirectionsBikeOutlined />}
+            onClick={handleSubmit}
           >
             Post
           </Button>
+
+          {/* {data && <div>Posted review: {data.comment}</div>} */}
+          {/* {error && <div style={{ color: "red" }}>Something went wrong</div>} */}
         </Box>
       </Modal>
     </div>

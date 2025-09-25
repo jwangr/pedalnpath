@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import AuthorReviewsEach from "./AuthorReviewsEach";
 import { useGetReviewsQuery } from "@/services/reviews";
 import ShakeLoading from "../loadingBikes/Shake";
@@ -21,8 +21,6 @@ export default function AuthorReviewsContainer({ bikePathId }) {
     );
   if (reviewsIsError)
     return <p>Error loading reviews: {reviewsFetchError.message}</p>;
-
-  console.log(`${reviews} reviews found`);
 
   const NoReviews = () => (
     <Typography variant="body1" gutterBottom>
