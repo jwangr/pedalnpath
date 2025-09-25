@@ -13,6 +13,7 @@ import {
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
 import MapBoxContainer from "./MapBoxContainer";
+import OverallCount from "./reviews/OverallCount";
 
 const MapView = MapBoxContainer(() => import("./MapBoxContainer.jsx"), {
   ssr: false,
@@ -52,6 +53,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
               bikeRoute={path}
               Loading={loading}
               toggleLoad={toggleLoad}
+              userId={userId}
             />
           )}
 
@@ -69,7 +71,9 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
             <Link
               color="inherit"
               underline="hover"
-              href={`/path/${encodeURIComponent(path.bikepath?.title || path.title)}`}
+              href={`/path/${encodeURIComponent(
+                path.bikepath?.title || path.title
+              )}`}
             >
               {path.bikepath?.title || path.title}
             </Link>
@@ -90,6 +94,10 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
           >
             {path.bikepath?.description || path.description}
           </Typography>
+
+          <Box sx={{ display: "flex" }}>
+            <OverallCount bikepathId={path.bikepath?.id || path.id} />
+          </Box>
           {loading && (
             <LinearProgress color="secondary" sx={{ width: "100%" }} />
           )}

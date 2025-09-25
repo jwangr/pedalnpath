@@ -10,7 +10,7 @@ export default async function HomePage() {
   if (user) {
     return (
       <div>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", marginX: 2 }}>
           <Typography
             variant="h1"
             sx={{
@@ -27,7 +27,7 @@ export default async function HomePage() {
               fontSize: { xs: "1.5.em", sm: "2em", md: "3em" }, // responsive sizes
             }}
           >
-            Welcome, {user.email || 'anon'}
+            Welcome, {user.email || "anon"}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             Explore our list of bike paths.

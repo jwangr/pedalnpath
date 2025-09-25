@@ -9,7 +9,7 @@ export default function UserPathsToggle({
   bikeRoute,
   Loading,
   toggleLoad,
-  // userId,
+  userId,
 }) {
   const [added, setAdded] = useState(true); // set default as false instead of null (for controlled switch)
   const [errorMsg, setError] = useState("");
@@ -21,7 +21,7 @@ export default function UserPathsToggle({
         .get(`/api/userpath`, {
           params: {
             title: bikeRoute.title,
-            id: 4,
+            id: userId,
           },
         })
         .then((response) => {
@@ -40,7 +40,7 @@ export default function UserPathsToggle({
     // send complex objects via POST instead of GET
     axios
       .post("/api/userpath", {
-        userId: 4,
+        userId,
         path: bikeRoute,
       })
       .then((response) => {
