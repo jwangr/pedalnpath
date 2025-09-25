@@ -2,14 +2,15 @@
 
 import { useGetOverallStatsQuery } from "@/services/reviews";
 import { CommentBank, StarOutline } from "@mui/icons-material";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function OverallCount({ bikepathId }) {
+export default function OverallCount({ bikepathId, size }) {
   const {
     data: { count, rating } = {},
     isLoading,
     isError,
+    isSuccess,
   } = useGetOverallStatsQuery(bikepathId);
 
   const [average, setAverage] = useState(0);
@@ -17,6 +18,7 @@ export default function OverallCount({ bikepathId }) {
   useEffect(() => {
     if (rating) {
       const x = rating._avg.score;
+      console.log(rating, count);
       if (typeof x === "number") {
         setAverage(x.toFixed(1));
       } else {
@@ -25,14 +27,41 @@ export default function OverallCount({ bikepathId }) {
     }
   }, [rating]);
 
-  return (
-    <>
-      <Typography gutterBottom variant="h3" component="div">
-        {average || `_`} <StarOutline />
+  if (isSuccess && count > 0) {
+    if (size === "S") {
+      return (
+        <>
+          <Grid item size={2}>
+            <Typography gutterBottom variant="h6" component="div">
+              {average || ``}
+              <StarOutline />
+            </Typography>
+          </Grid>
+          <Grid item size={2}>
+            <Typography gutterBottom variant="h6" component="div">
+              {count} <CommentBank />
+            </Typography>
+          </Grid>
+        </>
+      );
+    }
+    return (
+      <>
+        <Typography gutterBottom variant="h3" component="div">
+          {average || ``} <StarOutline />
+        </Typography>
+        <Typography gutterBottom variant="h3" component="div">
+          {count} <CommentBank />
+        </Typography>
+      </>
+    );
+  } else if (isSuccess && count == 0) {
+    return (
+      <Typography gutterBottom variant="body1" component="div">
+        <em>No reviews</em>
       </Typography>
-      <Typography gutterBottom variant="h3" component="div">
-        {count} <CommentBank />
-      </Typography>
-    </>
-  );
+    );
+  }
+
+  return null;
 }

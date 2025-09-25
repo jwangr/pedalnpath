@@ -82,6 +82,13 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
             {path.bikepath?.distanceKm || path.distanceKm || "?"} km
           </Typography>
 
+          <Grid container>
+            <OverallCount
+              bikepathId={path.bikepath?.id || path.id}
+              size={"S"}
+            />
+          </Grid>
+
           <Typography
             variant="body2"
             sx={{
@@ -95,9 +102,6 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
             {path.bikepath?.description || path.description}
           </Typography>
 
-          <Box sx={{ display: "flex" }}>
-            <OverallCount bikepathId={path.bikepath?.id || path.id} />
-          </Box>
           {loading && (
             <LinearProgress color="secondary" sx={{ width: "100%" }} />
           )}

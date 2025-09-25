@@ -39,7 +39,6 @@ export default function PathsContainer({
   const isError = displayPaths === "user" ? userPathsisError : allPathsisError;
 
   console.log("Error" + error);
-  console.log("Data" + JSON.stringify(data));
 
   const [filteredList, setFilteredList] = useState([]);
   useEffect(() => {
