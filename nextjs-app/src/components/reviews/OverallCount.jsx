@@ -18,7 +18,6 @@ export default function OverallCount({ bikepathId, size }) {
   useEffect(() => {
     if (rating) {
       const x = rating._avg.score;
-      console.log(rating, count);
       if (typeof x === "number") {
         setAverage(x.toFixed(1));
       } else {

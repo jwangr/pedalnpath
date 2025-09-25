@@ -1,115 +1,110 @@
 import {
+  Box,
   FormControl,
   FormHelperText,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
+  Slider,
+  Typography,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AllPathsFilter({ handleFilter }) {
   // handleFilter is a callback function that has props: applyFilters(path)
-
-  const [filter, setFilter] = useState("");
-  const [age, setAge] = useState("");
   const [difficulty, setDifficulty] = useState("all");
+  const [distance, setDistance] = useState([0, 200]);
 
-  const handleChange = (event, newValue) => {
-    setFilter(newValue);
-
-    const applyFilters = (path) => {
-      if (newValue === "done") {
-        return !!path.completed;
-      } else if (newValue === "notDone") {
-        return !path.completed;
-      } else {
-        return true;
-      }
-    };
-
-    handleFilter(applyFilters);
+  // Adjust slider/distance
+  const handleSliderChange = (event, newValue) => {
+    setDistance(newValue);
   };
+
+  // Filter conditions
+  const filterDifficulty = (path) => {
+    if (path.difficulty) {
+      const matchThis = path.difficulty?.toLowerCase();
+      console.log(matchThis);
+      switch (difficulty) {
+        case "beginner":
+          return matchThis.includes("easy");
+        case "intermediate":
+          return matchThis.includes("moderate");
+        case "advanced":
+          return matchThis.includes("advanced");
+        default:
+          return true;
+      }
+    }
+    return false;
+  };
+
+  const filterDistance = (path) => {
+    if (path.distanceKm) {
+      return path.distanceKm >= distance[0] && path.distanceKm <= distance[1];
+    }
+    return false;
+  };
+
+  const applyFilters = (path) => {
+    return filterDistance(path) && filterDifficulty(path);
+  };
+
+  // Apply filters is called when filter values change
+  useEffect(() => {
+    handleFilter(applyFilters);
+  }, [distance, difficulty]);
 
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <Grid
+        container
+        spacing={4}
+        sx={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <Grid>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            {/* Filter by difficulty */}
+            <InputLabel id="suitableFor">Difficulty</InputLabel>
+            <Select
+              labelId="suitableFor"
+              id="demo-suitableFor"
+              value={difficulty}
+              label="Difficulty"
+              onChange={(e) => {
+                setDifficulty(e.target.value);
+              }}
+            >
+              <MenuItem value="all">
+                <em>ALL</em>
+              </MenuItem>
+              <MenuItem value="beginner">Beginner</MenuItem>
+              <MenuItem value="intermediate">Intermediate</MenuItem>
+              <MenuItem value="advanced">Advanced</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
-        {/* Filter by difficulty */}
-        <InputLabel id="suitableFor">Difficulty</InputLabel>
-        <Select
-          labelId="suitableFor"
-          id="demo-suitableFor"
-          value={difficulty}
-          label="Difficulty"
-          onChange={(e) => {
-            setDifficulty(e.target.value);
-          }}
-        >
-          <MenuItem value="all">
-            <em>ALL</em>
-          </MenuItem>
-          <MenuItem value="beginner">Beginner</MenuItem>
-          <MenuItem value="intermediate">Intermediate</MenuItem>
-          <MenuItem value="advanced">Advanced</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }} error>
-        <InputLabel id="demo-simple-select-error-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-error-label"
-          id="demo-simple-select-error"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-          renderValue={(value) => `⚠️  - ${value}`}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Error</FormHelperText>
-      </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-readonly-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-readonly-label"
-          id="demo-simple-select-readonly"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-          inputProps={{ readOnly: true }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Read only</FormHelperText>
-      </FormControl>
-      <FormControl required sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-required-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-required-label"
-          id="demo-simple-select-required"
-          value={age}
-          label="Age *"
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Required</FormHelperText>
-      </FormControl>
+        <Box sx={{ width: 300 }}>
+          <Typography id="input-slider" gutterBottom>
+            Distance (km)
+          </Typography>{" "}
+          <Grid size="grow">
+            <Slider
+              value={distance}
+              onChange={handleSliderChange}
+              aria-labelledby="input-slider"
+              disableSwap
+              valueLabelDisplay="auto"
+              step={5}
+              max={200}
+              color="secondary"
+            />
+          </Grid>
+        </Box>
+      </Grid>
     </div>
   );
 }

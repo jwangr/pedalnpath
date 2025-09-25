@@ -25,9 +25,9 @@ export default function UserPathsToggle({
           },
         })
         .then((response) => {
-          console.log(
-            `Path found in user's database ${JSON.stringify(response.data)}`
-          );
+          // console.log(
+          //   `Path found in user's database ${JSON.stringify(response.data)}`
+          // );
           setAdded(!!response.data);
         });
     }

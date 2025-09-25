@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PathsItem from "./PathsItem";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
-import { Alert, Tab, Tabs } from "@mui/material";
+import { Alert } from "@mui/material";
 import SkeletonPathsContainer from "./skeletons/SkeletonPathsContainer";
 import { useGetUserPathsQuery } from "@/services/userPaths";
 import { useEffect, useState } from "react";
@@ -38,7 +38,9 @@ export default function PathsContainer({
     displayPaths === "user" ? userPathsisLoading : allPathsisLoading;
   const isError = displayPaths === "user" ? userPathsisError : allPathsisError;
 
-  console.log("Error" + error);
+  if (isError) {
+    console.log(error);
+  }
 
   const [filteredList, setFilteredList] = useState([]);
   useEffect(() => {
@@ -48,7 +50,9 @@ export default function PathsContainer({
   }, [data]);
 
   const handleFilter = (applyFilters) => {
-    setFilteredList([...data].filter((path) => applyFilters(path)));
+    if (data) {
+      setFilteredList([...data].filter(applyFilters));
+    }
   };
 
   if (data && data.length === 0) {
