@@ -169,9 +169,19 @@ export default function MainContent({ path = examplePath, loading = true }) {
 
       {/* Title and Description */}
       <SyledCardContent>
-        <Typography gutterBottom variant="h3" component="div">
-          {loading ? <Skeleton animation="wave" /> : path.title}
-        </Typography>
+        <Grid container spacing={2} sx={{
+          alignItems: "stretch",
+        }}>
+          <Grid item size={{ xs: 12, md: 9 }}>
+            <Typography gutterBottom variant="h3" component="div">
+              {loading ? <Skeleton animation="wave" /> : path.title}
+            </Typography>
+          </Grid>
+          <Grid item size={{xs: 12, md: 3}}>
+            {!loading && "Tada"}
+          </Grid>
+        </Grid>
+
         <StyledTypography variant="body2" color="text.secondary" gutterBottom>
           {loading ? <Skeleton animation="wave" /> : path.description}
         </StyledTypography>
@@ -338,7 +348,9 @@ export default function MainContent({ path = examplePath, loading = true }) {
               </Box>
             ) : (
               <Box sx={{ margin: "auto" }}>
-                <Link href="/login" underline="hover">Please sign in to write reviews.</Link>
+                <Link href="/login" underline="hover">
+                  Please sign in to write reviews.
+                </Link>
               </Box>
             )}
 
