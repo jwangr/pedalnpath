@@ -18,10 +18,27 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Avatar, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Avatar, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
+import {
+  ExitToAppOutlined,
+  HomeFilled,
+  HomeOutlined,
+  Navigation,
+  NavigationOutlined,
+  Person2Outlined,
+  TravelExplore,
+  TravelExploreOutlined,
+} from "@mui/icons-material";
 
 const drawerWidth = 240;
 const navItems = ["Home", "Explore", "Navigate"];
+const navItemsIcon = [
+  <HomeOutlined sx={{ color: "white" }} />,
+  <TravelExploreOutlined sx={{ color: "white" }} />,
+  <NavigationOutlined sx={{ color: "white" }} />,
+  <Person2Outlined sx={{ color: "white" }} />,
+  <ExitToAppOutlined sx={{ color: "white" }} />,
+];
 const settings = ["Profile", "Logout"];
 
 function DrawerAppBar(props) {
@@ -54,16 +71,51 @@ function DrawerAppBar(props) {
   };
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="h4" sx={{ my: 2 }} gutterBottom>
         Pedal N' Path
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
+        {navItems.map((item, index) => (
           <ListItem key={item} disablePadding>
-            <Link href={`/${item.toLowerCase()}`}>{item}</Link>
+            <ListItemButton>
+              <ListItemIcon>{navItemsIcon[index]}</ListItemIcon>
+              <ListItemText>
+                <Link href={`/${item.toLowerCase()}`}>{item}</Link>
+              </ListItemText>
+            </ListItemButton>
           </ListItem>
         ))}
+      </List>
+      <Divider sx={{ color: "white" }} />
+      <List>
+        {props.session?.email ? (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{navItemsIcon[3]}</ListItemIcon>
+                <ListItemText>
+                  <Link href={`/profile`}>Profile</Link>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemIcon>{navItemsIcon[3]}</ListItemIcon>
+                <ListItemText>Log Out</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </>
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>{navItemsIcon[4]}</ListItemIcon>
+              <ListItemText>
+                <Link href={`/login`}>Log In</Link>
+              </ListItemText>
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -142,7 +194,7 @@ function DrawerAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link href={`/home`}>Pedal N' Path</Link> 
+            <Link href={`/home`}>Pedal N' Path</Link>
           </Typography>
 
           {/* Page Name */}
