@@ -15,6 +15,11 @@ export default class ReviewDao {
           },
         },
       },
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
     });
   }
 

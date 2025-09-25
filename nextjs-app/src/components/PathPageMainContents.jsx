@@ -246,7 +246,7 @@ export default function MainContent({ path = examplePath, loading = true }) {
                     color="text.secondary"
                     gutterBottom
                   >
-                    {path.suitableFor.join(", ")}
+                    {path.suitableFor?.join(", ") || "Not specified"}
                   </StyledTypography>
                 </Grid>
               </Grid>
@@ -280,18 +280,21 @@ export default function MainContent({ path = examplePath, loading = true }) {
               <Typography gutterBottom variant="h6" component="div">
                 Highlights
               </Typography>
+              {path.highlights ? (
+                <List>
+                  {path.highlights.map((highlight) => (
+                    <ListItem key={highlight}>
+                      <ListItemIcon>
+                        <StarOutline />
+                      </ListItemIcon>
 
-              <List>
-                {path.highlights.map((highlight) => (
-                  <ListItem key={highlight}>
-                    <ListItemIcon>
-                      <StarOutline />
-                    </ListItemIcon>
-
-                    <ListItemText primary={highlight} />
-                  </ListItem>
-                ))}
-              </List>
+                      <ListItemText primary={highlight} />
+                    </ListItem>
+                  ))}
+                </List>
+              ) : (
+                "Not specified"
+              )}
             </Card>
           )}
         </Grid>
