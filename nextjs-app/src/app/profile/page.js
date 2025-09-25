@@ -10,7 +10,7 @@ export default async function ProfilePage() {
   if (user) {
     return (
       <div className="py-10">
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", marginX: 2 }}>
           <Typography
             variant="h1"
             sx={{
@@ -32,13 +32,13 @@ export default async function ProfilePage() {
           <Typography variant="subtitle1" gutterBottom>
             Explore your list of bike paths.
           </Typography>
-        </Box>
 
-        <UserPathsContainer
-          displayPaths={"user"}
-          userId={user.id}
-          displayUserPathsToggle={false}
-        />
+          <UserPathsContainer
+            displayPaths={"user"}
+            userId={user.id}
+            displayUserPathsToggle={false}
+          />
+        </Box>
       </div>
     );
   } else {

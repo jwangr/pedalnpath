@@ -52,6 +52,10 @@ export default function PathsContainer({
     setFilteredList([...data].filter((path) => applyFilters(path)));
   };
 
+  if (filteredList.length === 0) {
+    return <div>No paths found. Head to the home page for inspiration!</div>;
+  }
+
   return (
     <Box sx={{ flexGrow: 1, margin: 3 }}>
       {isError && (
