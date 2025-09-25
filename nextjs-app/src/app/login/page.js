@@ -1,49 +1,93 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation'
-import { Button, Stack, TextField } from '@mui/material';
-import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import Link from "@mui/material/Link";
+import Loading from "@/components/loadingBikes/Loading";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    setLoading(true);
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get('email')
-    const password = formData.get('password')
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
 
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-    })
+    });
     const data = response.json();
 
-    console.log(response)
+    console.log(response);
     console.log(data);
 
     if (response.ok) {
-      console.log("Login successful")
-      router.push('/profile') // add endpoint [id] for user
+      console.log("Login successful");
+      router.push("/profile"); // add endpoint [id] for user
     } else {
-      alert("Login failed")
+      alert("Login failed");
+      setLoading(false);
     }
   }
 
   return (
-    <Stack spacing={2} margin={10}>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
-          <TextField type="email" name="email" label="Email" variant="outlined" placeholder="Email" required />
-          <TextField type="password" name="password" label="Password" variant="outlined" placeholder="Password" required />
-          <Button type="submit">Login</Button>
-
-        </Stack>
-      </form>
-      <div>Not registered?
-        <Link href={`/register`} className='bg-blue-200' > Sign Up Here</Link>
-      </div></Stack>
-  )
+    <>
+      {loading && <Loading />}
+      <Stack spacing={2} margin={10}>
+        <Typography
+          variant="h2"
+          component="div"
+          gutterBottom
+          sx={{ textAlign: "center" }}
+        >
+          Sign In
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              type="email"
+              name="email"
+              label="Email"
+              variant="outlined"
+              placeholder="Email"
+              required
+            />
+            <TextField
+              type="password"
+              name="password"
+              label="Password"
+              variant="outlined"
+              placeholder="Password"
+              required
+            />
+            <Button color="secondary" variant="contained" type="submit">
+              Login
+            </Button>
+          </Stack>
+        </form>
+        <Box
+          sx={{
+            width: "100%",
+            margin: "auto",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="body1" component={"span"}>
+            Not registered?
+          </Typography>
+          <span> </span>
+          <Link href={`/register`} underline="hover">
+            Sign Up Here
+          </Link>
+        </Box>
+      </Stack>
+    </>
+  );
 }
