@@ -4,6 +4,7 @@ import { StarOutline } from "@mui/icons-material";
 import {
   Box,
   Grid,
+  LinearProgress,
   Link,
   List,
   ListItem,
@@ -20,7 +21,10 @@ import ReviewModal from "./reviews/ReviewModal";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 import OverallCount from "./reviews/OverallCount";
 import { useGetUserQuery } from "@/services/Auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useGetUserPathsQuery } from "@/services/userPaths";
+import ToggleCompleted from "./ToggleCompleted";
+import UserPathsToggle from "./UserPathsToggle";
 
 const cardData = [
   {
@@ -134,12 +138,55 @@ const examplePath = {
 };
 
 export default function MainContent({ path = examplePath, loading = true }) {
+  const [loadingToggled, setLoadingToggled] = useState(false);
+  const toggleLoad = (status) => {
+    setLoadingToggled(status);
+  };
   const { data: userData, error: userError } = useGetUserQuery();
   useEffect(() => {
     if (userData) {
       console.log(userData);
     }
   }, [userData]);
+
+  const {
+    data: userPaths,
+    error: userPathsError,
+    isSuccess,
+  } = useGetUserPathsQuery(
+    {
+      id: userData?.id,
+    },
+    { skip: !userData?.id } // only run when userData.id exists
+  );
+
+  const DisplayToggle = () => {
+    // ensure data is loaded first
+
+    if (userPaths && userData) {
+      const matching = (element) => element.bikepathId === path.id;
+      const found = userPaths.find(matching);
+      console.log(found);
+
+      return found ? (
+        <ToggleCompleted
+          bikeRoute={found}
+          userId={userData.id}
+          Loading={loadingToggled}
+          toggleLoad={toggleLoad}
+        />
+      ) : (
+        <UserPathsToggle
+          bikeRoute={found}
+          userId={userData.id}
+          Loading={loadingToggled}
+          toggleLoad={toggleLoad}
+        />
+      );
+    }
+
+    return null;
+  };
 
   return (
     <SyledCard variant="outlined" tabIndex={0}>
@@ -169,16 +216,24 @@ export default function MainContent({ path = examplePath, loading = true }) {
 
       {/* Title and Description */}
       <SyledCardContent>
-        <Grid container spacing={2} sx={{
-          alignItems: "stretch",
-        }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            alignItems: "stretch",
+          }}
+        >
+          {loadingToggled && (
+            <LinearProgress color="secondary" sx={{ width: "100%" }} />
+          )}
+
           <Grid item size={{ xs: 12, md: 9 }}>
             <Typography gutterBottom variant="h3" component="div">
               {loading ? <Skeleton animation="wave" /> : path.title}
             </Typography>
           </Grid>
-          <Grid item size={{xs: 12, md: 3}}>
-            {!loading && "Tada"}
+          <Grid item size={{ xs: 12, md: 3 }}>
+            {isSuccess && <DisplayToggle />}
           </Grid>
         </Grid>
 
