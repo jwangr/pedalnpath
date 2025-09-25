@@ -4,7 +4,6 @@ import { useGetReviewsQuery } from "@/services/reviews";
 import ShakeLoading from "../loadingBikes/Shake";
 
 export default function AuthorReviewsContainer({ bikePathId }) {
-  console.log(bikePathId);
   const {
     data: reviews,
     error: reviewsFetchError,

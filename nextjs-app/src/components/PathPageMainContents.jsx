@@ -1,9 +1,10 @@
-import { CommentBank, StarOutline } from "@mui/icons-material";
+"use client";
+
+import { StarOutline } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
-  Divider,
   Grid,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -16,10 +17,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import ReviewModal from "./reviews/ReviewModal";
-import { deepPurple } from "@mui/material/colors";
-import AuthorReviews from "./reviews/AuthorReviewsContainer";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 import OverallCount from "./reviews/OverallCount";
+import { useGetUserQuery } from "@/services/Auth";
+import { useEffect } from "react";
 
 const cardData = [
   {
@@ -133,6 +134,13 @@ const examplePath = {
 };
 
 export default function MainContent({ path = examplePath, loading = true }) {
+  const { data: userData, error: userError } = useGetUserQuery();
+  useEffect(() => {
+    if (userData) {
+      console.log(userData);
+    }
+  }, [userData]);
+
   return (
     <SyledCard variant="outlined" tabIndex={0}>
       {loading ? (
@@ -324,9 +332,15 @@ export default function MainContent({ path = examplePath, loading = true }) {
             </Box>
 
             {/* Add a review */}
-            <Box sx={{ margin: "auto" }}>
-              <ReviewModal path={path} />
-            </Box>
+            {userData ? (
+              <Box sx={{ margin: "auto" }}>
+                <ReviewModal path={path} userId={userData?.id} />
+              </Box>
+            ) : (
+              <Box sx={{ margin: "auto" }}>
+                <Link href="/login" underline="hover">Please sign in to write reviews.</Link>
+              </Box>
+            )}
 
             {/* Reviews left by authors*/}
             <AuthorReviewsContainer bikePathId={path.id} />

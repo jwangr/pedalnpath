@@ -45,7 +45,7 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ReviewModal({ path, userId = 4 }) {
+export default function ReviewModal({ path, userId }) {
   // Open modal toggle
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
