@@ -5,12 +5,13 @@ export default class BikePathDBController {
   async getPaths(req) {
     const { searchParams } = new URL(req.url);
     const title = searchParams?.get("title");
+    const userId = searchParams?.get('userId');
 
     if (title) {
       return await dao.findPathByName(title);
     }
 
-    return await dao.getAllPaths();
+    return await dao.getAllPaths(parseInt(userId));
   }
 
   async createPath(req) {
