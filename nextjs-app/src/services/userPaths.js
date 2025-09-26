@@ -7,7 +7,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userPathsApi = createApi({
   reducerPath: "userPathsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/userpath" }),
-  tagTypes: ["UserPaths"],
+  tagTypes: ["UserPaths", "BikePaths"],
   endpoints: (builder) => ({
     // GET route
     getUserPaths: builder.query({
@@ -23,7 +23,7 @@ export const userPathsApi = createApi({
         method: "POST",
         body: { userId, path }, // JSON body sent to API
       }),
-      invalidatesTags: ["UserPaths"],
+      invalidatesTags: ["UserPaths", "BikePaths"],
     }),
 
     // PUT route

@@ -7,6 +7,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const bikePathsApi = createApi({
   reducerPath: "bikePathsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
+  tagTypes: ["UserPaths", "BikePaths"],
   endpoints: (builder) => ({
     getBikePaths: builder.query({
       query: ({ title, id }) => {
@@ -15,6 +16,7 @@ export const bikePathsApi = createApi({
         if (id) searchParams.set("userId", id);
         return `?${searchParams.toString()}`;
       },
+      providesTags: ["UserPaths", "BikePaths"],
     }),
 
     createBikePath: builder.mutation({
