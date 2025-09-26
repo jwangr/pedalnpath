@@ -7,6 +7,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userPathsApi = createApi({
   reducerPath: "userPathsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/userpath" }),
+  tagTypes: ["UserPaths"],
   endpoints: (builder) => ({
     // GET route
     getUserPaths: builder.query({
@@ -14,13 +15,14 @@ export const userPathsApi = createApi({
         title ? `?title=${encodeURIComponent(title)}&id=${id}` : `?id=${id}`,
     }),
 
-    // POST route
+    // POST route - triggers a reload of bikepaths cache
     toggleAddDelete: builder.mutation({
       query: ({ userId, path }) => ({
         url: "",
         method: "POST",
         body: { userId, path }, // JSON body sent to API
       }),
+      invalidatesTags: ["UserPaths"],
     }),
 
     // PUT route
