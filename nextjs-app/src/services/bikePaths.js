@@ -9,7 +9,12 @@ export const bikePathsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
   endpoints: (builder) => ({
     getBikePaths: builder.query({
-      query: (title) => (title ? `?title=${encodeURIComponent(title)}` : ""),
+      query: ({ title, id }) => {
+        const searchParams = new URLSearchParams();
+        if (title) searchParams.set("title", title);
+        if (id) searchParams.set("userId", id);
+        return `?${searchParams.toString()}`;
+      },
     }),
 
     createBikePath: builder.mutation({
