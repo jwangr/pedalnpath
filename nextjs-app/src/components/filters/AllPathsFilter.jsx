@@ -1,14 +1,12 @@
 import {
   Box,
   FormControl,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Slider,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -62,7 +60,7 @@ export default function AllPathsFilter({ handleFilter }) {
       <Grid
         container
         spacing={4}
-        sx={{ alignItems: "center", justifyContent: "center" }}
+        sx={{ alignItems: "center", justifyContent: "end", marginBottom: 3 }}
       >
         <Grid>
           <FormControl sx={{ m: 1, minWidth: 120 }}>

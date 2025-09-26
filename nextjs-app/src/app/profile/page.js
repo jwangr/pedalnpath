@@ -2,6 +2,7 @@ import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import UserPathsContainer from "@/components/PathsContainer";
 import { Box, Typography } from "@mui/material";
+import HeaderBanner from "@/components/HeaderBanner";
 
 export default async function ProfilePage() {
   const user = await getSession();
@@ -9,30 +10,13 @@ export default async function ProfilePage() {
 
   if (user) {
     return (
-      <div className="py-10">
+      <div>
+        <HeaderBanner
+          h1={"DASHBOARD"}
+          h4={`Welcome, ${user.email}`}
+          subtitle1={"Explore your list of bike paths"}
+        />
         <Box sx={{ width: "100%", marginX: 2 }}>
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "2em", sm: "4em", md: "5em" }, // responsive sizes
-            }}
-            gutterBottom
-          >
-            DASHBOARD
-          </Typography>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{
-              fontSize: { xs: "1.5.em", sm: "2em", md: "3em" }, // responsive sizes
-            }}
-          >
-            Welcome, {user.email}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Explore your list of bike paths.
-          </Typography>
-
           <UserPathsContainer
             displayPaths={"user"}
             userId={user.id}
