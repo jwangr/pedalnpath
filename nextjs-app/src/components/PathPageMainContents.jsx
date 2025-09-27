@@ -177,10 +177,8 @@ export default function MainContent({ path = examplePath, loading = true }) {
         />
       ) : (
         <UserPathsToggle
-          bikeRoute={found}
+          bikeRoute={path}
           userId={userData.id}
-          Loading={loadingToggled}
-          toggleLoad={toggleLoad}
         />
       );
     }
