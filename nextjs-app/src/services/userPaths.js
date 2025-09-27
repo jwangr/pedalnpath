@@ -13,7 +13,8 @@ export const userPathsApi = createApi({
     getUserPaths: builder.query({
       query: ({ title, id }) =>
         title ? `?title=${encodeURIComponent(title)}&id=${id}` : `?id=${id}`,
-      providesTags: ["UserPaths"],
+      providesTags: (result, error, { id }) =>
+        id ? [{ type: "UserPaths", id }] : [{ type: "UserPaths", id: "LIST" }],
     }),
 
     // POST route - triggers a reload of bikepaths cache
@@ -23,7 +24,10 @@ export const userPathsApi = createApi({
         method: "POST",
         body: { userId, path }, // JSON body sent to API
       }),
-      invalidatesTags: ["UserPaths", "BikePaths"],
+      invalidatesTags: (result, error, { userId }) => [
+        { type: "UserPaths", id: userId },
+        { type: "BikePaths", id: userId }, // ensures getBikePaths refreshes
+      ],
     }),
 
     // PUT route

@@ -21,7 +21,9 @@ export default function PathsContainer({
     error: allPathsError,
     isLoading: allPathsisLoading,
     isError: allPathsisError,
-  } = useGetBikePathsQuery();
+  } = useGetBikePathsQuery({
+    id: userId,
+  });
 
   const {
     data: userPaths,

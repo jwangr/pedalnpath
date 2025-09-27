@@ -16,7 +16,8 @@ export const bikePathsApi = createApi({
         if (id) searchParams.set("userId", id);
         return `?${searchParams.toString()}`;
       },
-      providesTags: ["UserPaths", "BikePaths"],
+      providesTags: (result, error, { id }) =>
+        id ? [{ type: "BikePaths", id }] : [{ type: "BikePaths", id: "LIST" }],
     }),
 
     createBikePath: builder.mutation({
