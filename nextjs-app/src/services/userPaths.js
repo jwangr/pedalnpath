@@ -7,14 +7,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userPathsApi = createApi({
   reducerPath: "userPathsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/userpath" }),
-  tagTypes: ["UserPaths", "BikePaths"],
+  tagTypes: ["UserPaths"],
   endpoints: (builder) => ({
     // GET route
     getUserPaths: builder.query({
       query: ({ title, id }) =>
         title ? `?title=${encodeURIComponent(title)}&id=${id}` : `?id=${id}`,
-      providesTags: (result, error, { id }) =>
-        id ? [{ type: "UserPaths", id }] : [{ type: "UserPaths", id: "LIST" }],
+      providesTags: [{ type: "UserPaths", id: "LIST" }],
     }),
 
     // POST route - triggers a reload of bikepaths cache
@@ -24,10 +23,7 @@ export const userPathsApi = createApi({
         method: "POST",
         body: { userId, path }, // JSON body sent to API
       }),
-      invalidatesTags: (result, error, { userId }) => [
-        { type: "UserPaths", id: userId },
-        { type: "BikePaths", id: userId }, // ensures getBikePaths refreshes
-      ],
+      invalidatesTags: [{ type: "UserPaths", id: "LIST" }],
     }),
 
     // PUT route
@@ -37,7 +33,7 @@ export const userPathsApi = createApi({
         method: "PUT",
         body: { userId, pathId },
       }),
-      invalidatesTags: ["UserPaths"],
+      invalidatesTags: [{ type: "UserPaths", id: "LIST" }],
     }),
 
     // DELETE route
@@ -46,7 +42,7 @@ export const userPathsApi = createApi({
         url: `?id=${id}&pathId=${pathId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["UserPaths"],
+      invalidatesTags: [{ type: "UserPaths", id: "LIST" }],
     }),
   }),
 });
