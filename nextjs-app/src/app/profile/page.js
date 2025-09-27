@@ -20,7 +20,6 @@ export default async function ProfilePage() {
           <UserPathsContainer
             displayPaths={"user"}
             userId={user.id}
-            displayUserPathsToggle={false}
           />
         </Box>
       </div>

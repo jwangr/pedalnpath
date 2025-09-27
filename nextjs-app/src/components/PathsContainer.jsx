@@ -11,11 +11,7 @@ import { useEffect, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
 import AllPathsFilter from "./filters/AllPathsFilter";
 
-export default function PathsContainer({
-  displayPaths,
-  userId,
-  displayUserPathsToggle,
-}) {
+export default function PathsContainer({ displayPaths, userId }) {
   const {
     data: allPaths,
     error: allPathsError,
@@ -88,7 +84,7 @@ export default function PathsContainer({
             key={path.id}
             path={path}
             userId={userId}
-            displayUserPathsToggle={displayUserPathsToggle}
+            displayUserPathsToggle={!(displayPaths === "user")}
           />
         ))}
       </Grid>

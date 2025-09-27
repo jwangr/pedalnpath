@@ -19,7 +19,6 @@ export default async function HomePage() {
         <AllPathsContainer
           displayPaths={"AllPaths"}
           userId={user.id}
-          displayUserPathsToggle={true}
         />
       </div>
     );
