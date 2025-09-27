@@ -11,7 +11,9 @@ export default function PathPage() {
     error: onePathsError,
     isLoading: onePathsisLoading,
     isError: onePathsisError,
-  } = useGetBikePathsQuery(decodeURIComponent(slug));
+  } = useGetBikePathsQuery({
+    title: decodeURIComponent(slug),
+  });
 
   return (
     <div>
