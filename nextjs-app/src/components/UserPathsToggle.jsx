@@ -12,6 +12,11 @@ export default function UserPathsToggle({
   toggleLoad,
   userId,
 }) {
+  console.log(
+    `UserPathsToggle received bikeRoute ${JSON.stringify(
+      bikeRoute
+    )} and userId ${userId}`
+  );
   const [toggleAddDelete, { data, isLoading, isSuccess, isError }] =
     useToggleAddDeleteMutation();
 
@@ -37,7 +42,6 @@ export default function UserPathsToggle({
 
   return (
     <>
-      {Loading && <LinearProgress color="secondary" sx={{ width: "100%" }} />}
       <FormGroup className="flex flex-row-reverse">
         <FormControlLabel
           label={isError ? "Uh oh" : label}
