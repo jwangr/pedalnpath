@@ -8,8 +8,6 @@ import { useGetBikePathsQuery } from "@/services/bikePaths";
 
 export default function UserPathsToggle({
   bikeRoute,
-  Loading,
-  toggleLoad,
   userId,
 }) {
   console.log(
@@ -23,7 +21,7 @@ export default function UserPathsToggle({
   const { refetch: refetchBikePaths } = useGetBikePathsQuery({ id: userId });
 
   // Whenever the user presses the toggle, the response contains {added: true/false}
-  const [added, setAdded] = useState(!!bikeRoute.users[0]); // set default as false instead of null (for controlled switch)
+  const [added, setAdded] = useState(!!bikeRoute?.users?.[0]); // set default as false instead of null (for controlled switch)
 
   const toggleChange = () => {
     toggleAddDelete({

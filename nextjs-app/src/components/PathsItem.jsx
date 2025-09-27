@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Box,
   CardContent,
@@ -20,11 +19,6 @@ const MapView = MapBoxContainer(() => import("./MapBoxContainer.jsx"), {
 });
 
 export default function PathsItem({ path, userId, displayUserPathsToggle }) {
-  const [loading, setLoading] = useState(false);
-  const toggleLoad = (status) => {
-    setLoading(status);
-  };
-
   return (
     <Grid size={{ xs: 12, md: 6 }}>
       <Paper
@@ -41,20 +35,11 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
           {!displayUserPathsToggle && (
-            <ToggleCompleted
-              bikeRoute={path}
-              userId={userId}
-              toggleLoad={toggleLoad}
-            />
+            <ToggleCompleted bikeRoute={path} userId={userId} />
           )}
 
           {displayUserPathsToggle && (
-            <UserPathsToggle
-              bikeRoute={path}
-              Loading={loading}
-              toggleLoad={toggleLoad}
-              userId={userId}
-            />
+            <UserPathsToggle bikeRoute={path} userId={userId} />
           )}
 
           <Typography
@@ -101,10 +86,6 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
               size={"S"}
             />
           </Grid>
-
-          {loading && (
-            <LinearProgress color="secondary" sx={{ width: "100%" }} />
-          )}
         </CardContent>
       </Paper>
     </Grid>
