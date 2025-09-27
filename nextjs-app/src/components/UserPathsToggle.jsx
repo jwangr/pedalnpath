@@ -1,15 +1,17 @@
 "use client";
 
-import { FormControlLabel, FormGroup, LinearProgress } from "@mui/material";
+import {
+  CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  LinearProgress,
+} from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { useEffect, useState } from "react";
 import { useToggleAddDeleteMutation } from "@/services/userPaths";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
 
-export default function UserPathsToggle({
-  bikeRoute,
-  userId,
-}) {
+export default function UserPathsToggle({ bikeRoute, userId }) {
   console.log(
     `UserPathsToggle received bikeRoute ${JSON.stringify(
       bikeRoute
@@ -42,7 +44,15 @@ export default function UserPathsToggle({
     <>
       <FormGroup className="flex flex-row-reverse">
         <FormControlLabel
-          label={isError ? "Uh oh" : label}
+          label={
+            isError ? (
+              "Uh oh"
+            ) : isLoading ? (
+              <CircularProgress color="inherit" size="1em" />
+            ) : (
+              label
+            )
+          }
           control={
             <Switch
               disabled={isLoading}
