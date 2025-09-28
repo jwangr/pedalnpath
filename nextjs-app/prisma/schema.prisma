@@ -30,7 +30,7 @@ model Session {
 
 model Bikepath {
   id          Int     @id @default(autoincrement())
-  title       String
+  title       String  @unique
   description String?
   difficulty  String?
   distanceKm  Float?
