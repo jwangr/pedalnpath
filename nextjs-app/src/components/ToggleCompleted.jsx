@@ -1,39 +1,38 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { SwitchTextTrack } from "./SwitchTextTrack";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  useToggleCompletedMutation,
+} from "@/services/userPaths";
 
 export default function ToggleCompleted({ bikeRoute, userId, toggleLoad }) {
-  const [added, setAdded] = useState(false); // set default as false instead of null (for controlled switch)
+  const [added, setAdded] = useState(!!bikeRoute?.completed); // set default as false instead of null (for controlled switch)
 
-  useEffect(() => {
-    setAdded(!!bikeRoute.completed);
-  }, []);
+  const [toggleCompleted, { data, isLoading, isSuccess, isError }] =
+    useToggleCompletedMutation();
 
-  const handleChange = async () => {
-    toggleLoad(true);
-    axios
-      .put("/api/userpath", {
-        userId,
-        pathId: bikeRoute.id
-      })
+  const handleChangeRTK = () => {
+    toggleCompleted({
+      userId,
+      pathId: bikeRoute.id,
+    })
+      .unwrap()
       .then((response) => {
-        console.log(`Response from toggle: ${JSON.stringify(response.data)}`);
-        setAdded(!!response.data.completed);
+        console.log(JSON.stringify(response));
+        setAdded(!!response.completed);
       })
       .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        toggleLoad(false);
+        consol.log(err);
       });
   };
 
   return (
-    <Box className="flex flex-row-reverse">
-      <SwitchTextTrack checked={added} onChange={handleChange} />
+    <Box className="flex flex-row">
+      <SwitchTextTrack checked={added} onChange={handleChangeRTK} />
+      {isLoading && <CircularProgress color="secondary" size="1em" />}
     </Box>
   );
 }
