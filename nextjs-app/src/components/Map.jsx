@@ -10,17 +10,17 @@ import {
   useMap,
   Polyline,
 } from "react-leaflet";
+import "@/lib/leafletSetup";
 import "leaflet/dist/leaflet.css";
 // import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 // import "leaflet-defaulticon-compatibility";
 import Loading from "./loadingBikes/Loading";
-import polyline from "@mapbox/polyline";
 import TemporaryDrawer from "./Drawer";
 import { Alert, Snackbar, TextField } from "@mui/material";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 
 const MapComponent = () => {
-  //5. Initialize local state.
+  // Initialize local state.
   const [inputValue, setInputValue] = useState("");
   const [markerData, setMarkerData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const MapComponent = () => {
 
   const [
     getOSRMRoute,
-    { data: OSRMData, isLoading, isError, isSuccess, error: OSRMError },
+    { data, isLoading, isError, isSuccess, error: OSRMError },
   ] = useGetOSRMRouteMutation();
 
   //6. Declare useRef to reference map.
@@ -85,7 +85,7 @@ const MapComponent = () => {
     return null;
   };
 
-  //12. Function to handle form submission.
+  //12. Function to handle Gemini form submission.
   const handleSubmit = async () => {
     setLoading(true);
     console.log("Clearing marker data and coordinates");
@@ -119,27 +119,7 @@ const MapComponent = () => {
     }
   };
 
-  const displayRoute = async (waypoints) => {
-    setCoordinates([]);
-    // fetch data from api
-    const response = await fetch("/api/directions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ waypoints }),
-    });
-
-    const data = await response.json();
-    console.log("returned OSRM data: " + JSON.stringify(data));
-
-    // fill the coordinates
-    const encoded = data?.routes[0]?.geometry;
-    const geometry = polyline.decode(encoded);
-    console.log(geometry);
-    setCoordinates(geometry);
-  };
-
+  // Function to handle OSRM routing
   const displayRoutewithRTK = (waypoints) => {
     // Clear the data from previous OSRM calls
     setCoordinates([]);
@@ -160,6 +140,7 @@ const MapComponent = () => {
       .catch((err) => console.log(err));
   };
 
+  // OSRM routing error alert
   const AlertMsg = () => (
     <Snackbar open={isError} autoHideDuration={6000}>
       {isError && (
@@ -173,7 +154,7 @@ const MapComponent = () => {
   //17. Return the JSX for rendering.
   return (
     <>
-      {isLoading || loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
       <AlertMsg />
 
       {/* Add the map container. */}
@@ -204,7 +185,14 @@ const MapComponent = () => {
             <Popup>
               <h2>{marker.title}</h2>
               <p>{marker.description}</p>
-              <TemporaryDrawer markerObj={marker} />
+              <TemporaryDrawer
+                markerObj={{
+                  ...marker,
+                  coordinates: coordinates,
+                  distanceKm: distance,
+                  duration,
+                }}
+              />
             </Popup>
           </Marker>
         ))}

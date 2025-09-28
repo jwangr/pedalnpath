@@ -1,11 +1,59 @@
+"use client";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 
 import UserPathsToggle from "./UserPathsToggle";
+import {
+  useCreateBikePathMutation,
+  useGetBikePathsQuery,
+} from "@/services/bikePaths";
+import { useEffect } from "react";
+import { Typography } from "@mui/material";
 
-export default function RouteDrawer({ BikeRoute, Loading, toggleLoad }) {
+export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
+  // Search for BikeRoute in existing database
+  const {
+    data: getExistingPathData,
+    error: getExistingPathError,
+    isSuccess: getExistingPathIsSuccess,
+    isError: getExistingPathIsError,
+    isLoading: getExistingPathIsLoading,
+  } = useGetBikePathsQuery({
+    title: encodeURI(BikeRoute.title),
+  });
+  console.log(getExistingPathData);
+
+  const [
+    createRoute,
+    {
+      data: newPath,
+      error: newPathError,
+      isSuccess: newPathIsSuccess,
+      isError: newPathIsError,
+      isLoading: newPathIsLoading,
+    },
+  ] = useCreateBikePathMutation(); // automatically causes UseGetPathsQuery to refetch
+
+  // If route is not in database, add it to the global database first, then add it to user's database
+  useEffect(() => {
+    if (getExistingPathIsSuccess && !getExistingPathData) {
+      console.log(
+        "Track not found in global database, creating route now." +
+          JSON.stringify(BikeRoute)
+      );
+      createRoute({ ...BikeRoute })
+        .unwrap()
+        .then((response) => {
+          console.log(JSON.stringify(response));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [getExistingPathIsSuccess]);
+
+  // User can toggle / add if route already in database
+
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
       {/* Summary Card */}
@@ -34,104 +82,115 @@ export default function RouteDrawer({ BikeRoute, Loading, toggleLoad }) {
           </Box>
         </CardContent>
         <CardContent>
-          <UserPathsToggle
-            bikeRoute={BikeRoute}
-          />
+          {/* If added to existing paths database, then user can add / remove */}
+          {getExistingPathData?.id && (
+            <UserPathsToggle bikeRoute={BikeRoute} userId={userId} />
+          )}
         </CardContent>
         <Divider />
 
         {/* Overall Rating and Comments */}
-        <Box display={"flex"}>
-          <Box
-            p={2}
-            flex={"1"}
-            sx={{
-              position: "relative",
-              "&:not(:last-of-type)": {
-                "&:after": {
-                  content: '" "',
-                  display: "block",
-                  position: "absolute",
-                  height: "50%",
-                  width: "1px",
-                  backgroundColor: "rgba(0 0 0 / 0.08)",
-                  top: "50%",
-                  right: 0,
-                  transform: "translateY(-50%)",
-                },
-              },
-            }}
-          >
-            <Box
-              sx={{
-                fontSize: 12,
-                color: "grey.500",
-                fontWeight: 500,
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                margin: 0,
-              }}
-            >
-              Rating
+        {getExistingPathData?.id ? (
+          <>
+            <Box display={"flex"}>
+              <Box
+                p={2}
+                flex={"1"}
+                sx={{
+                  position: "relative",
+                  "&:not(:last-of-type)": {
+                    "&:after": {
+                      content: '" "',
+                      display: "block",
+                      position: "absolute",
+                      height: "50%",
+                      width: "1px",
+                      backgroundColor: "rgba(0 0 0 / 0.08)",
+                      top: "50%",
+                      right: 0,
+                      transform: "translateY(-50%)",
+                    },
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    fontSize: 12,
+                    color: "grey.500",
+                    fontWeight: 500,
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                    margin: 0,
+                  }}
+                >
+                  Rating
+                </Box>
+                <Box
+                  component="p"
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    marginBottom: 0.5,
+                    letterSpacing: "1px",
+                  }}
+                >
+                  ⭐⭐⭐
+                </Box>
+              </Box>
+              <Box
+                p={2}
+                flex={"1"}
+                sx={{
+                  position: "relative",
+                  "&:not(:last-of-type)": {
+                    "&:after": {
+                      content: '" "',
+                      display: "block",
+                      position: "absolute",
+                      height: "50%",
+                      width: "1px",
+                      backgroundColor: "rgba(0 0 0 / 0.08)",
+                      top: "50%",
+                      right: 0,
+                      transform: "translateY(-50%)",
+                    },
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    fontSize: 12,
+                    color: "grey.500",
+                    fontWeight: 500,
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                    margin: 0,
+                  }}
+                >
+                  Comments
+                </Box>
+                <Box
+                  component="p"
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    marginBottom: 0.5,
+                    letterSpacing: "1px",
+                  }}
+                >
+                  12
+                </Box>
+              </Box>
             </Box>
-            <Box
-              component="p"
-              sx={{
-                fontSize: 20,
-                fontWeight: "bold",
-                marginBottom: 0.5,
-                letterSpacing: "1px",
-              }}
-            >
-              ⭐⭐⭐
-            </Box>
+            <Divider light />
+          </>
+        ) : (
+          <Box width={"100%"} padding={2}>
+            <Typography variant="subtitle1" component="div">
+              Route is getting added to database. Please wait.
+            </Typography>
           </Box>
-          <Box
-            p={2}
-            flex={"1"}
-            sx={{
-              position: "relative",
-              "&:not(:last-of-type)": {
-                "&:after": {
-                  content: '" "',
-                  display: "block",
-                  position: "absolute",
-                  height: "50%",
-                  width: "1px",
-                  backgroundColor: "rgba(0 0 0 / 0.08)",
-                  top: "50%",
-                  right: 0,
-                  transform: "translateY(-50%)",
-                },
-              },
-            }}
-          >
-            <Box
-              sx={{
-                fontSize: 12,
-                color: "grey.500",
-                fontWeight: 500,
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                margin: 0,
-              }}
-            >
-              Comments
-            </Box>
-            <Box
-              component="p"
-              sx={{
-                fontSize: 20,
-                fontWeight: "bold",
-                marginBottom: 0.5,
-                letterSpacing: "1px",
-              }}
-            >
-              12
-            </Box>
-          </Box>
-        </Box>
-        <Divider light />
+        )}
 
         {/* Distance and duration */}
         <Box display={"flex"}>

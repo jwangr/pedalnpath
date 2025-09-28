@@ -3,6 +3,7 @@ import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import RouteDrawer from './RouteDrawer';
+import RouteDrawerOSRM from './RouteDrawerOSRM';
 
 export default function TemporaryDrawer({markerObj}) {
   const [open, setOpen] = useState(false);
@@ -50,10 +51,11 @@ export default function TemporaryDrawer({markerObj}) {
   }
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Expand</Button>
+      <Button onClick={toggleDrawer(true)}>More Info</Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {/* {DrawerList} */}
-        <RouteDrawer BikeRoute={markerObj} Loading={loading} toggleLoad={handleLoading}/>
+        {/* <RouteDrawer BikeRoute={markerObj} Loading={loading} toggleLoad={handleLoading}/> */}
+        <RouteDrawerOSRM BikeRoute={markerObj} />
       </Drawer>
     </div>
   );

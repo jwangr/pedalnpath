@@ -25,6 +25,7 @@ export default class BikePathDao {
 
   async createPath(bikeroute) {
     // create suitableForCreate array
+    console.log("Dao received" + JSON.stringify(bikeroute));
     const suitableForCreateArray = bikeroute.suitableFor?.map((element) => ({
       suitableFor: element,
     }));
@@ -35,10 +36,10 @@ export default class BikePathDao {
         description: bikeroute.description,
         difficulty: bikeroute.difficulty,
         distanceKm: bikeroute.distanceKm,
-        startLat: bikeroute.startCoordinate[0],
-        startLng: bikeroute.startCoordinate[1],
-        endLat: bikeroute.endCoordinate[0],
-        endLng: bikeroute.endCoordinate[1],
+        startLat: bikeroute.startLat,
+        startLng: bikeroute.startLng,
+        endLat: bikeroute.endLat,
+        endLng: bikeroute.endLng,
         duration: bikeroute.duration,
         coordinates: JSON.parse(JSON.stringify(bikeroute.coordinates)),
         suitableFor: bikeroute?.suitableFor,
