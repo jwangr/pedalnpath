@@ -16,7 +16,8 @@ import "leaflet/dist/leaflet.css";
 import Loading from "./loadingBikes/Loading";
 import polyline from "@mapbox/polyline";
 import TemporaryDrawer from "./Drawer";
-import { TextField } from "@mui/material";
+import { Alert, Snackbar, TextField } from "@mui/material";
+import { useGetOSRMRouteMutation } from "@/services/osrm";
 
 const MapComponent = () => {
   //5. Initialize local state.
@@ -25,6 +26,13 @@ const MapComponent = () => {
   const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
   const [coordinates, setCoordinates] = useState([]);
+  const [distance, setDistance] = useState(null);
+  const [duration, setDuration] = useState("");
+
+  const [
+    getOSRMRoute,
+    { data: OSRMData, isLoading, isError, isSuccess, error: OSRMError },
+  ] = useGetOSRMRouteMutation();
 
   //6. Declare useRef to reference map.
   const mapRef = useRef(null);
@@ -54,7 +62,9 @@ const MapComponent = () => {
         markerData.length >= 2 &&
         typeof markerData[0].coordinates[0] !== "undefined"
       ) {
-        console.log(`Flying to next markers: Note marker data is longer than 2 items long.`)
+        console.log(
+          `Flying to next markers: Note marker data is longer than 2 items long.`
+        );
         const index = markerData.length - 2;
         flyToMarker(markerData[index].startCoordinate, 10);
       }
@@ -66,8 +76,8 @@ const MapComponent = () => {
         map.flyToBounds(coordinates, {
           padding: [80, 80],
           animate: true,
-          duration: 1
-        })
+          duration: 1,
+        });
       }
     }, [coordinates]);
 
@@ -78,7 +88,7 @@ const MapComponent = () => {
   //12. Function to handle form submission.
   const handleSubmit = async () => {
     setLoading(true);
-    console.log('Clearing marker data and coordinates');
+    console.log("Clearing marker data and coordinates");
     setMarkerData([]);
     setCoordinates([]);
 
@@ -121,7 +131,7 @@ const MapComponent = () => {
     });
 
     const data = await response.json();
-    console.log("returned OSRM data: " + data);
+    console.log("returned OSRM data: " + JSON.stringify(data));
 
     // fill the coordinates
     const encoded = data?.routes[0]?.geometry;
@@ -130,12 +140,43 @@ const MapComponent = () => {
     setCoordinates(geometry);
   };
 
+  const displayRoutewithRTK = (waypoints) => {
+    // Clear the data from previous OSRM calls
+    setCoordinates([]);
+    setDistance(null);
+    setDuration("");
+
+    // make OSRM http call
+    getOSRMRoute({ waypoints })
+      .unwrap()
+      .then((data) => {
+        if (data?.code === "Ok") {
+          console.log(JSON.stringify(data));
+          setCoordinates(data.geometry);
+          setDistance(data.distanceKm);
+          setDuration(data.duration);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const AlertMsg = () => (
+    <Snackbar open={isError} autoHideDuration={6000}>
+      {isError && (
+        <Alert variant="filled" severity="error" sx={{ width: "100%" }}>
+          Uh-oh! Could not create route. Try again later.
+        </Alert>
+      )}
+    </Snackbar>
+  );
+
   //17. Return the JSX for rendering.
   return (
     <>
-      {loading && <Loading />}
+      {isLoading || loading && <Loading />}
+      <AlertMsg />
 
-      {/* 20. Add the map container. */}
+      {/* Add the map container. */}
       <MapContainer
         center={[-45.0302, 168.6615]}
         zoom={12}
@@ -150,10 +191,14 @@ const MapComponent = () => {
         {/*Render the markers. */}
         {markerData.map((marker) => (
           <Marker
-            position={marker.coordinates[0] ? marker.coordinates[0] : marker.startCoordinate}
+            position={
+              marker.coordinates[0]
+                ? marker.coordinates[0]
+                : marker.startCoordinate
+            }
             key={marker.title}
             eventHandlers={{
-              click: () => displayRoute(marker.coordinates),
+              click: () => displayRoutewithRTK(marker.coordinates),
             }}
           >
             <Popup>
@@ -172,8 +217,11 @@ const MapComponent = () => {
       {/* 24. Include the form input, submit button and area for submitted question. */}
       <div className="absolute bottom-15 left-0 w-full z-[500] p-3">
         <div className="flex justify-center">
-
-          <TextField id="filled-basic" label="Explore with Gemini" color="secondary" variant="outlined"
+          <TextField
+            id="filled-basic"
+            label="Explore with Gemini"
+            color="secondary"
+            variant="outlined"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             className="flex-grow p-2 border rounded-md bg-white/75"
