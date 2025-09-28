@@ -94,6 +94,8 @@ export default function SaveNewNavigateModal({ path }) {
       suitableFor: chipsSuitable,
       trackType,
       notes,
+      description,
+      difficulty,
     })
       .unwrap()
       .then((response) => {
