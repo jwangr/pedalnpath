@@ -10,6 +10,7 @@ import { useGetUserPathsQuery } from "@/services/userPaths";
 import { useEffect, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
 import AllPathsFilter from "./filters/AllPathsFilter";
+import Loading from "./loadingBikes/Loading";
 
 export default function PathsContainer({ displayPaths, userId }) {
   const {
@@ -59,40 +60,42 @@ export default function PathsContainer({ displayPaths, userId }) {
   };
 
   if (data && data.length === 0) {
-    return <div>No paths found. Head to the home page for inspiration!</div>;
+    return <div>No paths found. Head to the explore page for inspiration!</div>;
   }
 
   return (
-    <Box sx={{ flexGrow: 1, margin: 3 }}>
-      {isError && (
-        <Alert severity="error" className="my-3">
-          Error: Unable to get bike paths.
-        </Alert>
-      )}
+    <>
+      <Box sx={{ flexGrow: 1, margin: 3 }}>
+        {isError && (
+          <Alert severity="error" className="my-3">
+            Error: Unable to get bike paths.
+          </Alert>
+        )}
 
-      {displayPaths === "user" ? (
-        <UserPathsFilter handleFilter={handleFilter} />
-      ) : (
-        <AllPathsFilter handleFilter={handleFilter} />
-      )}
+        {displayPaths === "user" ? (
+          <UserPathsFilter handleFilter={handleFilter} />
+        ) : (
+          <AllPathsFilter handleFilter={handleFilter} />
+        )}
 
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        sx={{
-          alignItems: "stretch",
-        }}
-      >
-        {isLoading && <SkeletonPathsContainer />}
-        {filteredList?.map((path) => (
-          <PathsItem
-            key={path.id}
-            path={path}
-            userId={userId}
-            displayUserPathsToggle={!(displayPaths === "user")}
-          />
-        ))}
-      </Grid>
-    </Box>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          sx={{
+            alignItems: "stretch",
+          }}
+        >
+          {isLoading && <SkeletonPathsContainer />}
+          {filteredList?.map((path) => (
+            <PathsItem
+              key={path.id}
+              path={path}
+              userId={userId}
+              displayUserPathsToggle={!(displayPaths === "user")}
+            />
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 }

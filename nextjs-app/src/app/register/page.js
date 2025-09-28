@@ -1,5 +1,3 @@
-'use client';
-
 import { redirect } from 'next/navigation'
 import { Button, Stack, TextField } from '@mui/material';
 
@@ -27,7 +25,7 @@ export default function LoginPage() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing={2} margin={5}>
+      <Stack spacing={2} marginY={10} marginX={3}>
         <TextField autoFocus type="email" name="email" label="Email" variant="outlined" placeholder="Email" required />
         <TextField type="password" name="password" label="Password" variant="outlined" placeholder="Password" required />
         <TextField type="password" name="confirmpassword" label="Confirm Password" variant="outlined" placeholder="Confirm Password" required />

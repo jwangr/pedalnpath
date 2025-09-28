@@ -48,6 +48,8 @@ model Bikepath {
   suitableFor Json?
   users       UserPath[]
   Review      Review[]
+  @@unique([startLat, startLng, endLat, endLng]) // 👈 prevents duplicates at same coordinates
+
 }
 
 model UserPath {
