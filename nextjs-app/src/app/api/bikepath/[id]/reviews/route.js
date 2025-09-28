@@ -24,6 +24,14 @@ export async function POST(req, { params }) {
   return new Response(JSON.stringify(response), { status: 200 });
 }
 
+export async function PUT(req) {
+  const review = await req.json();
+
+  const response = await controller.updateReview(review.id, review);
+
+  return new Response(JSON.stringify(response), { status: 200 });
+}
+
 // Deletes a comment
 export async function DELETE(req) {
   const { userId, reviewId } = await req.json();

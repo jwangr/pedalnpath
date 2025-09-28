@@ -2,6 +2,7 @@ import { Card, Typography } from "@mui/material";
 import AuthorReviewsEach from "./AuthorReviewsEach";
 import { useGetReviewsQuery } from "@/services/reviews";
 import ShakeLoading from "../loadingBikes/Shake";
+import { useGetUserQuery } from "@/services/Auth";
 
 export default function AuthorReviewsContainer({ bikePathId }) {
   const {
@@ -10,6 +11,12 @@ export default function AuthorReviewsContainer({ bikePathId }) {
     isLoading: reviewsIsLoading,
     isError: reviewsIsError,
   } = useGetReviewsQuery(bikePathId);
+
+  const {
+    data: userData,
+    error: userError,
+    isLoading: loadingUser,
+  } = useGetUserQuery();
 
   if (reviewsIsLoading)
     return (
@@ -42,7 +49,9 @@ export default function AuthorReviewsContainer({ bikePathId }) {
       {reviews.length === 0 ? (
         <NoReviews />
       ) : (
-        reviews.map((review) => <AuthorReviewsEach review={review} key={review.id} />)
+        reviews.map((review) => (
+          <AuthorReviewsEach review={review} key={review.id} userId={userData?.id || null} />
+        ))
       )}
     </Card>
   );

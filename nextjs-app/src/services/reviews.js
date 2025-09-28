@@ -28,6 +28,15 @@ export const reviewsApi = createApi({
       invalidatesTags: ["Reviews"],
     }),
 
+    updateReview: builder.mutation({
+      query: ({ bikepathId, review }) => ({
+        url: `${bikepathId}/reviews`,
+        method: "PUT",
+        body: { ...review }, // JSON body sent to API
+      }),
+      invalidatesTags: ["Reviews"],
+    }),
+
     deleteReview: builder.mutation({
       query: ({ bikepathId, userId, reviewId }) => ({
         url: `${bikepathId}/reviews`,
@@ -46,4 +55,5 @@ export const {
   useDeleteReviewMutation,
   useGetReviewsQuery,
   useGetOverallStatsQuery,
+  useUpdateReviewMutation,
 } = reviewsApi;

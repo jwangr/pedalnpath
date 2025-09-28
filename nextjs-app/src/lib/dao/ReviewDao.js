@@ -82,6 +82,16 @@ export default class ReviewDao {
       },
     });
   }
+
+  async updateReview(reviewId, review) {
+    return await db.review.update({
+      where: {
+        id: reviewId
+      },
+      data: review
+    })
+  }
+
   async deleteReview(id) {
     return await db.review.delete({
       where: {

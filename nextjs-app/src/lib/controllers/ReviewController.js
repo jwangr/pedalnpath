@@ -18,6 +18,12 @@ export default class ReviewController {
     return await dao.createNewReview(score, comment, userId, bikepathId);
   }
 
+  async updateReview(reviewId, review) {
+    // TO DO: validate rating, userId, etc.
+    
+    return await dao.updateReview(reviewId, review);
+  }
+
   async deleteReview(userId, reviewId) {
     // TO DO: make sure only user matching reviewId can make changes
 
