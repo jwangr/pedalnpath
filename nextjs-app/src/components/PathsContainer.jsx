@@ -41,16 +41,21 @@ export default function PathsContainer({ displayPaths, userId }) {
   }
 
   const [filteredList, setFilteredList] = useState([]);
+
+  const [filterFunction, setFilterFunction] = useState(null);
+
   useEffect(() => {
     if (data) {
-      setFilteredList([...data]);
+      if (filterFunction) {
+        setFilteredList([...data].filter(filterFunction));
+      } else {
+        setFilteredList([...data]);
+      }
     }
-  }, [data]);
+  }, [data, filterFunction]);
 
   const handleFilter = (applyFilters) => {
-    if (data) {
-      setFilteredList([...data].filter(applyFilters));
-    }
+    setFilterFunction(() => applyFilters);
   };
 
   if (data && data.length === 0) {
