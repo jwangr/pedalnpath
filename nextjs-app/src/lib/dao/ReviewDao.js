@@ -10,10 +10,14 @@ export default class ReviewDao {
         // user: true,
         user: {
           select: {
-            id: true,
             email: true,
           },
         },
+        bikepath: {
+          select: {
+            title: true
+          }
+        }
       },
       orderBy: [
         {
