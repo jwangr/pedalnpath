@@ -15,7 +15,9 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
+  maxHeight: "70vh",
+  overflowY: "scroll",
   bgcolor: "background.paper",
   //   border: "2px solid #000",
   boxShadow: 24,
@@ -24,6 +26,8 @@ const style = {
   flexDirection: "column",
   alignItems: "center",
   borderRadius: "10px",
+  scrollbarWidth: "thin",
+  overflowX: "hidden"
 };
 
 export default function SaveNewNavigateModal({ path }) {
