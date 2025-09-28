@@ -27,11 +27,13 @@ export default function AllPathsFilter({ handleFilter }) {
       console.log(matchThis);
       switch (difficulty) {
         case "beginner":
-          return matchThis.includes("easy");
+          return matchThis.includes("easy") || matchThis.includes("beginner");
         case "intermediate":
-          return matchThis.includes("moderate");
+          return (
+            matchThis.includes("moderate") || matchThis.includes("intermediate")
+          );
         case "advanced":
-          return matchThis.includes("advanced");
+          return matchThis.includes("advanced") || matchThis.includes("expert");
         default:
           return true;
       }
