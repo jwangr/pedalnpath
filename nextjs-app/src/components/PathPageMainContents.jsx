@@ -142,7 +142,11 @@ export default function MainContent({ path = examplePath, loading = true }) {
   const toggleLoad = (status) => {
     setLoadingToggled(status);
   };
-  const { data: userData, error: userError } = useGetUserQuery();
+  const {
+    data: userData,
+    error: userError,
+    isLoading: loadingUser,
+  } = useGetUserQuery();
   useEffect(() => {
     if (userData) {
       console.log(userData);
@@ -176,10 +180,7 @@ export default function MainContent({ path = examplePath, loading = true }) {
           toggleLoad={toggleLoad}
         />
       ) : (
-        <UserPathsToggle
-          bikeRoute={path}
-          userId={userData.id}
-        />
+        <UserPathsToggle bikeRoute={path} userId={userData.id} />
       );
     }
 
@@ -395,7 +396,9 @@ export default function MainContent({ path = examplePath, loading = true }) {
             </Box>
 
             {/* Add a review */}
-            {userData ? (
+            {loadingUser ? (
+              "Please wait while we load..."
+            ) : userData ? (
               <Box sx={{ margin: "auto" }}>
                 <ReviewModal path={path} userId={userData?.id} />
               </Box>
