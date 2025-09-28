@@ -1,5 +1,5 @@
 "use client";
-
+import { jsonrepair } from "jsonrepair";
 import { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
@@ -16,8 +16,9 @@ import "leaflet/dist/leaflet.css";
 // import "leaflet-defaulticon-compatibility";
 import Loading from "./loadingBikes/Loading";
 import TemporaryDrawer from "./Drawer";
-import { Alert, Snackbar, TextField } from "@mui/material";
+import { Alert, Slide, Snackbar, TextField } from "@mui/material";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
+import { useGetUserQuery } from "@/services/Auth";
 
 const MapComponent = () => {
   // Initialize local state.
@@ -28,16 +29,27 @@ const MapComponent = () => {
   const [coordinates, setCoordinates] = useState([]);
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [
     getOSRMRoute,
     { data, isLoading, isError, isSuccess, error: OSRMError },
   ] = useGetOSRMRouteMutation();
 
-  //6. Declare useRef to reference map.
-  const mapRef = useRef(null);
+  // Load user data
+  const {
+    data: userData,
+    error: userError,
+    isLoading: loadingUser,
+  } = useGetUserQuery();
 
-  //7. ZoomHandler component for handling map zoom events.
+  useEffect(() => {
+    if (userData) {
+      console.log(userData.id);
+    }
+  }, [userData]);
+
+  // ZoomHandler component for handling map zoom events.
   const ZoomHandler = () => {
     //8. Use Leaflet's useMap hook.
     const map = useMap();
@@ -62,9 +74,6 @@ const MapComponent = () => {
         markerData.length >= 2 &&
         typeof markerData[0].coordinates[0] !== "undefined"
       ) {
-        console.log(
-          `Flying to next markers: Note marker data is longer than 2 items long.`
-        );
         const index = markerData.length - 2;
         flyToMarker(markerData[index].startCoordinate, 10);
       }
@@ -85,7 +94,7 @@ const MapComponent = () => {
     return null;
   };
 
-  //12. Function to handle Gemini form submission.
+  //Function to handle Gemini form submission.
   const handleSubmit = async () => {
     setLoading(true);
     console.log("Clearing marker data and coordinates");
@@ -108,7 +117,6 @@ const MapComponent = () => {
 
       //15. Parse and set the response data.
       const data = await response.json();
-
       setMarkerData([...data]);
       console.log(`MarkerData: ${markerData}`);
     } catch (error) {
@@ -141,13 +149,23 @@ const MapComponent = () => {
   };
 
   // OSRM routing error alert
+  useEffect(() => {
+    if (isError) {
+      setOpenAlert(true);
+      console.log(OSRMError);
+    }
+  }, [OSRMError]);
+
   const AlertMsg = () => (
-    <Snackbar open={isError} autoHideDuration={6000}>
-      {isError && (
-        <Alert variant="filled" severity="error" sx={{ width: "100%" }}>
-          Uh-oh! Could not create route. Try again later.
-        </Alert>
-      )}
+    <Snackbar
+      open={openAlert}
+      autoHideDuration={4000}
+      onClose={() => setOpenAlert(false)}
+      slots={{ transition: Slide }}
+    >
+      <Alert variant="filled" severity="error" sx={{ width: "100%" }}>
+        Uh-oh! Could not create route. Try again later.
+      </Alert>
     </Snackbar>
   );
 
@@ -192,6 +210,7 @@ const MapComponent = () => {
                   distanceKm: distance,
                   duration,
                 }}
+                userId={userData?.id || null}
               />
             </Popup>
           </Marker>

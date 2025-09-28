@@ -7,6 +7,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const bikePathsApi = createApi({
   reducerPath: "bikePathsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
+  tagTypes: ["BikePaths"],
   endpoints: (builder) => ({
     getBikePaths: builder.query({
       query: ({ title, id }) => {
@@ -15,6 +16,7 @@ export const bikePathsApi = createApi({
         if (id) searchParams.set("userId", id);
         return `?${searchParams.toString()}`;
       },
+      providesTags: [{ type: "BikePaths", id: "LIST" }],
     }),
 
     createBikePath: builder.mutation({
@@ -23,6 +25,7 @@ export const bikePathsApi = createApi({
         method: "POST",
         body: newPath, // JSON body sent to API
       }),
+      invalidatesTags: [{ type: "BikePaths", id: "LIST" }],
     }),
 
     deleteBikePath: builder.mutation({
@@ -31,6 +34,7 @@ export const bikePathsApi = createApi({
         method: "DELETE",
         body: { pathId }, // JSON body sent to API
       }),
+      invalidatesTags: [{ type: "BikePaths", id: "LIST" }],
     }),
   }),
 });

@@ -9,10 +9,16 @@ import {
   useCreateBikePathMutation,
   useGetBikePathsQuery,
 } from "@/services/bikePaths";
-import { useEffect } from "react";
-import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Alert, Link, Slide, Snackbar, Typography } from "@mui/material";
+import OverallCount from "./reviews/OverallCount";
+import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 
-export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
+export default function RouteDrawerOSRM({ BikeRoute, userId }) {
+  const [alertTheme, setAlertTheme] = useState(null);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [storedPath, setStoredPath] = useState(null);
+
   // Search for BikeRoute in existing database
   const {
     data: getExistingPathData,
@@ -20,10 +26,10 @@ export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
     isSuccess: getExistingPathIsSuccess,
     isError: getExistingPathIsError,
     isLoading: getExistingPathIsLoading,
+    refetch: refetchBikePaths,
   } = useGetBikePathsQuery({
     title: encodeURI(BikeRoute.title),
   });
-  console.log(getExistingPathData);
 
   const [
     createRoute,
@@ -36,9 +42,10 @@ export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
     },
   ] = useCreateBikePathMutation(); // automatically causes UseGetPathsQuery to refetch
 
-  // If route is not in database, add it to the global database first, then add it to user's database
+  // If route is not in database, add it to the global database.
   useEffect(() => {
     if (getExistingPathIsSuccess && !getExistingPathData) {
+      setAlertTheme("warning");
       console.log(
         "Track not found in global database, creating route now." +
           JSON.stringify(BikeRoute)
@@ -46,16 +53,55 @@ export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
       createRoute({ ...BikeRoute })
         .unwrap()
         .then((response) => {
-          console.log(JSON.stringify(response));
+          console.log("fulfilled", JSON.stringify(response));
+          setAlertTheme("success");
+          setStoredPath({ ...response }); // set the stored path
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log("error", err);
+          setAlertTheme("error");
+        });
+    } else if (getExistingPathData) {
+      setStoredPath({ ...getExistingPathData });
+    } else {
+      setStoredPath(null);
     }
   }, [getExistingPathIsSuccess]);
 
   // User can toggle / add if route already in database
 
+  useEffect(() => {
+    if (alertTheme) {
+      setOpenAlert(true);
+    }
+  }, [alertTheme]);
+  // Snackbar and alert message
+  const AlertMsg = ({ theme }) => {
+    if (!theme) return null;
+
+    const messages = {
+      success: "Loaded route",
+      warning: "Loading route. Please wait...",
+      error: "Uh-oh! Route not added to Pedal N Path. Try again later",
+    };
+
+    return (
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={4000}
+        onClose={() => setOpenAlert(false)}
+        slots={{ transition: Slide }}
+      >
+        <Alert variant="filled" severity={theme} sx={{ width: "100%" }}>
+          {messages[theme]}
+        </Alert>
+      </Snackbar>
+    );
+  };
+
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
+      <AlertMsg theme={alertTheme} />
       {/* Summary Card */}
       <Card
         sx={{
@@ -78,109 +124,39 @@ export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
               marginBottom: 1,
             }}
           >
-            {BikeRoute.title}
+            {storedPath?.title ? (
+              <Link
+                color="inherit"
+                underline="hover"
+                href={`/path/${encodeURIComponent(
+                  storedPath.title
+                )}`}
+              >
+                {storedPath.title}
+              </Link>
+            ) : (
+              BikeRoute.title
+            )}
           </Box>
         </CardContent>
         <CardContent>
           {/* If added to existing paths database, then user can add / remove */}
-          {getExistingPathData?.id && (
-            <UserPathsToggle bikeRoute={BikeRoute} userId={userId} />
+          {storedPath?.id && userId && (
+            <UserPathsToggle bikeRoute={storedPath} userId={userId} />
           )}
         </CardContent>
         <Divider />
 
         {/* Overall Rating and Comments */}
-        {getExistingPathData?.id ? (
+        {storedPath?.id ? (
           <>
-            <Box display={"flex"}>
-              <Box
-                p={2}
-                flex={"1"}
-                sx={{
-                  position: "relative",
-                  "&:not(:last-of-type)": {
-                    "&:after": {
-                      content: '" "',
-                      display: "block",
-                      position: "absolute",
-                      height: "50%",
-                      width: "1px",
-                      backgroundColor: "rgba(0 0 0 / 0.08)",
-                      top: "50%",
-                      right: 0,
-                      transform: "translateY(-50%)",
-                    },
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    fontSize: 12,
-                    color: "grey.500",
-                    fontWeight: 500,
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                    margin: 0,
-                  }}
-                >
-                  Rating
-                </Box>
-                <Box
-                  component="p"
-                  sx={{
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    marginBottom: 0.5,
-                    letterSpacing: "1px",
-                  }}
-                >
-                  ⭐⭐⭐
-                </Box>
-              </Box>
-              <Box
-                p={2}
-                flex={"1"}
-                sx={{
-                  position: "relative",
-                  "&:not(:last-of-type)": {
-                    "&:after": {
-                      content: '" "',
-                      display: "block",
-                      position: "absolute",
-                      height: "50%",
-                      width: "1px",
-                      backgroundColor: "rgba(0 0 0 / 0.08)",
-                      top: "50%",
-                      right: 0,
-                      transform: "translateY(-50%)",
-                    },
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    fontSize: 12,
-                    color: "grey.500",
-                    fontWeight: 500,
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                    margin: 0,
-                  }}
-                >
-                  Comments
-                </Box>
-                <Box
-                  component="p"
-                  sx={{
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    marginBottom: 0.5,
-                    letterSpacing: "1px",
-                  }}
-                >
-                  12
-                </Box>
-              </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-evenly"}
+              marginY={2}
+              alignItems={"center"}
+            >
+              <OverallCount bikepathId={storedPath.id} />
             </Box>
             <Divider light />
           </>
@@ -475,44 +451,37 @@ export default function RouteDrawerOSRM({ BikeRoute, userId = 4 }) {
       </Card>
 
       {/* Reviews Card */}
-      <Card
-        sx={{
-          borderRadius: "12px",
-          //   minWidth: 256,
-          textAlign: "center",
-          boxShadow:
-            "0 2px 4px -2px rgba(0,0,0,0.24), 0 4px 24px -2px rgba(0, 0, 0, 0.2)",
-          marginTop: 1,
-          marginBottom: 1,
-        }}
-      >
-        <CardContent>
-          <Box
-            component="h4"
-            sx={{
-              fontSize: 18,
-              fontWeight: "bold",
-              letterSpacing: "0.5px",
-              marginTop: 1,
-              marginBottom: 1,
-            }}
-          >
-            Reviews
+      {storedPath?.id && (
+        <Card
+          sx={{
+            borderRadius: "12px",
+            //   minWidth: 256,
+            textAlign: "center",
+            boxShadow:
+              "0 2px 4px -2px rgba(0,0,0,0.24), 0 4px 24px -2px rgba(0, 0, 0, 0.2)",
+            marginTop: 1,
+            marginBottom: 1,
+          }}
+        >
+          <CardContent>
+            {/* Reviews */}
             <Box
+              component="h4"
               sx={{
                 fontSize: 18,
-                fontWeight: 500,
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                margin: 0,
+                fontWeight: "bold",
+                letterSpacing: "0.5px",
+                marginTop: 1,
+                marginBottom: 1,
               }}
             >
-              Be the first to review!
+              Reviews
+              <AuthorReviewsContainer bikePathId={storedPath.id} />
             </Box>
-          </Box>
-        </CardContent>
-        <Divider />
-      </Card>
+          </CardContent>
+          <Divider />
+        </Card>
+      )}
     </Box>
   );
 }

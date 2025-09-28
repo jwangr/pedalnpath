@@ -44,6 +44,8 @@ export default class BikePathDao {
         coordinates: JSON.parse(JSON.stringify(bikeroute.coordinates)),
         suitableFor: bikeroute?.suitableFor,
         highlights: bikeroute?.highlights,
+        notes: bikeroute?.notes,
+        trackType: bikeroute?.trackType,
       },
     });
 
