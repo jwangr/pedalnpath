@@ -1,16 +1,15 @@
 import GeminiDao from "../dao/GeminiDao";
+import ValidatePrompt from "../utils/validation/validateGeminiPrompt";
+import validateGeminiResponse from "../utils/validation/validateGeminiResponse";
+
+const gemini = new GeminiDao();
+const validate = new ValidatePrompt();
 
 export default class ExploreController {
-    gemini = new GeminiDao();
-
-    // 1) async sendToGemini(data) -> returns
-    async sendToGemini(location) {
-        const data = await this.gemini.sendRequest(location);
-        return data;
-    }
-
-    async createRoute(location) {
-
-    }
-
+  async sendToGemini(location) {
+    await validate.validateText(location); // validates the prompt length and location
+    const data = await gemini.sendRequest(location);
+    const parsed = validateGeminiResponse(data);
+    return parsed;
+  }
 }

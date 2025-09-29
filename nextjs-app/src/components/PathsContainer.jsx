@@ -31,6 +31,8 @@ export default function PathsContainer({ displayPaths, userId }) {
     id: userId,
   });
 
+  const [max, setMax] = useState(50); // set minimum slider length
+
   const data = displayPaths === "user" ? userPaths : allPaths;
   const error = displayPaths === "user" ? userPathsError : allPathsError;
   const isLoading =
@@ -47,6 +49,11 @@ export default function PathsContainer({ displayPaths, userId }) {
 
   useEffect(() => {
     if (data) {
+      // find longest distance
+      const distances = data.map((route) => route.distanceKm);
+      const newMax = Math.ceil(Math.max(...distances));
+      setMax(newMax);
+
       if (filterFunction) {
         setFilteredList([...data].filter(filterFunction));
       } else {
@@ -75,7 +82,7 @@ export default function PathsContainer({ displayPaths, userId }) {
         {displayPaths === "user" ? (
           <UserPathsFilter handleFilter={handleFilter} />
         ) : (
-          <AllPathsFilter handleFilter={handleFilter} />
+          <AllPathsFilter handleFilter={handleFilter} max={max} />
         )}
 
         <Grid

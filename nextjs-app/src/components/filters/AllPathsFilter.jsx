@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function AllPathsFilter({ handleFilter }) {
+export default function AllPathsFilter({ handleFilter, max = 500 }) {
   // handleFilter is a callback function that has props: applyFilters(path)
   const [difficulty, setDifficulty] = useState("all");
-  const [distance, setDistance] = useState([0, 200]);
+  const [distance, setDistance] = useState([0, max]);
 
   // Adjust slider/distance
   const handleSliderChange = (event, newValue) => {
@@ -24,7 +24,6 @@ export default function AllPathsFilter({ handleFilter }) {
   const filterDifficulty = (path) => {
     if (path.difficulty) {
       const matchThis = path.difficulty?.toLowerCase();
-      console.log(matchThis);
       switch (difficulty) {
         case "beginner":
           return matchThis.includes("easy") || matchThis.includes("beginner");
@@ -99,7 +98,7 @@ export default function AllPathsFilter({ handleFilter }) {
               disableSwap
               valueLabelDisplay="auto"
               step={5}
-              max={200}
+              max={max}
               color="secondary"
             />
           </Grid>
