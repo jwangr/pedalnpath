@@ -1,5 +1,5 @@
 import GeminiDao from "../dao/GeminiDao";
-import ValidatePrompt from "../utils/validation/validateGeminiPrompt";
+import ValidatePrompt from "../utils/validation/ValidateGeminiPrompt";
 import validateGeminiResponse from "../utils/validation/validateGeminiResponse";
 
 const gemini = new GeminiDao();

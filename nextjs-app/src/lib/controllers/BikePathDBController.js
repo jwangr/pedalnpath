@@ -1,4 +1,5 @@
 import BikePathDao from "../dao/BikePathDao";
+import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
 const dao = new BikePathDao();
 
 export default class BikePathDBController {
@@ -15,24 +16,12 @@ export default class BikePathDBController {
   }
 
   async createPath(req) {
+    const validator = new ValidateNewBikePath();
+
     const path = await req.json();
-    
-    return await dao.createPath({
-      title: path.title,
-      description: path.description,
-      difficulty: path.difficulty,
-      distanceKm: parseFloat(path.distanceKm),
-      duration: path.duration,
-      startLat: path.startCoordinate[0],
-      startLng: path.startCoordinate[1],
-      endLat: path.endCoordinate[0],
-      endLng: path.endCoordinate[1],
-      coordinates: path.coordinates,
-      notes: path.notes,
-      trackType: path.trackType,
-      highlights: path.highlights,
-      suitableFor: path.suitableFor,
-    });
+    const parsedPath = validator.validatePath(path);
+
+    return await dao.createPath(parsedPath);
   }
 
   async deletePath(req) {
