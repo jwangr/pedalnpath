@@ -42,7 +42,7 @@ const MapComponent = () => {
     },
   ] = useGetOSRMRouteMutation();
 
-    // API actions for Gemini
+  // API actions for Gemini
   const [
     askGemini,
     {
@@ -65,24 +65,22 @@ const MapComponent = () => {
   const ZoomHandler = () => {
     //8. Use Leaflet's useMap hook.
     const map = useMap();
-    //9. Function to fly map to given coordinates.
-    const flyToMarker = (coordinates, zoom) => {
-      if (coordinates && typeof coordinates[0] !== "undefined") {
-        map.flyTo(coordinates, zoom, {
-          animate: true,
-          duration: 1.5,
-        });
-      }
-    };
 
-    //10. useEffect to trigger the map fly when markerData changes.
+    // Trigger the map fly to bounds when markerData changes.
     useEffect(() => {
       if (
         markerData.length >= 2 &&
         typeof markerData[0].coordinates[0] !== "undefined"
       ) {
-        const index = markerData.length - 2;
-        flyToMarker(markerData[index].startCoordinate, 10);
+        const markerCoordinates = markerData.map(
+          (marker) => marker.startCoordinate
+        );
+
+        map.flyToBounds(markerCoordinates, {
+          padding: [50, 50],
+          animate: true,
+          duration: 1.5,
+        });
       }
     }, [markerData]);
 
@@ -92,12 +90,12 @@ const MapComponent = () => {
         map.flyToBounds(coordinates, {
           padding: [80, 80],
           animate: true,
-          duration: 1,
+          duration: 1.5,
         });
       }
     }, [coordinates]);
 
-    //11. Return null as we're not rendering anything in the DOM.
+    // Return null as we're not rendering anything in the DOM.
     return null;
   };
 
