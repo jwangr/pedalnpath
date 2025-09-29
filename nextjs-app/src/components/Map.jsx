@@ -115,7 +115,7 @@ const MapComponent = () => {
       console.log(response);
       setMarkerData([...response]);
     } catch (error) {
-      console.log(error);
+      console.log(error.data.error);
     }
   };
 
@@ -150,14 +150,14 @@ const MapComponent = () => {
           OSRMSuccess
             ? "Route found by OSRM"
             : geminiSuccess
-            ? `Paths found by Gemini around ${submittedQuestion}`
+            ? `Paths found by Gemini around ${submittedQuestion.toUpperCase()}`
             : null
         }
         errorMsg={
           OSRMError
             ? "Unable to find route"
             : geminiError
-            ? "Unable to find paths by Gemini"
+            ? geminiErrorMsg.data.error || "Unable to find paths by Gemini."
             : null
         }
       />
