@@ -11,11 +11,36 @@ export const usersApi = createApi({
     getUser: builder.query({
       query: () => "/",
     }),
+    loginUser: builder.mutation({
+      query: ({ email, password }) => ({
+        url: "/login",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: { email, password },
+      }),
+    }),
+    registerUser: builder.mutation({
+      query: ({ email, password, confirmpassword }) => ({
+        url: "/register",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: { email, password, confirmpassword },
+      }),
+    }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "/logout",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
-  useGetUserQuery
+  useGetUserQuery,
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useLogoutUserMutation,
 } = usersApi;

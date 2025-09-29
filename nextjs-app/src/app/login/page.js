@@ -5,41 +5,40 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 import Loading from "@/components/loadingBikes/Loading";
 import { useState } from "react";
+import { useLoginUserMutation } from "@/services/Auth";
+import Alerts from "@/components/Alerts";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false)
+
+  const [login, { data: loginData, isSuccess, isError, isLoading }] =
+    useLoginUserMutation();
 
   async function handleSubmit(event) {
-    setLoading(true);
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email");
     const password = formData.get("password");
 
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = response.json();
-
-    console.log(response);
-    console.log(data);
-
-    if (response.ok) {
-      console.log("Login successful");
-      router.push("/profile"); // add endpoint [id] for user
-    } else {
-      alert("Login failed");
-      setLoading(false);
+    try {
+      const response = await login({ email, password }).unwrap();
+      console.log(JSON.stringify(response));
+      router.push(response.redirectTo);
+    } catch (error) {
+      console.log(error);
     }
   }
 
   return (
     <>
-      {loading && <Loading />}
+      <Alerts
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+        successMsg="Successfully logged in"
+        errorMsg="Unable to log in."
+      />
       <Stack spacing={2} margin={10}>
         <Typography
           variant="h2"
