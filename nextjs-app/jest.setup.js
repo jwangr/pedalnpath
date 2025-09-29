@@ -1,16 +1,17 @@
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
-import { fetch, Request, Response, Headers } from "undici";
+import { TextEncoder, TextDecoder } from "util";
 
 // Mock environment variables
 process.env.DATABASE_URL = "file:./test.db";
 
-global.fetch = fetch;
-global.Request = Request;
-global.Response = Response;
-global.Headers = Headers;
+// Polyfill TextEncoder and TextDecoder for Node.js environment
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
-// Mock the DAO layer with working default implementations
+// ----------------------------
+// BikePathDao Mock
+// ----------------------------
 jest.mock("./src/lib/dao/BikePathDao", () => {
   return jest.fn().mockImplementation(() => ({
     getAllPaths: jest.fn().mockResolvedValue([
@@ -60,5 +61,22 @@ jest.mock("./src/lib/dao/BikePathDao", () => {
       success: true,
       deletedId: 1,
     }),
+  }));
+
+  
+});
+
+// ----------------------------
+// GeminiDao Mock
+// ----------------------------
+import GeminiTestData from "@/__tests__/helpers/GeminiTestData";
+
+jest.mock("./src/lib/dao/GeminiDao", () => {
+  return jest.fn().mockImplementation(() => ({
+    sendRequest: jest
+      .fn()
+      .mockImplementation((location) =>
+        Promise.resolve(GeminiTestData.getMockGeminiResponse())
+      ),
   }));
 });

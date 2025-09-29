@@ -63,4 +63,52 @@ describe("Bikepath API Routes Integration", () => {
     expect(response.status).toBe(200);
     expect(response instanceof Response).toBe(true);
   });
+
+  test("API responses contain valid JSON", async () => {
+    // Test GET response contains valid JSON
+    const getReq = new Request("http://localhost:3000/api/bikepath");
+    const getResponse = await GET(getReq);
+    const getJson = await getResponse.json();
+    expect(typeof getJson).toBe("object");
+
+    // Test POST response contains valid JSON
+    const postReq = new Request("http://localhost:3000/api/bikepath", {
+      method: "POST",
+      body: JSON.stringify(BikePathTestData.getNewPathData()),
+      headers: { "Content-Type": "application/json" },
+    });
+    const postResponse = await POST(postReq);
+    const postJson = await postResponse.json();
+    expect(typeof postJson).toBe("object");
+
+    // Test DELETE response contains valid JSON
+    const deleteReq = new Request("http://localhost:3000/api/bikepath?id=1");
+    const deleteResponse = await DELETE(deleteReq);
+    const deleteJson = await deleteResponse.json();
+    expect(typeof deleteJson).toBe("object");
+  });
+
+  test("POST with invalid data structure", async () => {
+    const invalidData = BikePathTestData.getInvalidPathData();
+    const req = new Request("http://localhost:3000/api/bikepath", {
+      method: "POST",
+      body: JSON.stringify(invalidData),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const response = await POST(req);
+    // Even with invalid data, the route should respond (error handling is in controller)
+    expect(response instanceof Response).toBe(true);
+    expect(response.status).toBe(200);
+  });
+
+  test("DELETE with missing ID parameter", async () => {
+    const req = new Request("http://localhost:3000/api/bikepath", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(req);
+    expect(response instanceof Response).toBe(true);
+    expect(response.status).toBe(200);
+  });
 });
