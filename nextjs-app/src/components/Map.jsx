@@ -12,29 +12,47 @@ import {
 } from "react-leaflet";
 import "@/lib/leafletSetup";
 import "leaflet/dist/leaflet.css";
-// import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
-// import "leaflet-defaulticon-compatibility";
-import Loading from "./loadingBikes/Loading";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
+import "leaflet-defaulticon-compatibility";
 import TemporaryDrawer from "./Drawer";
-import { Alert, Slide, Snackbar, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 import { useGetUserQuery } from "@/services/Auth";
+import { useRequestGeminiMutation } from "@/services/Gemini";
+import Alerts from "./Alerts";
 
 const MapComponent = () => {
   // Initialize local state.
   const [inputValue, setInputValue] = useState("");
   const [markerData, setMarkerData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
   const [coordinates, setCoordinates] = useState([]);
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState("");
-  const [openAlert, setOpenAlert] = useState(false);
 
+  // API actions for OSRM
   const [
     getOSRMRoute,
-    { data, isLoading, isError, isSuccess, error: OSRMError },
+    {
+      data,
+      isLoading: OSRMLoading,
+      isError: OSRMError,
+      isSuccess: OSRMSuccess,
+      error: OSRMErrorMsg,
+    },
   ] = useGetOSRMRouteMutation();
+
+    // API actions for Gemini
+  const [
+    askGemini,
+    {
+      data: geminiData,
+      error: geminiErrorMsg,
+      isLoading: geminiLoading,
+      isError: geminiError,
+      isSuccess: geminiSuccess,
+    },
+  ] = useRequestGeminiMutation();
 
   // Load user data
   const {
@@ -42,12 +60,6 @@ const MapComponent = () => {
     error: userError,
     isLoading: loadingUser,
   } = useGetUserQuery();
-
-  useEffect(() => {
-    if (userData) {
-      console.log(userData.id);
-    }
-  }, [userData]);
 
   // ZoomHandler component for handling map zoom events.
   const ZoomHandler = () => {
@@ -62,11 +74,6 @@ const MapComponent = () => {
         });
       }
     };
-    useMapEvents({
-      zoomend: () => {
-        setLoading(false);
-      },
-    });
 
     //10. useEffect to trigger the map fly when markerData changes.
     useEffect(() => {
@@ -96,34 +103,21 @@ const MapComponent = () => {
 
   //Function to handle Gemini form submission.
   const handleSubmit = async () => {
-    setLoading(true);
     console.log("Clearing marker data and coordinates");
     setMarkerData([]);
     setCoordinates([]);
 
+    // Set loading state and clear the input.
+    setSubmittedQuestion(inputValue);
+    setInputValue("");
+
+    // Make API request to Gemini
     try {
-      // Set loading state and clear the input.
-      setSubmittedQuestion(inputValue);
-      setInputValue("");
-
-      // Make the API request to Gemini.
-      const response = await fetch("/api/gemini", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ value: inputValue }),
-      });
-
-      //15. Parse and set the response data.
-      const data = await response.json();
-      setMarkerData([...data]);
-      console.log(`MarkerData: ${markerData}`);
+      const response = await askGemini({ value: inputValue }).unwrap();
+      console.log(response);
+      setMarkerData([...response]);
     } catch (error) {
-      //16. Log errors.
-      console.error(error + "unable to explore currently");
-    } finally {
-      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -148,32 +142,27 @@ const MapComponent = () => {
       .catch((err) => console.log(err));
   };
 
-  // OSRM routing error alert
-  useEffect(() => {
-    if (isError) {
-      setOpenAlert(true);
-      console.log(OSRMError);
-    }
-  }, [OSRMError]);
-
-  const AlertMsg = () => (
-    <Snackbar
-      open={openAlert}
-      autoHideDuration={4000}
-      onClose={() => setOpenAlert(false)}
-      slots={{ transition: Slide }}
-    >
-      <Alert variant="filled" severity="error" sx={{ width: "100%" }}>
-        Uh-oh! Could not create route. Try again later.
-      </Alert>
-    </Snackbar>
-  );
-
-  //17. Return the JSX for rendering.
   return (
     <>
-      {(isLoading || loading) && <Loading />}
-      <AlertMsg />
+      <Alerts
+        isLoading={OSRMLoading || geminiLoading}
+        isSuccess={OSRMSuccess || geminiSuccess}
+        isError={OSRMError || geminiError}
+        successMsg={
+          OSRMSuccess
+            ? "Route found by OSRM"
+            : geminiSuccess
+            ? `Paths found by Gemini around ${submittedQuestion}`
+            : null
+        }
+        errorMsg={
+          OSRMError
+            ? "Unable to find route"
+            : geminiError
+            ? "Unable to find paths by Gemini"
+            : null
+        }
+      />
 
       {/* Add the map container. */}
       <MapContainer

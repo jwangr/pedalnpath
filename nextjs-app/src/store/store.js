@@ -7,6 +7,7 @@ import { userPathsApi } from "@/services/userPaths";
 import { reviewsApi } from "@/services/reviews";
 import { usersApi } from "@/services/Auth";
 import { osrmApi } from "@/services/osrm";
+import { geminiApi } from "@/services/Gemini";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     [reviewsApi.reducerPath]: reviewsApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [osrmApi.reducerPath]: osrmApi.reducer,
+    [geminiApi.reducerPath]: geminiApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -26,6 +28,7 @@ export const store = configureStore({
       userPathsApi.middleware,
       reviewsApi.middleware,
       usersApi.middleware,
-      osrmApi.middleware
+      osrmApi.middleware,
+      geminiApi.middleware
     ),
 });
