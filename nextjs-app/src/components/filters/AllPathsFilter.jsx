@@ -37,7 +37,7 @@ export default function AllPathsFilter({ handleFilter, max = 500 }) {
           return true;
       }
     }
-    return false;
+    return true;
   };
 
   const filterDistance = (path) => {
