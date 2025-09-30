@@ -9,6 +9,7 @@ import { Alert, Chip, Link, Stack, TextField } from "@mui/material";
 import { DirectionsBikeOutlined, RestartAlt, Save } from "@mui/icons-material";
 import { useCreateBikePathMutation } from "@/services/bikePaths";
 import Loading from "./loadingBikes/Loading";
+import Alerts from "./Alerts";
 
 const style = {
   position: "absolute",
@@ -27,7 +28,7 @@ const style = {
   alignItems: "center",
   borderRadius: "10px",
   scrollbarWidth: "thin",
-  overflowX: "hidden"
+  overflowX: "hidden",
 };
 
 export default function SaveNewNavigateModal({ path }) {
@@ -114,18 +115,17 @@ export default function SaveNewNavigateModal({ path }) {
 
   return (
     <>
-      {isSuccess && (
-        <Alert severity="success">
-          New path successfully saved.
+      <Alerts
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+        errorMsg={OSRMError?.data?.error || "Unable to create new bike path."}
+        successMsg={
           <Link href={`/path/${encodeURI(path.title)}`}>
-            Click here to view
+            Successfully created new bikepath. View now.
           </Link>
-        </Alert>
-      )}
-      {isError && (
-        <Alert severity="error">Error saving new path. Try again later.</Alert>
-      )}
-      {isLoading && <Loading />}
+        }
+      />
       <Button
         onClick={handleOpen}
         color="secondary"
