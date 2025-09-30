@@ -45,8 +45,8 @@ const MapComponent = () => {
 
   const [coordinates, setCoordinates] = useState([]);
   const [markers, setMarkers] = useState([]);
-  const [start, setStart] = useState("Queenstown");
-  const [end, setEnd] = useState("Frankton");
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
   // const [loading, setLoading] = useState(false);
   // const [distance, setDistance] = useState(null);
   // const [duration, setDuration] = useState("");
@@ -176,12 +176,14 @@ const MapComponent = () => {
               name="start"
               variant="filled"
               color="secondary"
+              placeholder="Start Here"
               value={start}
               onChange={(e) => setStart(e.target.value)}
             />
             <TextField
               label="End"
               name="end"
+              placeholder="Destination"
               variant="filled"
               color="secondary"
               value={end}

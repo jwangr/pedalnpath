@@ -121,7 +121,11 @@ export default function SaveNewNavigateModal({ path }) {
         isError={isError}
         errorMsg={OSRMError?.data?.error || "Unable to create new bike path."}
         successMsg={
-          <Link href={`/path/${encodeURI(path.title)}`}>
+          <Link
+            color="inherit"
+            underline="hover"
+            href={`/path/${encodeURI(path.title)}`}
+          >
             Successfully created new bikepath. View now.
           </Link>
         }

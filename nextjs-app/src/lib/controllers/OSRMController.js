@@ -16,7 +16,7 @@ export default class OSRMController {
     const startChecked = await validate.validateLocation(start);
     const endChecked = await validate.validateLocation(end);
 
-    // convert to geocode
+    // convert to geocode (lat, lon)
     const startGeocode = await this.getGeocode(startChecked);
     const endGeocode = await this.getGeocode(endChecked);
 

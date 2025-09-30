@@ -15,10 +15,17 @@ export default class OSRMDao {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
         location
-      )}&format=json`
+      )}&format=json&countrycodes=nz`
     );
 
     const data = await res.json();
+    const cleanedData = data.map((place) => ({
+      name: place.name,
+      lat: place.lat,
+      lon: place.lon,
+    }));
+
+    console.log(cleanedData);
 
     if (data.length > 0) {
       return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
