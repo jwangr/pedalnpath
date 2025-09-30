@@ -9,13 +9,13 @@ export const osrmApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "/api/directions" }),
   endpoints: (builder) => ({
     getOSRMRoute: builder.mutation({
-      query: ({ waypoints }) => ({
+      query: ({ start, end }) => ({
         url: "",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ waypoints }), // JSON body sent to API
+        body: JSON.stringify({ start, end }), // JSON body sent to API
       }),
     }),
   }),

@@ -10,7 +10,6 @@ import { useGetUserPathsQuery } from "@/services/userPaths";
 import { useEffect, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
 import AllPathsFilter from "./filters/AllPathsFilter";
-import Loading from "./loadingBikes/Loading";
 
 export default function PathsContainer({ displayPaths, userId }) {
   const {

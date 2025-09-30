@@ -1,5 +1,6 @@
 import BikePathDao from "../dao/BikePathDao";
 import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
+import ValidationError from "../utils/validation/ValidationError";
 const dao = new BikePathDao();
 
 export default class BikePathDBController {
@@ -16,12 +17,21 @@ export default class BikePathDBController {
   }
 
   async createPath(req) {
-    const validator = new ValidateNewBikePath();
+    try {
+      const validator = new ValidateNewBikePath();
 
-    const path = await req.json();
-    const parsedPath = validator.validatePath(path);
+      const path = await req.json();
+      const parsedPath = validator.validatePath(path);
 
-    return await dao.createPath(parsedPath);
+      return await dao.createPath(parsedPath);
+    } catch (error) {
+      if (error.code === "P2002") {
+        // prisma client error for un-unique bike paths
+        throw new ValidationError(
+          "Bike path with the same title or coordinates already exists."
+        );
+      }
+    }
   }
 
   async deletePath(req) {

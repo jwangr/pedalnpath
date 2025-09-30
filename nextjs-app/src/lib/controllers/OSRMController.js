@@ -1,21 +1,32 @@
 import OSRMDao from "../dao/OSRMDao";
+import ValidateOSRMRequest from "../utils/validation/ValidateOSRMRequest";
+const osrm = new OSRMDao();
+const validate = new ValidateOSRMRequest();
 
 export default class OSRMController {
-    osrm = new OSRMDao();
+  async getGeocode(location) {
+    const coordinates = await osrm.getGeocode(location);
+    return coordinates;
+  }
 
-    // accepts an ARRAY of coordinates in [lat, lon] format
-    async getDirections(waypoints) {
-        console.log('waypoints are ' + waypoints)
-        if (!waypoints) { throw new Error("Please type in waypoints") }
-        const lonLatWaypoints = waypoints.map(([lat, lon]) => [lon, lat]);
+  async getGeocodeAndDirections(req) {
+    const { start, end } = await req.json();
 
-        const data = await this.osrm.getDirections(lonLatWaypoints);
-        return data;
-    }
+    // validate start and end values
+    const startChecked = await validate.validateLocation(start);
+    const endChecked = await validate.validateLocation(end);
 
-    async getGeocode(location) {
-        const coordinates = await this.osrm.getGeocode(location);
-        return coordinates;
-    }
+    // convert to geocode
+    const startGeocode = await this.getGeocode(startChecked);
+    const endGeocode = await this.getGeocode(endChecked);
 
+    // convert LatLon geocodes to LonLat;
+    const waypoints = [startGeocode, endGeocode].map(([lat, lon]) => [
+      lon,
+      lat,
+    ]);
+
+    // send OSRM request
+    return await osrm.getDirections(waypoints);
+  }
 }

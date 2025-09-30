@@ -20,6 +20,7 @@ import { Button, Stack } from "@mui/material";
 import SaveNewNavigateModal from "./SaveNewNavigateModal";
 import { useCreateBikePathMutation } from "@/services/bikePaths";
 import Loading from "./loadingBikes/Loading";
+import Alerts from "./Alerts";
 
 const MapComponent = () => {
   const [
@@ -46,16 +47,16 @@ const MapComponent = () => {
   const [markers, setMarkers] = useState([]);
   const [start, setStart] = useState("Queenstown");
   const [end, setEnd] = useState("Frankton");
-  const [loading, setLoading] = useState(false);
-  const [distance, setDistance] = useState(null);
-  const [duration, setDuration] = useState("");
+  // const [loading, setLoading] = useState(false);
+  // const [distance, setDistance] = useState(null);
+  // const [duration, setDuration] = useState("");
   const [path, setPath] = useState(null);
 
   const clearRoute = () => {
     setCoordinates([]);
     setMarkers([]);
-    setDistance(null);
-    setDuration("");
+    // setDistance(null);
+    // setDuration("");
     setPath(null);
   };
 
@@ -64,35 +65,16 @@ const MapComponent = () => {
 
     // empty the list of coordinates
     clearRoute();
-    setLoading(true);
-
-    // Converts query/locations to latitude/longitude
-    const geocode = async (query) => {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          query
-        )}&format=json`
-      );
-      const data = await res.json();
-      if (data.length > 0) {
-        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-      }
-      return null;
-    };
-
-    const startCoords = await geocode(start); // [-45.0321923,168.661]
-    const endCoords = await geocode(end);
-    const waypoints = [startCoords, endCoords];
 
     // make OSRM http call
-    getOSRMRoute({ waypoints })
+    getOSRMRoute({ start, end })
       .unwrap()
       .then((data) => {
         if (data?.code === "Ok") {
           console.log(JSON.stringify(data));
           setCoordinates(data.geometry);
-          setDistance(data.distanceKm);
-          setDuration(data.duration);
+          // setDistance(data.distanceKm);
+          // setDuration(data.duration);
 
           // set the markers
           const startEnd = [
@@ -128,11 +110,11 @@ const MapComponent = () => {
         });
       }
     };
-    useMapEvents({
-      zoomend: () => {
-        setLoading(false);
-      },
-    });
+    // useMapEvents({
+    //   zoomend: () => {
+    //     setLoading(false);
+    //   },
+    // });
 
     //useEffect to trigger the map fly when markerData changes.
     useEffect(() => {
@@ -147,7 +129,13 @@ const MapComponent = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      <Alerts
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+        errorMsg={OSRMError?.data?.error}
+        successMsg="Route loaded"
+      />
       <MapContainer
         center={[-45.0302, 168.6615]}
         zoom={12}
@@ -174,13 +162,14 @@ const MapComponent = () => {
 
         <ZoomHandler />
       </MapContainer>
-      <div className="absolute bottom-5 left-0 w-full z-[10000] p-3">
+      <div className="absolute bottom-5 left-0 w-full z-[1000] p-3">
         <form className="flex justify-center w-full" onSubmit={handleSearch}>
           <Stack
             direction={"row"}
             width={"inherit"}
             justifyContent={"center"}
             spacing={3}
+            marginBottom={10}
           >
             <TextField
               label="Start"

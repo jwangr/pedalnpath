@@ -128,9 +128,9 @@ export default function SaveNewNavigateModal({ path }) {
       />
       <Button
         onClick={handleOpen}
-        color="secondary"
-        variant="outlined"
-        startIcon={<Save color="secondary" />}
+        color="success"
+        variant="contained"
+        startIcon={<Save />}
       >
         Save
       </Button>

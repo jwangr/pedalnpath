@@ -1,4 +1,6 @@
 import BikePathDBController from "@/lib/controllers/BikePathDBController";
+import ValidationError from "@/lib/utils/validation/ValidationError";
+import { NextResponse } from "next/server";
 
 const controller = new BikePathDBController();
 
@@ -9,8 +11,19 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  const response = await controller.createPath(req);
-  return new Response(JSON.stringify(response), { status: 200 });
+  try {
+    const response = await controller.createPath(req);
+    return new Response(JSON.stringify(response), { status: 200 });
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+        },
+        { status: error.statusCode }
+      );
+    }
+  }
 }
 
 export async function DELETE(req) {
