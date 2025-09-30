@@ -155,7 +155,7 @@ const MapComponent = () => {
         }
         errorMsg={
           OSRMError
-            ? "Unable to find route"
+            ? OSRMErrorMsg.data.error || "Unable to find route"
             : geminiError
             ? geminiErrorMsg.data.error || "Unable to find paths by Gemini."
             : null

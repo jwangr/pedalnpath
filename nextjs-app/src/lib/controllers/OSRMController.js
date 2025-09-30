@@ -1,4 +1,5 @@
 import OSRMDao from "../dao/OSRMDao";
+import validateGeminiCoordinates from "../utils/validation/validateGeminiResponse copy";
 import ValidateOSRMRequest from "../utils/validation/ValidateOSRMRequest";
 const osrm = new OSRMDao();
 const validate = new ValidateOSRMRequest();
@@ -10,23 +11,28 @@ export default class OSRMController {
   }
 
   async getGeocodeAndDirections(req) {
-    const { start, end } = await req.json();
+    const { start, end, waypoints } = await req.json();
 
-    // validate start and end values
-    const startChecked = await validate.validateLocation(start);
-    const endChecked = await validate.validateLocation(end);
+    let coordinates = [];
 
-    // convert to geocode (lat, lon)
-    const startGeocode = await this.getGeocode(startChecked);
-    const endGeocode = await this.getGeocode(endChecked);
+    if (start && end) {
+      // validate start and end values
+      const startChecked = await validate.validateLocation(start);
+      const endChecked = await validate.validateLocation(end);
 
-    // convert LatLon geocodes to LonLat;
-    const waypoints = [startGeocode, endGeocode].map(([lat, lon]) => [
-      lon,
-      lat,
-    ]);
+      // convert to geocode (lat, lon)
+      const startGeocode = await this.getGeocode(startChecked);
+      const endGeocode = await this.getGeocode(endChecked);
+
+      // convert LatLon geocodes to LonLat;
+      coordinates = [startGeocode, endGeocode].map(([lat, lon]) => [lon, lat]);
+    } else if (waypoints) {
+      coordinates = waypoints.map(([lat, lon]) => [lon, lat]);
+      console.log(`Waypoints noted by controller are: `, coordinates);
+      validateGeminiCoordinates(coordinates);
+    }
 
     // send OSRM request
-    return await osrm.getDirections(waypoints);
+    return await osrm.getDirections(coordinates);
   }
 }

@@ -8,6 +8,10 @@ export default class OSRMDao {
 
     const response = await axios.get(url);
     const data = response.data;
+
+    if (data.code !== "Ok") {
+      console.log(data.message);
+    }
     return data;
   }
 
