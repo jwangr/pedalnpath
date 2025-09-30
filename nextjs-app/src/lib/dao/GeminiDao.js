@@ -77,7 +77,6 @@ export default class GeminiDao {
       candidates[0]?.content?.parts[0]?.text ||
       "{title: 'No response from Gemini'}";
     data = data.replace(/```json|```/g, "").trim();
-    console.log(data);
 
     return data;
   }
