@@ -1,3 +1,4 @@
+import { NotFoundError } from "openai";
 import BikePathDao from "../dao/BikePathDao";
 import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
 import ValidationError from "../utils/validation/ValidationError";
@@ -10,7 +11,9 @@ export default class BikePathDBController {
     const userId = searchParams?.get("userId");
 
     if (title) {
-      return await dao.findPathByName(title);
+      const paths = await dao.findPathByName(title);
+      if (!paths)
+        throw new NotFoundError(`Could not find paths called ${title}.`);
     }
 
     return await dao.getAllPaths(parseInt(userId));
