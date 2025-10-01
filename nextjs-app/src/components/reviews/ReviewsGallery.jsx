@@ -91,7 +91,6 @@ export default function ReviewsGallery() {
                   <PathsItem
                     path={review.bikepath}
                     userId={review.userId}
-                    displayUserPathsToggle={true}
                   />
                 </Box>
               </Paper>
