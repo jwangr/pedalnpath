@@ -14,6 +14,7 @@ export default class BikePathDBController {
       const paths = await dao.findPathByName(title);
       if (!paths)
         throw new NotFoundError(`Could not find paths called ${title}.`);
+      return paths;
     }
 
     return await dao.getAllPaths(parseInt(userId));
