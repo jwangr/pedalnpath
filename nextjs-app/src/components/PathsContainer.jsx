@@ -45,6 +45,7 @@ export default function PathsContainer({ displayPaths, userId }) {
   const [filteredList, setFilteredList] = useState([]);
 
   const [filterFunction, setFilterFunction] = useState(null);
+  const [sortedFunction, setSortedFunction] = useState(null);
 
   useEffect(() => {
     if (data) {
@@ -54,15 +55,19 @@ export default function PathsContainer({ displayPaths, userId }) {
       setMax(newMax);
 
       if (filterFunction) {
-        setFilteredList([...data].filter(filterFunction));
+        setFilteredList([...data].filter(filterFunction).sort(sortedFunction));
       } else {
-        setFilteredList([...data]);
+        setFilteredList([...data].sort(sortedFunction));
       }
     }
-  }, [data, filterFunction]);
+  }, [data, filterFunction, sortedFunction]);
 
   const handleFilter = (applyFilters) => {
     setFilterFunction(() => applyFilters);
+  };
+
+  const handleSort = (sortingFunction) => {
+    setSortedFunction(() => sortingFunction);
   };
 
   if (data && data.length === 0) {
@@ -81,7 +86,11 @@ export default function PathsContainer({ displayPaths, userId }) {
         {displayPaths === "user" ? (
           <UserPathsFilter handleFilter={handleFilter} />
         ) : (
-          <AllPathsFilter handleFilter={handleFilter} max={max} />
+          <AllPathsFilter
+            handleFilter={handleFilter}
+            max={max}
+            handleSort={handleSort}
+          />
         )}
 
         <Grid
