@@ -6,22 +6,27 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Define a service using a base URL and expected endpoints
 export const reviewsApi = createApi({
   reducerPath: "reviewsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/bikepath" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
   tagTypes: ["Reviews"],
   endpoints: (builder) => ({
     getReviews: builder.query({
-      query: (bikepathId) => `${bikepathId}/reviews`,
+      query: (bikepathId) => `bikepath/${bikepathId}/reviews`,
+      providesTags: ["Reviews"],
+    }),
+
+    getAllReviews: builder.query({
+      query: (limit) => `reviews?limit=${limit}`,
       providesTags: ["Reviews"],
     }),
 
     getOverallStats: builder.query({
-      query: (bikepathId) => `${bikepathId}/reviews/stats`,
+      query: (bikepathId) => `bikepath/${bikepathId}/reviews/stats`,
       providesTags: ["Reviews"],
     }),
 
     createReview: builder.mutation({
       query: ({ bikepathId, userId, score, comment }) => ({
-        url: `${bikepathId}/reviews`,
+        url: `bikepath/${bikepathId}/reviews`,
         method: "POST",
         body: { score, comment, userId }, // JSON body sent to API
       }),
@@ -30,7 +35,7 @@ export const reviewsApi = createApi({
 
     updateReview: builder.mutation({
       query: ({ bikepathId, review }) => ({
-        url: `${bikepathId}/reviews`,
+        url: `bikepath/${bikepathId}/reviews`,
         method: "PUT",
         body: { ...review }, // JSON body sent to API
       }),
@@ -39,7 +44,7 @@ export const reviewsApi = createApi({
 
     deleteReview: builder.mutation({
       query: ({ bikepathId, userId, reviewId }) => ({
-        url: `${bikepathId}/reviews`,
+        url: `bikepath/${bikepathId}/reviews`,
         method: "DELETE",
         body: { userId, reviewId }, // JSON body sent to API
       }),
@@ -54,6 +59,7 @@ export const {
   useCreateReviewMutation,
   useDeleteReviewMutation,
   useGetReviewsQuery,
+  useGetAllReviewsQuery,
   useGetOverallStatsQuery,
   useUpdateReviewMutation,
 } = reviewsApi;

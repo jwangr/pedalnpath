@@ -16,11 +16,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Alert,
   Avatar,
+  Link,
   ListItemIcon,
   Menu,
   MenuItem,
@@ -73,8 +73,8 @@ export default function Header(props) {
 
   const handleLogout = async () => {
     try {
-      const response = await logout().unwrap()
-      console.log("Logged out")
+      const response = await logout().unwrap();
+      console.log("Logged out");
       router.replace(response.redirectTo);
     } catch (error) {
       console.log("Not logged out");
@@ -93,7 +93,13 @@ export default function Header(props) {
             <ListItemButton>
               <ListItemIcon>{navItemsIcon[index]}</ListItemIcon>
               <ListItemText>
-                <Link href={`/${item.toLowerCase()}`}>{item}</Link>
+                <Link
+                  color="inherit"
+                  underline="none"
+                  href={`/${item.toLowerCase()}`}
+                >
+                  {item}
+                </Link>
               </ListItemText>
             </ListItemButton>
           </ListItem>
@@ -107,7 +113,9 @@ export default function Header(props) {
               <ListItemButton>
                 <ListItemIcon>{navItemsIcon[3]}</ListItemIcon>
                 <ListItemText>
-                  <Link href={`/profile`}>Profile</Link>
+                  <Link href={`/profile`} color="inherit" underline="none">
+                    Profile
+                  </Link>
                 </ListItemText>
               </ListItemButton>
             </ListItem>

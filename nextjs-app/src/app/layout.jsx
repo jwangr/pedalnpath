@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "@/components/Header";
 import Box from "@mui/material/Box";
 import { getSession } from "@/lib/auth";

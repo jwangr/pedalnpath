@@ -18,6 +18,15 @@ export default async function HomePage() {
           subtitle1={"Explore our list of bike paths"}
         />
         <ReviewsGallery />
+        <Box
+          sx={{
+            margin: 2,
+          }}
+        >
+          <Typography variant="h3" component={"div"} gutterBottom>
+            Discover More
+          </Typography>
+        </Box>
         <AllPathsContainer displayPaths={"AllPaths"} userId={user.id} />
       </div>
     );

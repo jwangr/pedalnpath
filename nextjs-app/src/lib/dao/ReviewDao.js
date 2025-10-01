@@ -15,9 +15,9 @@ export default class ReviewDao {
         },
         bikepath: {
           select: {
-            title: true
-          }
-        }
+            title: true,
+          },
+        },
       },
       orderBy: [
         {
@@ -66,9 +66,14 @@ export default class ReviewDao {
             id: true,
             email: true,
           },
-          bikepath: true,
         },
+        bikepath: true,
       },
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
     });
   }
 
@@ -86,10 +91,10 @@ export default class ReviewDao {
   async updateReview(reviewId, review) {
     return await db.review.update({
       where: {
-        id: reviewId
+        id: reviewId,
       },
-      data: review
-    })
+      data: review,
+    });
   }
 
   async deleteReview(id) {

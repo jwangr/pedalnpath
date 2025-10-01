@@ -1,4 +1,5 @@
 import ReviewDao from "../dao/ReviewDao";
+import ValidationError from "../utils/validation/ValidationError";
 
 const dao = new ReviewDao();
 export default class ReviewController {
@@ -6,6 +7,16 @@ export default class ReviewController {
     // TO DO: validate id
 
     return await dao.onePathAllReviews(bikepathId);
+  }
+
+  async allPathsAllReviews(req) {
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams?.get("limit"));
+    // TO DO: validate limit
+    if (isNaN(limit))
+      throw new ValidationError("Please provide valid numerical limit.");
+
+    return await dao.allPathsAllReviews(limit);
   }
 
   async getStats(bikepathId) {
@@ -20,7 +31,7 @@ export default class ReviewController {
 
   async updateReview(reviewId, review) {
     // TO DO: validate rating, userId, etc.
-    
+
     return await dao.updateReview(reviewId, review);
   }
 

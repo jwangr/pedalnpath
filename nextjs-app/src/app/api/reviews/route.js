@@ -1,9 +1,12 @@
 import CommentsController from "@/lib/controllers/ReviewController.js";
+import { NextResponse } from "next/server";
 
 const controller = new CommentsController();
 
-// Get all comments for all paths
-export async function GET() {
-  const response = await controller.onePathAllReviews(parseInt(id));
-  return new Response(JSON.stringify(response), { status: 200 });
+// Get all reviews for all the paths
+export async function GET(req) {
+  const response = await controller.allPathsAllReviews(req);
+  return NextResponse.json({
+    response,
+  });
 }
