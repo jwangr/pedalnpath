@@ -34,11 +34,11 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         {/* <MapView /> */}
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
-          {!displayUserPathsToggle && (
+          {!displayUserPathsToggle === false && (
             <ToggleCompleted bikeRoute={path} userId={userId} />
           )}
 
-          {displayUserPathsToggle && (
+          {displayUserPathsToggle === true && (
             <UserPathsToggle bikeRoute={path} userId={userId} />
           )}
 
