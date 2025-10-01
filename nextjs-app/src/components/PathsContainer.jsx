@@ -55,9 +55,13 @@ export default function PathsContainer({ displayPaths, userId }) {
       setMax(newMax);
 
       if (filterFunction) {
-        setFilteredList([...data].filter(filterFunction).sort(sortedFunction));
+        setFilteredList([...data].filter(filterFunction));
       } else {
-        setFilteredList([...data].sort(sortedFunction));
+        setFilteredList([...data]);
+      }
+
+      if (sortedFunction) {
+        setFilteredList((prev) => [...prev].sort(sortedFunction));
       }
     }
   }, [data, filterFunction, sortedFunction]);
