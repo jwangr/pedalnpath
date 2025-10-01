@@ -94,7 +94,7 @@ export default function Header(props) {
               <ListItemIcon>{navItemsIcon[index]}</ListItemIcon>
               <ListItemText>
                 <Link
-                  color="inherit"
+                  color="white"
                   underline="none"
                   href={`/${item.toLowerCase()}`}
                 >
@@ -243,7 +243,13 @@ export default function Header(props) {
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               {navItems.map((item) => (
                 <Button key={item} sx={{ color: "#fff", marginX: 2 }}>
-                  <Link href={`/${item.toLowerCase()}`}>{item}</Link>
+                  <Link
+                    color="white"
+                    underline="none"
+                    href={`/${item.toLowerCase()}`}
+                  >
+                    {item}
+                  </Link>
                 </Button>
               ))}
               {!props.session?.email && logIn}
