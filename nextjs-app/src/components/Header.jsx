@@ -113,7 +113,7 @@ export default function Header(props) {
               <ListItemButton>
                 <ListItemIcon>{navItemsIcon[3]}</ListItemIcon>
                 <ListItemText>
-                  <Link href={`/profile`} color="inherit" underline="none">
+                  <Link href={`/profile`} color="white" underline="none">
                     Profile
                   </Link>
                 </ListItemText>
@@ -167,7 +167,9 @@ export default function Header(props) {
       >
         <MenuItem onClick={handleCloseUserMenu}>
           <Typography sx={{ textAlign: "center" }}>
-            <Link href={`/profile`}>Profile</Link>
+            <Link href={`/profile`} color="black" underline="none">
+              Profile
+            </Link>
           </Typography>
         </MenuItem>
         <MenuItem
@@ -227,7 +229,9 @@ export default function Header(props) {
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
             >
-              <Link href={`/home`}>Pedal N' Path</Link>
+              <Link href={`/home`} color="white" underline="none">
+                Pedal N' Path
+              </Link>
             </Typography>
 
             {/* Page Name */}
