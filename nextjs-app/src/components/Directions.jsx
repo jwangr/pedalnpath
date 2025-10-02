@@ -165,18 +165,20 @@ const MapComponent = () => {
       <div className="absolute bottom-5 left-0 w-full z-[1000] p-3">
         <form className="flex justify-center w-full" onSubmit={handleSearch}>
           <Stack
-            direction={"row"}
-            width={"inherit"}
             justifyContent={"center"}
-            spacing={3}
-            marginBottom={10}
+            alignItems={"stretch"}
+            spacing={{ xs: 1, sm: 2, md: 4 }}
+            direction={{ xs: "column", sm: "row" }}
+            width={'100%'}
+            marginBottom={5}
           >
             <TextField
               label="Start"
               name="start"
-              variant="filled"
+              variant="outlined"
               color="secondary"
               placeholder="Start Here"
+              className="flex-grow p-2 border rounded-md bg-white/75"
               value={start}
               onChange={(e) => setStart(e.target.value)}
             />
@@ -184,8 +186,9 @@ const MapComponent = () => {
               label="End"
               name="end"
               placeholder="Destination"
-              variant="filled"
+              variant="outlined"
               color="secondary"
+              className="flex-grow p-2 border rounded-md bg-white/75"
               value={end}
               onChange={(e) => setEnd(e.target.value)}
             />
