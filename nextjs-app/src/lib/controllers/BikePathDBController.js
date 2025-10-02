@@ -1,4 +1,4 @@
-import { NotFoundError } from "openai";
+import NotFoundError from "../utils/errors/NotFoundError";
 import BikePathDao from "../dao/BikePathDao";
 import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
 import ValidationError from "../utils/validation/ValidationError";
