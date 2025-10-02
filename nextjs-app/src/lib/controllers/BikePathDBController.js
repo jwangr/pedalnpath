@@ -4,7 +4,7 @@ import ValidateNewBikePath from "../utils/validation/ValidateNewBikePath";
 import ValidationError from "../utils/validation/ValidationError";
 
 export default class BikePathDBController {
-  constructor (dao= BikePathDao()) {
+  constructor (dao= new BikePathDao()) {
     this.dao = dao
   }
   async getPaths(req) {
