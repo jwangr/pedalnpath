@@ -1,11 +1,18 @@
-import 'module-alias/register.js';
-// Test setup file for configuring the test environment
-// This file is loaded before all tests run
+import moduleAlias from 'module-alias';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-// Setup global test configuration
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Register aliases
+moduleAlias.addAliases({
+  '@': resolve(__dirname, '../'),
+  '@test': resolve(__dirname, '../test'),
+  '@dao': resolve(__dirname, '../lib/dao'),
+  '@controllers': resolve(__dirname, '../lib/controllers')
+});
+
+// Test setup
 process.env.NODE_ENV = 'test';
-
-// You can add any global test setup here
-// For example, setting up global mocks, test database connections, etc.
-
 console.log('Test environment initialized');

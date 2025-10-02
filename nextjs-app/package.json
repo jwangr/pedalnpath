@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "mocha \"src/tests/**/*.test.js\" --require test/setup.js --reporter spec",
-    "test:watch": "mocha test/**/*.test.js --require test/setup.js --watch"
+    "test": "mocha",
+    "test:watch": "mocha --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -57,6 +57,9 @@
     "whatwg-fetch": "^3.6.20"
   },
   "_moduleAliases": {
-    "@": "src"
+    "@": "./src",
+    "@utils": "./src/utils",
+    "@models": "./src/models",
+    "@controllers": "./src/controllers"
   }
 }
