@@ -10,13 +10,12 @@ import {
   useGetBikePathsQuery,
 } from "@/services/bikePaths";
 import { useEffect, useState } from "react";
-import { Alert, Link, Slide, Snackbar, Typography } from "@mui/material";
+import { Link, Typography } from "@mui/material";
 import OverallCount from "./reviews/OverallCount";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
+import Alerts from "./Alerts";
 
 export default function RouteDrawerOSRM({ BikeRoute, userId }) {
-  const [alertTheme, setAlertTheme] = useState(null);
-  const [openAlert, setOpenAlert] = useState(false);
   const [storedPath, setStoredPath] = useState(null);
 
   // Search for BikeRoute in existing database
@@ -44,8 +43,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
 
   // If route is not in database, add it to the global database.
   useEffect(() => {
-    if (getExistingPathIsSuccess && !getExistingPathData) {
-      setAlertTheme("warning");
+    if (!getExistingPathIsSuccess) {
       console.log(
         "Track not found in global database, creating route now." +
           JSON.stringify(BikeRoute)
@@ -54,54 +52,33 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
         .unwrap()
         .then((response) => {
           console.log("fulfilled", JSON.stringify(response));
-          setAlertTheme("success");
           setStoredPath({ ...response }); // set the stored path
         })
         .catch((err) => {
           console.log("error", err);
-          setAlertTheme("error");
         });
     } else if (getExistingPathData) {
       setStoredPath({ ...getExistingPathData });
     } else {
       setStoredPath(null);
     }
-  }, [getExistingPathIsSuccess]);
-
-  // User can toggle / add if route already in database
-
-  useEffect(() => {
-    if (alertTheme) {
-      setOpenAlert(true);
-    }
-  }, [alertTheme]);
-  // Snackbar and alert message
-  const AlertMsg = ({ theme }) => {
-    if (!theme) return null;
-
-    const messages = {
-      success: "Loaded route",
-      warning: "Loading route. Please wait...",
-      error: "Uh-oh! Route not added to Pedal N Path. Try again later",
-    };
-
-    return (
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={4000}
-        onClose={() => setOpenAlert(false)}
-        slots={{ transition: Slide }}
-      >
-        <Alert variant="filled" severity={theme} sx={{ width: "100%" }}>
-          {messages[theme]}
-        </Alert>
-      </Snackbar>
-    );
-  };
+  }, [getExistingPathData]);
 
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
-      <AlertMsg theme={alertTheme} />
+      <Alerts
+        isLoading={getExistingPathIsLoading || newPathIsLoading}
+        isSuccess={getExistingPathIsSuccess || newPathIsSuccess}
+        isError={newPathIsError}
+        successMsg={
+          getExistingPathIsSuccess
+            ? "Path found in database already. "
+            : newPathIsSuccess
+            ? "Added new path to Pedal N' Path. "
+            : ""
+        }
+        errorMsg={newPathIsError ? "Unable to create new path. " : null}
+      />
       {/* Summary Card */}
       <Card
         sx={{
@@ -128,9 +105,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
               <Link
                 color="inherit"
                 underline="hover"
-                href={`/path/${encodeURIComponent(
-                  storedPath.title
-                )}`}
+                href={`/path/${encodeURIComponent(storedPath.title)}`}
               >
                 {storedPath.title}
               </Link>
