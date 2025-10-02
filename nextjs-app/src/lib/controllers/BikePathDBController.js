@@ -1,7 +1,7 @@
-import NotFoundError from "../utils/errors/NotFoundError";
-import BikePathDao from "../dao/BikePathDao";
-import ValidateNewBikePath from "../utils/validation/ValidateNewBikePath";
-import ValidationError from "../utils/validation/ValidationError";
+import NotFoundError from "../utils/errors/NotFoundError.js";
+import BikePathDao from "../dao/BikePathDao.js";
+import ValidateNewBikePath from "../utils/validation/ValidateNewBikePath.js";
+import ValidationError from "../utils/validation/ValidationError.js";
 
 export default class BikePathDBController {
   constructor (dao= new BikePathDao()) {

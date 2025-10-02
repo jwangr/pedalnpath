@@ -3,8 +3,8 @@ import { describe, it, beforeEach, afterEach } from "mocha";
 import sinon from "sinon";
 
 // import bikepath controllers and dao
-import BikePathDBController from "../lib/controllers/BikePathDBController";
-import BikePathDao from "../lib/dao/BikePathDao";
+import BikePathDBController from "../lib/controllers/BikePathDBController.js";
+import BikePathDao from "../lib/dao/BikePathDao.js";
 
 describe("BikePathController", () => {
   let bikePathController;
