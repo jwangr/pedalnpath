@@ -1,17 +1,19 @@
 import NotFoundError from "../utils/errors/NotFoundError";
 import BikePathDao from "../dao/BikePathDao";
-import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
+import ValidateNewBikePath from "../utils/validation/ValidateNewBikePath";
 import ValidationError from "../utils/validation/ValidationError";
-const dao = new BikePathDao();
 
 export default class BikePathDBController {
+  constructor (dao= BikePathDao()) {
+    this.dao = dao
+  }
   async getPaths(req) {
     const { searchParams } = new URL(req.url);
     const title = searchParams?.get("title");
     const userId = searchParams?.get("userId");
 
     if (title) {
-      const paths = await dao.findPathByName(title);
+      const paths = await this.dao.findPathByName(title);
       if (!paths)
         throw new NotFoundError(`Could not find paths called ${title}.`);
       return paths;
@@ -27,7 +29,7 @@ export default class BikePathDBController {
       const path = await req.json();
       const parsedPath = validator.validatePath(path);
 
-      return await dao.createPath(parsedPath);
+      return await this.dao.createPath(parsedPath);
     } catch (error) {
       if (error.code === "P2002") {
         // prisma client error for un-unique bike paths
@@ -46,13 +48,13 @@ export default class BikePathDBController {
   }
 
   async toggleAddDelete(path) {
-    const checkPath = await dao.findPathByName(path.title);
+    const checkPath = await this.dao.findPathByName(path.title);
 
     if (checkPath) {
-      await dao.deletePath(checkPath.id);
+      await this.dao.deletePath(checkPath.id);
       return { added: false };
     } else {
-      await dao.createPath(path);
+      await this.dao.createPath(path);
       return { added: true };
     }
   }
