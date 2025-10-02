@@ -15,7 +15,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import TemporaryDrawer from "./Drawer";
-import { TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 import { useGetUserQuery } from "@/services/Auth";
 import { useRequestGeminiMutation } from "@/services/Gemini";
@@ -210,7 +210,12 @@ const MapComponent = () => {
 
       {/* 24. Include the form input, submit button and area for submitted question. */}
       <div className="absolute bottom-15 left-0 w-full z-[500] p-3">
-        <div className="flex justify-center">
+        <Stack
+          justifyContent={"center"}
+          alignItems={"stretch"}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          direction={{ xs: "column", sm: "row" }}
+        >
           <TextField
             id="filled-basic"
             label="Explore with Gemini"
@@ -225,13 +230,10 @@ const MapComponent = () => {
               }
             }}
           />
-          <button
-            onClick={handleSubmit}
-            className="p-2 ml-2 bg-blue-500 text-white rounded-md"
-          >
+          <Button variant="contained" color="secondary" onClick={handleSubmit}>
             Submit
-          </button>
-        </div>
+          </Button>
+        </Stack>
       </div>
     </>
   );
