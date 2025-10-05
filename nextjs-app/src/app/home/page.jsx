@@ -17,6 +17,7 @@ export default async function HomePage() {
           h4={`Welcome, ${user.email || "anon"}`}
           subtitle1={"Explore our list of bike paths"}
         />
+
         <ReviewsGallery />
         <Box
           sx={{

@@ -19,7 +19,7 @@ import { deepPurple } from "@mui/material/colors";
 
 export default function ReviewsGallery() {
   const { data, error, isError, isLoading, isSuccess } =
-    useGetAllReviewsQuery(5);
+    useGetAllReviewsQuery(10);
 
   return (
     <Box
@@ -31,73 +31,78 @@ export default function ReviewsGallery() {
         Community Reviews
       </Typography>
 
-      {isLoading && (
-        <Skeleton
-          height={400}
-          width={"100%"}
-          animation="wave"
-          variant="rounded"
-        />
-      )}
+      <Box
+        sx={{
+          margin: "auto",
+          marginTop: 2,
+          maxWidth: "1080px",
+        }}
+      >
+        {isLoading && (
+          <Skeleton
+            height={400}
+            width={"100%"}
+            animation="wave"
+            variant="rounded"
+          />
+        )}
 
-      {isSuccess && (
-        <Carousel data-bs-theme="dark">
-          {data?.response?.map((review) => (
-            <CarouselItem>
-              <Paper
-                height={"auto"}
-                padding={2}
-                borderRadius={"16px"}
-                elevation={3}
-              >
-                <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
-                  <Box mb={0}>
-                    <Box
-                      component="h3"
-                      sx={{
-                        fontSize: 17,
-                        fontWeight: "bold",
-                        letterSpacing: "0.5px",
-                        marginBottom: 3,
-                        marginRight: 1.5,
-                        display: "inline-block",
-                      }}
-                    >
-                      {review.user?.email} left a review.
-                    </Box>
-                    {review.score && (
-                      <Rating
-                        name={"rating"}
-                        value={review.score}
-                        size={"medium"}
-                        sx={{ verticalAlign: "text-top" }}
-                        readOnly
-                      />
-                    )}
-                  </Box>
-                  <Box component="p" sx={{ fontSize: 14 }}>
-                    {review.comment}
-                  </Box>
-                </CardContent>
-
-                <Box
-                  sx={{
-                    marginBottom: 2,
-                    background: deepPurple[100],
-                    paddingX: 3,
-                    paddingBottom: 2
-                  }}
+        {isSuccess && (
+          <Carousel data-bs-theme="dark" controls={false} pause={"hover"}>
+            {data?.response?.map((review) => (
+              <CarouselItem key={review.id}>
+                <Paper
+                  height={"auto"}
+                  padding={2}
+                  borderRadius={"16px"}
+                  elevation={3}
                 >
-                  <PathsItem
-                    path={review.bikepath}
-                    userId={review.userId}
-                  />
-                </Box>
-              </Paper>
-            </CarouselItem>
-          ))}
-        </Carousel>
-      )}
+                  <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
+                    <Box mb={0}>
+                      <Box
+                        component="h3"
+                        sx={{
+                          fontSize: 17,
+                          fontWeight: "bold",
+                          letterSpacing: "0.5px",
+                          marginBottom: 3,
+                          marginRight: 1.5,
+                          display: "inline-block",
+                        }}
+                      >
+                        {review.user?.email} left a review.
+                      </Box>
+                      {review.score && (
+                        <Rating
+                          name={"rating"}
+                          value={review.score}
+                          size={"medium"}
+                          sx={{ verticalAlign: "text-top" }}
+                          readOnly
+                        />
+                      )}
+                    </Box>
+                    <Box component="p" sx={{ fontSize: 14 }}>
+                      {review.comment}
+                    </Box>
+                  </CardContent>
+
+                  <Box
+                    sx={{
+                      marginBottom: 2,
+                      background: deepPurple[100],
+                      paddingX: 3,
+                      paddingBottom: 2,
+                    }}
+                  >
+                    <PathsItem path={review.bikepath} userId={review.userId} />
+                  </Box>
+                </Paper>
+              </CarouselItem>
+            ))}
+          </Carousel>
+        )}
+      </Box>
     </Box>
   );
 }
