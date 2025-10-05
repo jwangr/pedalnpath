@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, CardContent, Divider, Rating, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  Divider,
+  Rating,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import CarouselCaption from "react-bootstrap/CarouselCaption";
 import CarouselItem from "react-bootstrap/CarouselItem";
 import PathsItem from "../PathsItem";
@@ -50,11 +57,11 @@ export default function ReviewCarouselItem({ review }) {
           </Box>
         )}
 
-        <Divider light sx={{ mt: 1, mb: 1 }} />
         <PathsItem
           path={review.bikepath}
           userId={review.userId}
           displayUserPathsToggle={true}
+          displayMap={false}
         />
       </Box>
 

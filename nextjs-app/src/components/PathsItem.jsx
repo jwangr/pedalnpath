@@ -23,7 +23,12 @@ const DynamicMapComponent = dynamic(
   }
 );
 
-export default function PathsItem({ path, userId, displayUserPathsToggle }) {
+export default function PathsItem({
+  path,
+  userId,
+  displayUserPathsToggle,
+  displayMap = true,
+}) {
   return (
     <Grid size={{ xs: 12, md: 6 }}>
       <Paper
@@ -37,7 +42,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         }}
       >
         {/* <MapView /> */}
-        <DynamicMapComponent />
+        {!!displayMap && <DynamicMapComponent />}
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
           {displayUserPathsToggle === false && (
