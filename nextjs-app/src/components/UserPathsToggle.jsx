@@ -12,11 +12,6 @@ import { useToggleAddDeleteMutation } from "@/services/userPaths";
 import { useGetBikePathsQuery } from "@/services/bikePaths";
 
 export default function UserPathsToggle({ bikeRoute, userId }) {
-  // console.log(
-  //   `UserPathsToggle received bikeRoute ${JSON.stringify(
-  //     bikeRoute
-  //   )} and userId ${userId}`
-  // );
   const [toggleAddDelete, { data, isLoading, isSuccess, isError }] =
     useToggleAddDeleteMutation();
 
