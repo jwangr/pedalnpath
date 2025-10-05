@@ -25,6 +25,15 @@ import { useEffect, useState } from "react";
 import { useGetUserPathsQuery } from "@/services/userPaths";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
+import dynamic from "next/dynamic";
+
+// Load the map only when window is defined on the client-side
+const DynamicMapComponent = dynamic(
+  () => import("@/components/maps/PathPageMap"),
+  {
+    ssr: false,
+  }
+);
 
 const cardData = [
   {
@@ -200,17 +209,7 @@ export default function MainContent({ path = examplePath, loading = true }) {
           }}
         />
       ) : (
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image={cardData[0].img}
-          sx={{
-            aspectRatio: "16 / 9",
-            maxHeight: "50vh",
-            borderBottom: "1px solid",
-            borderColor: "divider",
-          }}
-        />
+        <DynamicMapComponent coordinates={path.coordinates} />
       )}
 
       {/* Title and Description */}
