@@ -1,31 +1,30 @@
-// jest.config.js
 import nextJest from "next/jest.js";
 
-const createJestConfig = nextJest({ dir: "./" });
+const createJestConfig = nextJest({
+  dir: "./", // Path to nextjs-app
+});
 
-/** @type {import('jest').Config} */
+// Add any custom config to be passed to Jest
 const customJestConfig = {
-  testEnvironment: "jest-environment-jsdom",
-  coverageProvider: "v8",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testPathIgnorePatterns: ["<rootDir>/src/__tests__/helpers/"],
-  collectCoverageFrom: [
-    "src/**/*.{js,jsx}",
-    "!src/**/*.d.ts",
-    "!src/__tests__/**",
-    "!src/components/**", // Skip components for now as they need React testing
-    "!**/node_modules/**",
-    "!**/.next/**",
-  ],
-  coverageReporters: ["text", "lcov", "html"],
-  testMatch: [
-    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}",
-  ],
+  testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    // Handle module aliases (if you use them in your app) - can try to generalise with: '^@/(.*)$': '<rootDir>/src/$1',
+    "^@/app/(.*)$": "<rootDir>/src/app/$1",
+    "^@/components/(.*)$": "<rootDir>/src/components/$1",
+    "^@/generated/(.*)$": "<rootDir>/src/generated/$1",
+    "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
+    "^@/services/(.*)$": "<rootDir>/src/services/$1",
+    "^@/store/(.*)$": "<rootDir>/src/store/$1",
   },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // optional, for RTL
+
+  //   or handling ES Modules
+  transformIgnorePatterns: ["/node_modules/(?!(@your-problematic-module)/)"],
+  transform: {
+    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+  },
+  extensionsToTreatAsEsm: [".ts", ".tsx"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
 
 export default createJestConfig(customJestConfig);

@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from "../db/index.js";
 
 export default class BikePathDao {
   async getAllPaths(id = null) {
