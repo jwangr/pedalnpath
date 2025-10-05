@@ -31,7 +31,7 @@ describe("Toggle complete component", () => {
     ]);
   });
 
-  it("Calls togglecomplete when clicked", () => {
+  it("Calls togglecomplete when clicked", async () => {
     renderWithTheme(
       <ToggleCompleted
         bikeRoute={{ id: 123, title: "Title", completed: false }}
@@ -39,9 +39,9 @@ describe("Toggle complete component", () => {
       />
     );
 
-    screen.debug();
+
     const switchInput = screen.getByRole("switch");
-    fireEvent.click(switchInput);
+    await fireEvent.click(switchInput);
 
     expect(mockToggleCompleted).toHaveBeenCalledWith({
       userId: 3,
