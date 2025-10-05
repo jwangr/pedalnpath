@@ -130,7 +130,6 @@ describe("Paths Item", () => {
         displayUserPathsToggle={true}
       />
     );
-    screen.debug();
     expect(
       screen.getByText((content, element) => content.includes("4.0"))
     ).toBeInTheDocument();
