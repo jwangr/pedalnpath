@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { useEffect, useState } from "react";
-import EditModal from "./EditModal";
+import EditModal from "./EditReviewModal";
 
 const example = {
   id: 1,
@@ -111,7 +111,7 @@ export default function AuthorReviewsEach({ review = example, userId = null }) {
         {/* {review.score}  */}
         <Rating
           name="half-rating-read"
-          defaultValue={review.score}
+          value={review.score} // use 'value' instead of 'default value' -> updates when review is updated
           precision={0.5}
           readOnly
         />

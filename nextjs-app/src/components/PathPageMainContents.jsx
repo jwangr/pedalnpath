@@ -17,7 +17,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import ReviewModal from "./reviews/ReviewModal";
+import ReviewModal from "./reviews/WriteReviewModal";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 import OverallCount from "./reviews/OverallCount";
 import { useGetUserQuery } from "@/services/Auth";

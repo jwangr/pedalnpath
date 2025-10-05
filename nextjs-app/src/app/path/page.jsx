@@ -1,4 +1,4 @@
-import ReviewModal from "@/components/reviews/ReviewModal";
+import ReviewModal from "@/components/reviews/WriteReviewModal";
 
 const examplePath = {
   id: 19,
