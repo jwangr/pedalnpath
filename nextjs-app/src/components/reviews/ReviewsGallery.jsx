@@ -54,7 +54,6 @@ export default function ReviewsGallery() {
                 <Paper
                   height={"auto"}
                   padding={2}
-                  borderRadius={"16px"}
                   elevation={3}
                 >
                   <CardContent sx={{ pr: 2, background: deepPurple[100] }}>

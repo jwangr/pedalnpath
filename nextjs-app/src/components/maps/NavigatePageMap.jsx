@@ -14,7 +14,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import TextField from "@mui/material/TextField";
-import polyline from "@mapbox/polyline";
+import polasdjflkjyline from "@mapbox/polyline";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 import { Button, Stack } from "@mui/material";
 import SaveNewNavigateModal from "../SaveNewNavigateModal";
@@ -149,7 +149,6 @@ const MapComponent = () => {
 
         {/* If search is successfull */}
         <Polyline positions={coordinates}>
-          <Popup>See This!</Popup>
         </Polyline>
 
         {/*Render the markers. */}

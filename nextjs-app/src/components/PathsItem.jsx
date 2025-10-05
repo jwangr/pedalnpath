@@ -11,12 +11,17 @@ import {
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
-import MapBoxContainer from "./maps/MapBoxContainer";
+import MapBoxContainer from "./maps/PathsItemMap";
 import OverallCount from "./reviews/OverallCount";
+import dynamic from "next/dynamic";
 
-const MapView = MapBoxContainer(() => import("./maps/MapBoxContainer.jsx"), {
-  ssr: false,
-});
+// The map component will only be imported if 'windows' is defined
+const DynamicMapComponent = dynamic(
+  () => import("@/components/maps/PathsItemMap"),
+  {
+    ssr: false,
+  }
+);
 
 export default function PathsItem({ path, userId, displayUserPathsToggle }) {
   return (
@@ -32,6 +37,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
         }}
       >
         {/* <MapView /> */}
+        <DynamicMapComponent />
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
           {displayUserPathsToggle === false && (
@@ -80,7 +86,7 @@ export default function PathsItem({ path, userId, displayUserPathsToggle }) {
             {path.bikepath?.description || path.description}
           </Typography>
 
-          <Grid container marginTop={2}>
+          <Grid container marginTop={2} gap={2}>
             <OverallCount
               bikepathId={path.bikepath?.id || path.id}
               size={"S"}
