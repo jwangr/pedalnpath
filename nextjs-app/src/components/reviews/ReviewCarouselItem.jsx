@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Avatar,
   Box,
   CardContent,
   Divider,
@@ -11,6 +12,7 @@ import {
 import CarouselCaption from "react-bootstrap/CarouselCaption";
 import CarouselItem from "react-bootstrap/CarouselItem";
 import PathsItem from "../PathsItem";
+import { deepPurple } from "@mui/material/colors";
 
 export default function ReviewCarouselItem({ review }) {
   return (
@@ -33,9 +35,12 @@ export default function ReviewCarouselItem({ review }) {
                 letterSpacing: "0.5px",
                 marginBottom: 0,
                 marginRight: 1.5,
-                display: "inline-block",
+                display: "flex",
               }}
             >
+              <Avatar sx={{ bgcolor: deepPurple[300] }}>
+                {review.user?.email.slice(0, 1).toUpperCase()}
+              </Avatar>
               {review.user?.email} left a review.
             </Box>
             {review.score && (

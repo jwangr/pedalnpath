@@ -42,7 +42,9 @@ export default function PathsItem({
         }}
       >
         {/* <MapView /> */}
-        {!!displayMap && <DynamicMapComponent />}
+        {!!displayMap && (
+          <DynamicMapComponent coordinates={path.coordinates || null} />
+        )}
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
           {displayUserPathsToggle === false && (
