@@ -75,7 +75,7 @@ export default function Header(props) {
     try {
       const response = await logout().unwrap();
       console.log("Logged out");
-      router.replace(response.redirectTo);
+      router.replace('/login');
     } catch (error) {
       console.log("Not logged out");
     }

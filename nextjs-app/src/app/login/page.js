@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
       const response = await login({ email, password }).unwrap();
       console.log(JSON.stringify(response));
-      router.replace(response.redirectTo);
+      router.replace('/home');
     } catch (error) {
       console.log(error);
     }
