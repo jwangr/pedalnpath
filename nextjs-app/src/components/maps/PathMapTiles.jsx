@@ -26,7 +26,7 @@ export default function PathMapTiles({ coordinates, userControl = false }) {
       keyboard={false} // disable keyboard navigation
       zoomControl={userControl} // remove zoom buttons
       dragging={userControl} // disable dragging
-      scrollWheelZoom={userControl} // disable scroll zoom
+      scrollWheelZoom={false} // disable scroll zoom
       doubleClickZoom={false} // disable double-click zoom
       touchZoom={false} // disable touch zoom
     >

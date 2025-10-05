@@ -13,7 +13,6 @@ import {
 import Carousel from "react-bootstrap/Carousel";
 import CarouselCaption from "react-bootstrap/CarouselCaption";
 import CarouselItem from "react-bootstrap/CarouselItem";
-import ReviewCarouselItem from "./ReviewCarouselItem";
 import PathsItem from "../PathsItem";
 import { deepPurple } from "@mui/material/colors";
 
@@ -51,11 +50,7 @@ export default function ReviewsGallery() {
           <Carousel data-bs-theme="dark" controls={false} pause={"hover"}>
             {data?.response?.map((review) => (
               <CarouselItem key={review.id}>
-                <Paper
-                  height={"auto"}
-                  padding={2}
-                  elevation={3}
-                >
+                <Paper height={"auto"} padding={2} elevation={3}>
                   <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
                     <Box mb={0}>
                       <Box
@@ -64,7 +59,6 @@ export default function ReviewsGallery() {
                           fontSize: 17,
                           fontWeight: "bold",
                           letterSpacing: "0.5px",
-                          marginBottom: 3,
                           marginRight: 1.5,
                           display: "inline-block",
                         }}
@@ -94,7 +88,11 @@ export default function ReviewsGallery() {
                       paddingBottom: 2,
                     }}
                   >
-                    <PathsItem path={review.bikepath} userId={review.userId} />
+                    <PathsItem
+                      path={review.bikepath}
+                      userId={review.userId}
+                      displayMap={false}
+                    />
                   </Box>
                 </Paper>
               </CarouselItem>
