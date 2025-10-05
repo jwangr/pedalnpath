@@ -30,7 +30,7 @@ export default function ToggleCompleted({ bikeRoute, userId, toggleLoad }) {
   };
 
   return (
-    <Box className="flex flex-row">
+    <Box className="flex flex-row-reverse">
       <SwitchTextTrack checked={added} onChange={handleChangeRTK} />
       {isLoading && <CircularProgress color="secondary" size="1em" />}
     </Box>
