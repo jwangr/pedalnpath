@@ -117,7 +117,7 @@ describe("Paths Item", () => {
     expect(switches).toHaveLength(1);
   });
 
-  it("renders the overall review stats", () => {
+  it("renders the overall review stats if they are filled", () => {
     renderWithTheme(
       <PathsItem
         path={{
@@ -136,5 +136,28 @@ describe("Paths Item", () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText(3)).toBeInTheDocument();
+  });
+
+  it("displays no reviews if there are none", () => {
+    useGetOverallStatsQuery.mockReturnValue({
+      data: { count: 0, rating: { _avg: { score: null } } },
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    renderWithTheme(
+      <PathsItem
+        path={{
+          title: "Title",
+          distanceKm: 3,
+          description: "Description",
+          id: 3,
+        }}
+        userId={3}
+        displayUserPathsToggle={true}
+      />
+    );
+    expect(screen.getByText("No reviews")).toBeInTheDocument();
   });
 });
