@@ -14,7 +14,7 @@ export default function ReviewCarouselItem({ review }) {
         bgcolor={"grey"}
         display={"flex"}
         padding={2}
-        borderRadius={"16px"}
+        // borderRadius={"16px"}
       >
         <CardContent sx={{ pr: 2 }}>
           <Box mb={1}>
