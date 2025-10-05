@@ -56,7 +56,7 @@ describe("Paths Item", () => {
     ]);
 
     useGetOverallStatsQuery.mockReturnValue({
-      data: [{ count: 3, rating: { _avg: { score: 4 } } }],
+      data: { count: 3, rating: { _avg: { score: 4 } } },
       isLoading: false,
       isSuccess: true,
       isError: false,
@@ -127,7 +127,7 @@ describe("Paths Item", () => {
           id: 3,
         }}
         userId={3}
-        displayUserPathsToggle={false}
+        displayUserPathsToggle={true}
       />
     );
     screen.debug();
@@ -135,8 +135,6 @@ describe("Paths Item", () => {
       screen.getByText((content, element) => content.includes("4.0"))
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByText((content, element) => content.includes("3"))
-    ).toBeInTheDocument();
+    expect(screen.getByText(3)).toBeInTheDocument();
   });
 });
