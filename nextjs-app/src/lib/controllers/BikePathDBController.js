@@ -19,7 +19,7 @@ export default class BikePathDBController {
       return paths;
     }
 
-    return await dao.getAllPaths(parseInt(userId));
+    return await this.dao.getAllPaths(parseInt(userId));
   }
 
   async createPath(req) {
@@ -44,7 +44,7 @@ export default class BikePathDBController {
     const { searchParams } = new URL(req.url);
     const id = Number(searchParams?.get("id"));
 
-    return await dao.deletePath(id);
+    return await this.dao.deletePath(id);
   }
 
   async toggleAddDelete(path) {
