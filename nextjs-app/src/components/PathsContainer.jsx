@@ -39,7 +39,7 @@ export default function PathsContainer({ displayPaths, userId }) {
   const isError = displayPaths === "user" ? userPathsisError : allPathsisError;
 
   if (isError) {
-    console.log(error);
+    console.log(error, userPathsisError, allPathsisError);
   }
 
   const [filteredList, setFilteredList] = useState([]);
