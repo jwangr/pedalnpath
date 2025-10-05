@@ -186,7 +186,7 @@ export default function Header(props) {
 
   const logIn = (
     <Button sx={{ color: "#fff" }}>
-      <Link href={`/login`}>Login</Link>
+      <Link color="white" underline="none" href={`/login`}>Login</Link>
     </Button>
   );
 
