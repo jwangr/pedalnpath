@@ -1,5 +1,4 @@
 "use client";
-import { jsonrepair } from "jsonrepair";
 import { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
