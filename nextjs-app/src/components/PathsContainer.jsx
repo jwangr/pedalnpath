@@ -30,7 +30,7 @@ export default function PathsContainer({ displayPaths, userId }) {
     id: userId,
   });
 
-  const [max, setMax] = useState(50); // set minimum slider length
+  const [max, setMax] = useState(20000); // set minimum slider length
 
   const data = displayPaths === "user" ? userPaths : allPaths;
   const error = displayPaths === "user" ? userPathsError : allPathsError;

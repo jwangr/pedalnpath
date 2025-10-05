@@ -45,3 +45,5 @@ next-env.d.ts
 # OSRM generated files
 osrm/data/*
 !osrm/data/README.md
+
+.swc/
