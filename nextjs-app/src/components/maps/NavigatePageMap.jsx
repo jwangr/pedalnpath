@@ -17,10 +17,10 @@ import TextField from "@mui/material/TextField";
 import polyline from "@mapbox/polyline";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 import { Button, Stack } from "@mui/material";
-import SaveNewNavigateModal from "./SaveNewNavigateModal";
+import SaveNewNavigateModal from "../SaveNewNavigateModal";
 import { useCreateBikePathMutation } from "@/services/bikePaths";
-import Loading from "./loadingBikes/Loading";
-import Alerts from "./Alerts";
+import Loading from "../loadingBikes/Loading";
+import Alerts from "../Alerts";
 
 const MapComponent = () => {
   const [

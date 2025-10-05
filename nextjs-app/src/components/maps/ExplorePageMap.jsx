@@ -14,12 +14,12 @@ import "@/lib/leafletSetup";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
-import TemporaryDrawer from "./Drawer";
+import TemporaryDrawer from "../Drawer";
 import { Button, Stack, TextField } from "@mui/material";
 import { useGetOSRMRouteMutation } from "@/services/osrm";
 import { useGetUserQuery } from "@/services/Auth";
 import { useRequestGeminiMutation } from "@/services/Gemini";
-import Alerts from "./Alerts";
+import Alerts from "../Alerts";
 
 const MapComponent = () => {
   // Initialize local state.

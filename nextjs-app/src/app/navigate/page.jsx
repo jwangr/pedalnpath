@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-const DynamicMapComponent = dynamic(() => import("@/components/Directions"), {
+const DynamicMapComponent = dynamic(() => import("@/components/maps/NavigatePageMap"), {
   ssr: false,
 });
 

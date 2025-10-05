@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import MapComponent from '@/components/Map';
+import MapComponent from '@/components/maps/ExplorePageMap';
 import TemporaryDrawer from '@/components/Drawer';
 
 // Mock the leaflet setup

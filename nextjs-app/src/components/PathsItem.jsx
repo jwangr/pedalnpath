@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
-import MapBoxContainer from "./MapBoxContainer";
+import MapBoxContainer from "./maps/MapBoxContainer";
 import OverallCount from "./reviews/OverallCount";
 
-const MapView = MapBoxContainer(() => import("./MapBoxContainer.jsx"), {
+const MapView = MapBoxContainer(() => import("./maps/MapBoxContainer.jsx"), {
   ssr: false,
 });
 
