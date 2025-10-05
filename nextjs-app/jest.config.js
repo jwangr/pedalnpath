@@ -16,11 +16,11 @@ const customJestConfig = {
     "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
     "^@/services/(.*)$": "<rootDir>/src/services/$1",
     "^@/store/(.*)$": "<rootDir>/src/store/$1",
-  },
 
-  // Stub react-leaflet and leaflet
-  "^react-leaflet$": "<rootDir>/__mocks__/react-leaflet.js",
-  "^leaflet$": "<rootDir>/__mocks__/leaflet.js",
+    // Stub react-leaflet and leaflet
+    "^react-leaflet$": "<rootDir>/__mocks__/react-leaflet.js",
+    "^leaflet$": "<rootDir>/__mocks__/leaflet.js",
+  },
 
   //   or handling ES Modules
   transformIgnorePatterns: ["/node_modules/(?!(@your-problematic-module)/)"],

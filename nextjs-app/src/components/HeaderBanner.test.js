@@ -7,7 +7,7 @@ test("renders HeaderBanner text", () => {
     <HeaderBanner h1="Main Title" h4="Subheading" subtitle1="Subtitle" />
   );
 
-  screen.debug(); // should now print the Paper + Typography DOM
+  // screen.debug(); // should now print the Paper + Typography DOM
 
   //   Assertions
   expect(screen.getByText("Main Title")).toBeInTheDocument();

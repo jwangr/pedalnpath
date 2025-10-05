@@ -3,7 +3,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import { SwitchTextTrack } from "./SwitchTextTrack";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import {
   useToggleCompletedMutation,
 } from "@/services/userPaths";
