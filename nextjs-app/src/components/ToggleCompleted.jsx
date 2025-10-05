@@ -7,7 +7,7 @@ import {
   useToggleCompletedMutation,
 } from "@/services/userPaths";
 
-export default function ToggleCompleted({ bikeRoute, userId, toggleLoad }) {
+export default function ToggleCompleted({ bikeRoute, userId }) {
   const [added, setAdded] = useState(!!bikeRoute?.completed); // set default as false instead of null (for controlled switch)
 
   const [toggleCompleted, { data, isLoading, isSuccess, isError }] =
