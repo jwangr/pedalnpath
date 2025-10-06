@@ -39,6 +39,41 @@ describe("BikePath controller", () => {
 
     expect(mockBikePathDao.findPathByName).toHaveBeenCalledWith("trail3");
     expect(result).toEqual(mockPaths);
-    console.log(result);
+  });
+
+  it("returns not found error if no path matches title", async () => {
+    // Simulate no matching path is found in the dao
+    mockBikePathDao.findPathByName.mockResolvedValue(null);
+
+    const req = { url: "http://localhost300/api/bikepaths?title=trail4" };
+
+    // Jest's reject.toThrow for async errors
+    await expect(controller.getPaths(req)).rejects.toThrow(NotFoundError);
+    await expect(controller.getPaths(req)).rejects.toThrow(
+      "Could not find paths called trail4."
+    );
+    expect(mockBikePathDao.findPathByName).toHaveBeenCalledWith("trail4");
+  });
+
+  it("returns all paths for a given userId", async () => {
+    // Arrange: simulate DAO returning paths
+    const mockUserId = 7;
+    const mockPaths = [
+      { id: 1, title: "River Trail", difficulty: "Easy" },
+      { id: 2, title: "Mountain Pass", difficulty: "Hard" },
+    ];
+
+    mockBikePathDao.getAllPaths.mockResolvedValue(mockPaths);
+
+    // Act: create a fake request with userId query param
+    const req = {
+      url: `http://localhost:3000/api/bikepaths?userId=${mockUserId}`,
+    };
+    const result = await controller.getPaths(req);
+
+    // Assert: check DAO interaction and output
+    expect(mockBikePathDao.getAllPaths).toHaveBeenCalledTimes(1);
+    expect(mockBikePathDao.getAllPaths).toHaveBeenCalledWith(mockUserId);
+    expect(result).toEqual(mockPaths);
   });
 });
