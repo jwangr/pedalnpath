@@ -17,12 +17,13 @@ import {
 import { deepPurple } from "@mui/material/colors";
 import { useState } from "react";
 import PathsItem from "../PathsItem";
+import ReviewsGalleryItem from "./ReviewsGalleryItem";
 
 export default function ProfilePageReviewsContainer({
   user = { id: 4, email: "user@example.com" },
 }) {
   const [toggleDrawer, setToggleDrawer] = useState(false);
-
+  const [toggleDropdown, setToggleDropDown] = useState();
   // fetch all reviews corresponding to userId
   const { data, isSuccess, isError, isLoading, error } = useGetAllReviewsQuery({
     userId: user.id,
@@ -78,7 +79,7 @@ export default function ProfilePageReviewsContainer({
               letterSpacing: "1px",
             }}
           >
-            {data?.response?.length || 0 }
+            {data?.response?.length || 0}
           </Box>
         </CardContent>
       </Card>
@@ -96,7 +97,7 @@ export default function ProfilePageReviewsContainer({
         size="large"
         sx={{
           width: "100%",
-          marginTop: 3
+          marginTop: 3,
         }}
       >
         Your Contributions
@@ -137,59 +138,63 @@ export default function ProfilePageReviewsContainer({
           {isSuccess &&
             !!data.response[0] &&
             data?.response?.map((review) => (
-              <Paper key={review.id} height={"auto"} padding={2} elevation={3}>
-                <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
-                  <Box mb={0}>
-                    <Box
-                      component="h3"
-                      sx={{
-                        fontSize: 17,
-                        fontWeight: "bold",
-                        letterSpacing: "0.5px",
-                        marginRight: 1.5,
-                        display: "inline-block",
-                      }}
-                    >
-                      {review.user?.email} left a review.
-                    </Box>
-                    {review.score && (
-                      <Rating
-                        name={"rating"}
-                        value={review.score}
-                        size={"medium"}
-                        sx={{ verticalAlign: "text-top" }}
-                        readOnly
-                      />
-                    )}
-                  </Box>
-                  <Box
-                    component="p"
-                    sx={{ fontSize: 10, textEmphasis: "italics" }}
-                  >
-                    {new Date(review.createdAt).toLocaleString()}
-                  </Box>
-                  <Box component="p" sx={{ fontSize: 14 }}>
-                    {review.comment}
-                  </Box>
-                </CardContent>
+              // <Paper key={review.id} height={"auto"} padding={2} elevation={3}>
+              //   <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
+              //     <Box mb={0}>
+              //       <Box
+              //         component="h3"
+              //         sx={{
+              //           fontSize: 17,
+              //           fontWeight: "bold",
+              //           letterSpacing: "0.5px",
+              //           marginRight: 1.5,
+              //           display: "inline-block",
+              //         }}
+              //       >
+              //         {review.user?.email} left a review.
+              //       </Box>
+              //       {review.score && (
+              //         <Rating
+              //           name={"rating"}
+              //           value={review.score}
+              //           size={"medium"}
+              //           sx={{ verticalAlign: "text-top" }}
+              //           readOnly
+              //         />
+              //       )}
+              //     </Box>
+              //     <Box
+              //       component="p"
+              //       sx={{ fontSize: 10, textEmphasis: "italics" }}
+              //     >
+              //       {new Date(review.createdAt).toLocaleString()}
+              //     </Box>
+              //     <Box component="p" sx={{ fontSize: 14 }}>
+              //       {review.comment}
+              //     </Box>
+              //   </CardContent>
 
-                <Box
-                  sx={{
-                    marginBottom: 2,
-                    background: deepPurple[100],
-                    paddingX: 3,
-                    paddingBottom: 2,
-                  }}
-                >
-                  <PathsItem
-                    path={review.bikepath}
-                    userId={review.userId}
-                    displayMap={false}
-                  />
-                </Box>
-              </Paper>
+              //   <Box
+              //     sx={{
+              //       marginBottom: 2,
+              //       background: deepPurple[100],
+              //       paddingX: 3,
+              //       paddingBottom: 2,
+              //     }}
+              //   >
+              //     <PathsItem
+              //       path={review.bikepath}
+              //       userId={review.userId}
+              //       displayMap={false}
+              //     />
+              //   </Box>
+              // </Paper>
+
+              <ReviewsGalleryItem review={review} key={review.id} />
             ))}
-          {isSuccess && !data.response[0] && <div className="text-white">No contributions yet.</div>}
+          {isSuccess && !data.response[0] && (
+            <div className="text-white">No contributions yet.</div>
+          )}
         </Box>
       </Drawer>
     </div>

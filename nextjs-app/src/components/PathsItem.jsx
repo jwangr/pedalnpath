@@ -92,7 +92,7 @@ export default function PathsItem({
               textOverflow: "ellipsis",
             }}
           >
-            {path.bikepath?.description || path.description}
+            {path.bikepath?.description || path.description || null}
           </Typography>
 
           <Grid container marginTop={2} gap={2}>

@@ -52,7 +52,7 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function EditModal({ review, userId }) {
+export default function EditModal({ review }) {
   // Open modal toggle
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -168,7 +168,7 @@ export default function EditModal({ review, userId }) {
             startIcon={<DirectionsBikeOutlined />}
             onClick={handleSubmit}
           >
-            Edit
+            Save
           </Button>
         </Box>
       </Modal>
