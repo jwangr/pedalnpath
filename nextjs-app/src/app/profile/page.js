@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import UserPathsContainer from "@/components/PathsContainer";
 import { Box, Typography } from "@mui/material";
 import HeaderBanner from "@/components/HeaderBanner";
+import ProfilePageReviewsContainer from "@/components/reviews/ProfilePageReviewsContainer";
 
 export default async function ProfilePage() {
   const user = await getSession();
@@ -16,11 +17,9 @@ export default async function ProfilePage() {
           h4={`Welcome, ${user.email}`}
           subtitle1={"Explore your list of bike paths"}
         />
-        <Box sx={{ width: "100%", marginX: 2 }}>
-          <UserPathsContainer
-            displayPaths={"user"}
-            userId={user.id}
-          />
+        <Box sx={{ width: "100%" }}>
+          <ProfilePageReviewsContainer user={user} />
+          <UserPathsContainer displayPaths={"user"} userId={user.id} />
         </Box>
       </div>
     );

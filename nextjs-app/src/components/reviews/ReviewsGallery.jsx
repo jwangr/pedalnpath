@@ -17,8 +17,9 @@ import PathsItem from "../PathsItem";
 import { deepPurple } from "@mui/material/colors";
 
 export default function ReviewsGallery() {
-  const { data, error, isError, isLoading, isSuccess } =
-    useGetAllReviewsQuery(10);
+  const { data, error, isError, isLoading, isSuccess } = useGetAllReviewsQuery({
+    limit: 10,
+  });
 
   return (
     <Box
@@ -74,6 +75,12 @@ export default function ReviewsGallery() {
                           readOnly
                         />
                       )}
+                    </Box>
+                    <Box
+                      component="p"
+                      sx={{ fontSize: 10, textEmphasis: "italics" }}
+                    >
+                      {new Date(review.createdAt).toLocaleString()}
                     </Box>
                     <Box component="p" sx={{ fontSize: 14 }}>
                       {review.comment}

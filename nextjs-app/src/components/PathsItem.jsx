@@ -43,7 +43,9 @@ export default function PathsItem({
       >
         {/* <MapView /> */}
         {!!displayMap && (
-          <DynamicMapComponent coordinates={path.coordinates || null} />
+          <DynamicMapComponent
+            coordinates={path.coordinates || path.bikepath.coordinates || null}
+          />
         )}
 
         <CardContent sx={{ flex: 1, width: "100%" }}>
