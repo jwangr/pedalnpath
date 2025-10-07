@@ -32,7 +32,7 @@ export default async function RootLayout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Header session={user} />
-          <Box sx={{ mt: 8 }}>{children}</Box>
+          <Box sx={{ mt: { xs: 6, sm: 8 } }}>{children}</Box>
         </body>
       </html>
     </StoreProvider>
