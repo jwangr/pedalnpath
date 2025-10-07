@@ -11,12 +11,14 @@ export default class ReviewController {
 
   async allPathsAllReviews(req) {
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams?.get("limit"));
-    // TO DO: validate limit
-    if (isNaN(limit))
-      throw new ValidationError("Please provide valid numerical limit.");
+    const limit_raw = searchParams?.get("limit");
+    const userId_raw = searchParams?.get("userId");
+    // TO DO: validate limit or userId
 
-    return await dao.allPathsAllReviews(limit);
+    const limit_parsed = limit_raw ? parseInt(limit_raw) : null;
+    const userId_parsed = userId_raw ? parseInt(userId_raw) : null;
+
+    return await dao.allPathsAllReviews(limit_parsed, userId_parsed);
   }
 
   async getStats(bikepathId) {

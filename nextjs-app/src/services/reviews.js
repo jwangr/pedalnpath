@@ -15,7 +15,7 @@ export const reviewsApi = createApi({
     }),
 
     getAllReviews: builder.query({
-      query: (limit) => `reviews?limit=${limit}`,
+      query: ({limit, userId}) => `reviews?limit=${limit}&userId=${userId}`,
       providesTags: ["Reviews"],
     }),
 

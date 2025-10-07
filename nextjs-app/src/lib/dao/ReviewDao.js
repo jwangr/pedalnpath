@@ -57,9 +57,10 @@ export default class ReviewDao {
     });
   }
 
-  async allPathsAllReviews(limit) {
+  async allPathsAllReviews(limit, userId) {
     return await db.review.findMany({
-      take: limit,
+      take: limit || undefined,
+      where: userId ? { userId } : {},
       include: {
         user: {
           select: {
