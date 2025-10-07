@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 import Loading from "@/components/loadingBikes/Loading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginUserMutation } from "@/services/Auth";
 import Alerts from "@/components/Alerts";
 
@@ -24,11 +24,17 @@ export default function LoginPage() {
     try {
       const response = await login({ email, password }).unwrap();
       console.log(JSON.stringify(response));
-      router.replace('/home');
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    if (isSuccess && loginData) {
+      router.replace("/home");
+      router.refresh();
+    }
+  }, [isSuccess, loginData]);
 
   return (
     <>

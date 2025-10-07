@@ -75,11 +75,17 @@ export default function Header(props) {
     try {
       const response = await logout().unwrap();
       console.log("Logged out");
-      router.replace('/login');
     } catch (error) {
       console.log("Not logged out");
     }
   };
+
+  React.useEffect(() => {
+    if (isSuccess && data) {
+      router.replace("/login");
+      router.refresh();
+    }
+  }, [isSuccess, data]);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -186,7 +192,9 @@ export default function Header(props) {
 
   const logIn = (
     <Button sx={{ color: "#fff" }}>
-      <Link color="white" underline="none" href={`/login`}>Login</Link>
+      <Link color="white" underline="none" href={`/login`}>
+        Login
+      </Link>
     </Button>
   );
 

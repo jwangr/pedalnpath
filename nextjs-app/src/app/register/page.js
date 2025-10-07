@@ -2,12 +2,15 @@
 import Alerts from "@/components/Alerts";
 import { useRegisterUserMutation } from "@/services/Auth";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Register() {
   const router = useRouter();
-  const [register, { data, isSuccess, isError, isLoading, error:registerError }] =
-    useRegisterUserMutation();
+  const [
+    register,
+    { data, isSuccess, isError, isLoading, error: registerError },
+  ] = useRegisterUserMutation();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -24,11 +27,17 @@ export default function Register() {
         confirmpassword,
       }).unwrap();
       console.log(JSON.stringify(response));
-      router.replace("/home");
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      router.replace("/home");
+      router.refresh();
+    }
+  }, [isSuccess, data]);
 
   return (
     <Stack spacing={2} marginX={10} marginTop={10}>
@@ -69,7 +78,9 @@ export default function Register() {
             placeholder="Confirm Password"
             required
           />
-          <Button type="submit">Login</Button>
+          <Button type="submit" color="secondary" variant="contained">
+            Login
+          </Button>
         </Stack>
       </form>
     </Stack>
