@@ -34,7 +34,7 @@ export default class ValidateNewBikePath {
       );
     }
 
-    if (path.distanceKm && isNaN(parseFloat(path.distanceKm))) {
+    if (!path.distanceKm || path.distanceKm < 0 || isNaN(parseFloat(path.distanceKm))) {
       throw new ValidationError("Distance must be a decimal number");
     }
 
