@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 
 export default class ReviewDao {
-  async onePathAllReviews(bikepathId) {
+  async c(bikepathId) {
     return await db.review.findMany({
       where: {
         bikepathId,
