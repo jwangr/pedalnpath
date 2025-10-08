@@ -1,12 +1,14 @@
 import OSRMDao from "../dao/OSRMDao";
-import validateGeminiCoordinates from "../utils/validation/validateGeminiResponse copy";
+import validateGeminiCoordinates from "../utils/validation/ValidateGeminiCoordinates";
 import ValidateOSRMRequest from "../utils/validation/ValidateOSRMRequest";
-const osrm = new OSRMDao();
-const validate = new ValidateOSRMRequest();
 
 export default class OSRMController {
+  constructor(osrm = new OSRMDao(), validate = new ValidateOSRMRequest()) {
+    this.osrm = osrm;
+    this.validate = validate;
+  }
   async getGeocode(location) {
-    const coordinates = await osrm.getGeocode(location);
+    const coordinates = await this.osrm.getGeocode(location);
     return coordinates;
   }
 
@@ -17,8 +19,8 @@ export default class OSRMController {
 
     if (start && end) {
       // validate start and end values
-      const startChecked = await validate.validateLocation(start);
-      const endChecked = await validate.validateLocation(end);
+      const startChecked = await this.validate.validateLocation(start);
+      const endChecked = await this.validate.validateLocation(end);
 
       // convert to geocode (lat, lon)
       const startGeocode = await this.getGeocode(startChecked);
@@ -33,6 +35,6 @@ export default class OSRMController {
     }
 
     // send OSRM request
-    return await osrm.getDirections(coordinates);
+    return await this.osrm.getDirections(coordinates);
   }
 }
