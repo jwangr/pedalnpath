@@ -82,8 +82,13 @@ export default function Header(props) {
 
   React.useEffect(() => {
     if (isSuccess && data) {
-      router.replace("/login");
-      router.refresh();
+      console.log("redirect to login page");
+      // Small delay to let Fast Refresh complete
+      const timer = setTimeout(() => {
+        router.replace("/login");
+      }, 600);
+
+      return () => clearTimeout(timer);
     }
   }, [isSuccess, data]);
 

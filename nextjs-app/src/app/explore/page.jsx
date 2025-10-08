@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 
 export default async function Explore() {
   const user = await getSession();
-  console.log(user.email);
+  console.log(user?.email);
   if (!user) {
-    return redirect("home");
+    return redirect("login");
   }
 
   return (
