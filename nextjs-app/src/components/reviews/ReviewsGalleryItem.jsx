@@ -69,61 +69,6 @@ export default function ReviewsGalleryItem({ review }) {
     }
   };
 
-  const Rating_View = () => (
-    <Rating
-      name={"rating"}
-      value={review.score}
-      size={"medium"}
-      sx={{ verticalAlign: "text-top" }}
-      readOnly
-    />
-  );
-
-  const Rating_Edit = () => {
-    return (
-      <>
-        <Rating
-          name="hover-feedback"
-          sx={{ verticalAlign: "text-top" }}
-          size="medium"
-          value={score}
-          precision={0.5}
-          onChange={(event, newValue) => {
-            setScore(newValue);
-          }}
-          emptyIcon={<StarIcon style={{ opacity: 1 }} fontSize="inherit" />}
-        />
-      </>
-    );
-  };
-
-  const Comment_View = () => {
-    return (
-      <Box component="p" sx={{ fontSize: 14 }}>
-        {review.comment}
-      </Box>
-    );
-  };
-
-  const Comment_Edit = () => {
-    return (
-      <TextField
-        id="outlined-basic"
-        label="Edit review"
-        variant="outlined"
-        color="secondary"
-        placeholder="Write about your own experience doing this route."
-        multiline
-        minRows={3}
-        sx={{ width: "100%", marginBottom: 2 }}
-        value={comment}
-        onChange={(e) => {
-          setComment(e.target.value);
-        }}
-      />
-    );
-  };
-
   return (
     <Paper height={"auto"} padding={2} elevation={3}>
       <Alerts
@@ -133,7 +78,7 @@ export default function ReviewsGalleryItem({ review }) {
         successMsg="Review updated. "
         errorMsg="Unable to update review. "
       />
-      <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
+      <CardContent sx={{ pr: 2, background: "#f8fbff" }}>
         <Stack
           direction={{ sm: "column", sm: "row" }}
           spacing={2}
@@ -153,12 +98,53 @@ export default function ReviewsGalleryItem({ review }) {
               >
                 {review.user?.email} left a review.
               </Box>
-              {editingMode ? <Rating_Edit /> : <Rating_View />}
+              {editingMode ? (
+                <Rating
+                  name="hover-feedback"
+                  sx={{ verticalAlign: "text-top" }}
+                  size="medium"
+                  value={score}
+                  precision={0.5}
+                  onChange={(event, newValue) => {
+                    setScore(newValue);
+                  }}
+                  emptyIcon={
+                    <StarIcon style={{ opacity: 1 }} fontSize="inherit" />
+                  }
+                />
+              ) : (
+                <Rating
+                  name={"rating"}
+                  value={review.score}
+                  size={"medium"}
+                  sx={{ verticalAlign: "text-top" }}
+                  readOnly
+                />
+              )}
             </Box>
             <Box component="p" sx={{ fontSize: 10, textEmphasis: "italics" }}>
               {new Date(review.createdAt).toLocaleString()}
             </Box>
-            {editingMode ? <Comment_Edit /> : <Comment_View />}
+            {editingMode ? (
+              <TextField
+                id="outlined-basic"
+                label="Edit review"
+                variant="outlined"
+                color="secondary"
+                placeholder="Write about your own experience doing this route."
+                multiline
+                minRows={3}
+                sx={{ width: "100%", marginBottom: 2 }}
+                value={comment}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+              />
+            ) : (
+              <Box component="p" sx={{ fontSize: 14 }}>
+                {review.comment}
+              </Box>
+            )}
           </Box>
 
           {/* Show dropdown when user is viewing comments, otherwise Edit button */}
@@ -202,7 +188,7 @@ export default function ReviewsGalleryItem({ review }) {
       <Box
         sx={{
           marginBottom: 2,
-          background: deepPurple[100],
+          background: "#f8fbff",
           paddingX: 3,
           paddingBottom: 2,
         }}
