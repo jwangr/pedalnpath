@@ -112,7 +112,7 @@ export default function ProfilePageReviewsContainer({
           paper: {
             sx: {
               // backgroundColor: deepPurple[400],
-              background: `linear-gradient(180deg, #0a214f, #412542)`,
+              background: `linear-gradient(180deg, #f4edff, #111534)`,
               overflowY: "scroll",
             },
           },

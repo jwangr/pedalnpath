@@ -6,12 +6,10 @@ import {
   CardContent,
   Paper,
   Rating,
-  Skeleton,
   Stack,
   TextField,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import { deepPurple } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import PathsItem from "../PathsItem";
 import EditDeleteDropdown from "./EditDeleteDropdown";
@@ -37,11 +35,6 @@ export default function ReviewsGalleryItem({ review }) {
       setComment("");
     }
   }, [editingMode]);
-
-  // check how often it remounts
-  useEffect(() => {
-    console.log("ReviewsGalleryItem mounted", review.id);
-  }, []);
 
   const [editPost, { data, error, isLoading, isError, isSuccess }] =
     useUpdateReviewMutation();
