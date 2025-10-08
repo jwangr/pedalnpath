@@ -1,6 +1,6 @@
 const mockOSRMDao = {
   getGeocode: jest.fn(),
-  getDirection: jest.fn(),
+  getDirections: jest.fn(),
 };
 
 export default mockOSRMDao;
