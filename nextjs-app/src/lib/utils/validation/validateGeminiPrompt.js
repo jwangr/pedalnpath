@@ -2,9 +2,11 @@
 
 import GeminiDao from "@/lib/dao/GeminiDao";
 import ValidationError from "./ValidationError";
-const gemini = new GeminiDao();
 
 export default class ValidatePrompt {
+  constructor() {
+    this.gemini = new GeminiDao();
+  }
   async validateText(location) {
     const length = location?.length || 0; // if null text, will return 0
 
@@ -22,7 +24,7 @@ export default class ValidatePrompt {
       );
     }
 
-    const NZLocation = await gemini.checkinNZ(location);
+    const NZLocation = await this.gemini.checkinNZ(location);
     const parsed = JSON.parse(NZLocation);
     console.log(parsed["validLocation"]);
     if (!parsed.validLocation) {
