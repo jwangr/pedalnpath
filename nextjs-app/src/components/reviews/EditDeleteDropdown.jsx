@@ -1,16 +1,11 @@
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
 import Divider from "@mui/material/Divider";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { ArrowDropDown, Delete } from "@mui/icons-material";
+import { ArrowDropDown, Delete, Edit } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import EditModal from "./EditReviewModal";
+import { useState } from "react";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -58,8 +53,8 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function ReviewsGalleryItem({review}) {
-  const [anchorElement, setAnchorElement] = React.useState(null);
+export default function ReviewsGalleryItem({handleEditToggle}) {
+  const [anchorElement, setAnchorElement] = useState(null);
   const open = Boolean(anchorElement);
   const handleClick = (event) => {
     setAnchorElement(event.currentTarget);
@@ -78,11 +73,9 @@ export default function ReviewsGalleryItem({review}) {
         variant="text"
         disableElevation
         onClick={handleClick}
-        endIcon={<ArrowDropDown color="secondary"/>}
+        endIcon={<ArrowDropDown color="secondary" />}
       >
-        <Box
-        display={{xs: "inline-block", sm: "none"}}
-        >Options</Box>
+        <Box display={{ xs: "inline-block", sm: "none" }}>Options</Box>
       </Button>
       <StyledMenu
         id="demo-customized-menu"
@@ -95,8 +88,15 @@ export default function ReviewsGalleryItem({review}) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
-          <EditModal review={review} />
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleEditToggle();
+          }}
+          disableRipple
+        >
+          <Edit />
+          Edit
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>

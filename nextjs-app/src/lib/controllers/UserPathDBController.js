@@ -1,7 +1,7 @@
 import { NotFoundError } from "openai";
 import BikePathDao from "../dao/BikePathDao";
 import UserPathDao from "../dao/UserPathDao";
-import ValidateNewBikePath from "../utils/validation/validateNewBikePath";
+import ValidateNewBikePath from "../utils/validation/ValidateNewBikePath";
 import ValidationError from "../utils/validation/ValidationError";
 const dao = new UserPathDao();
 const pathDao = new BikePathDao();
