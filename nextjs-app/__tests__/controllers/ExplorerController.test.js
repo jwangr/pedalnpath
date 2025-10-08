@@ -1,31 +1,33 @@
-import ExploreController from "@/lib/controllers/ExplorerController";
-import ValidatePrompt from "@/lib/utils/validation/ValidateGeminiPrompt";
 import validateGeminiResponse from "@/lib/utils/validation/validateGeminiResponse";
 import { mockGeminiDao } from "../dao/mockGeminiDao";
+import ValidatePrompt from "@/lib/utils/validation/ValidateGeminiPrompt";
 
-// mock the validation class
 jest.mock("../../src/lib/utils/validation/ValidateGeminiPrompt.js", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      validateText: jest.fn(),
-    };
-  });
+  const mockValidateText = jest.fn(); // define mock function as jest.mock() functions are called first
+
+  return jest.fn().mockImplementation(() => ({
+    validateText: mockValidateText,
+  }));
 });
 
-jest.mock("../../src/lib/utils/validation/ValidateGeminiResponse.js", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+jest.mock("../../src/lib/utils/validation/validateGeminiResponse.js");
+
+// Import controller AFTER mocked functions are set up
+import ExploreController from "@/lib/controllers/ExplorerController";
+import ValidatePrompt from "@/lib/utils/validation/ValidateGeminiPrompt";
+import { mockGeminiDao } from "../dao/mockGeminiDao";
 
 describe("Explorer / Gemini controller", () => {
   let controller;
-  let mockValidatorInstance;
+  let validatePromptInstance;
+  let mockValidateText;
 
   beforeEach(() => {
     // Reset mocks
     jest.clearAllMocks();
     controller = new ExploreController(mockGeminiDao);
-    mockValidatorInstance = new ValidatePrompt();
+    validatePromptInstance = new ValidatePrompt();
+    mockValidateText = validatePromptInstance.validateText;
   });
 
   it("should validate input, send request to DAO and parse response", async () => {
@@ -34,16 +36,16 @@ describe("Explorer / Gemini controller", () => {
     const parsedResponse = { result: "parsed data" };
 
     // Setup mocks
-    mockValidatorInstance.validateText.mockResolvedValue(); // resolves successfully
+    mockValidateText.mockResolvedValue(); // resolves successfully
     mockGeminiDao.sendRequest.mockResolvedValue(daoResponse);
-    // validateGeminiResponse.mockReturnValue(parsedResponse);
+    validateGeminiResponse.mockReturnValue(parsedResponse);
 
     const result = await controller.sendToGemini(location);
 
     // Assertions
-    expect(validateMock.validateText).toHaveBeenCalledWith(location);
-    expect(daoMock.sendRequest).toHaveBeenCalledWith(location);
-    // expect(validateGeminiResponse).toHaveBeenCalledWith(daoResponse);
+    expect(mockValidateText).toHaveBeenCalledWith(location);
+    expect(mockGeminiDao.sendRequest).toHaveBeenCalledWith(location);
+    expect(validateGeminiResponse).toHaveBeenCalledWith(daoResponse);
     expect(result).toEqual(parsedResponse);
   });
 });
