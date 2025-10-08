@@ -57,7 +57,7 @@ export default class UserPathDBController {
       );
 
     // check that this path is in database
-    const route = this.dao.findPathById(id, userId);
+    const route = await this.dao.findPathById(id, userId);
 
     if (!route) {
       throw new Error("Path isn't saved to user's profile");
@@ -81,7 +81,7 @@ export default class UserPathDBController {
 
     if (!bikepath) {
       // add to global database and user's profile
-      const validatedPath = this.validator.validatePath(bikepath);
+      const validatedPath = this.validator.validatePath(path); // validate requested path first
       const newPath = await this.pathDao.createPath(validatedPath);
       console.log("Created new path in global database. Adding to user list.");
       return await this.dao.savePath(newPath.id, userId);

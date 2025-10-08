@@ -20,12 +20,16 @@ jest.mock("../../src/lib/utils/validation/ValidateNewBikePath.js", () => ({
 import UserPathDBController from "@/lib/controllers/UserPathDBController";
 import ValidationError from "@/lib/utils/validation/ValidationError";
 import { mockBikePathDao } from "../dao/mockBikePathDao";
+import ValidateNewBikePath from "@/lib/utils/validation/ValidateNewBikePath";
 
 describe("User paths controller", () => {
   let controller;
+  let validator;
   let mockFindPathByNameResult = [{ id: 1 }];
   let mockfindPathById = { title: "mockfindPathById" };
   let mockDeletedPath = { title: "mockDeletedPath" };
+  let mockSavedPath = { title: "mockSavedPath" };
+  let mockCreatedPath = { title: "mockCreatedPath" };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -40,13 +44,22 @@ describe("User paths controller", () => {
       .fn()
       .mockResolvedValue(mockfindPathById);
     mockUserPathDao.deletePath = jest.fn().mockResolvedValue(mockDeletedPath);
+    mockUserPathDao.savePath = jest.fn().mockResolvedValue(mockSavedPath);
 
     // mock bikepath dao
     mockBikePathDao.findPathByName = jest
       .fn()
       .mockResolvedValue(mockFindPathByNameResult);
+    mockBikePathDao.createPath = jest.fn().mockResolvedValue(mockCreatedPath);
 
-    controller = new UserPathDBController(mockUserPathDao, mockBikePathDao);
+    // mock validator instance -> functions mocked below
+    validator = new ValidateNewBikePath();
+
+    controller = new UserPathDBController(
+      mockUserPathDao,
+      mockBikePathDao,
+      validator
+    );
   });
 
   it("gets all paths for specified user", async () => {
@@ -134,7 +147,7 @@ describe("User paths controller", () => {
     };
 
     // Mock DAO to return null (path not found)
-    mockUserPathDao.findPathById.mockReturnValue(null);
+    mockUserPathDao.findPathById.mockResolvedValue(null);
 
     await expect(controller.deletePath(mockReq)).rejects.toThrow(
       "Path isn't saved to user's profile"
@@ -156,6 +169,7 @@ describe("User paths controller", () => {
     expect(mockBikePathDao.findPathByName).toHaveBeenCalledWith("title");
     expect(mockUserPathDao.findPathByName).toHaveBeenCalledWith("title", 2);
     expect(mockUserPathDao.deletePath).toHaveBeenCalledWith(3, 2);
+    expect(result).toEqual(mockDeletedPath);
   });
   it("toggleAddDelete: saves path to user's database", async () => {
     const mockReq = {
@@ -166,10 +180,39 @@ describe("User paths controller", () => {
     };
     mockBikePathDao.findPathByName.mockResolvedValue({ id: 3 });
     mockUserPathDao.findPathByName.mockResolvedValue();
-    
+
     const result = await controller.toggleAddDelete(mockReq);
     expect(mockBikePathDao.findPathByName).toHaveBeenCalledWith("title");
     expect(mockUserPathDao.findPathByName).toHaveBeenCalledWith("title", 2);
     expect(mockUserPathDao.savePath).toHaveBeenCalledWith(3, 2);
+    expect(result).toEqual(mockSavedPath);
+  });
+  it("toggleAddDelete: checks and saves any new path to global database", async () => {
+    const mockReq = {
+      json: jest.fn().mockResolvedValue({
+        userId: 2,
+        path: { title: "title" },
+      }),
+    };
+
+    // Mock resolved values
+    mockBikePathDao.findPathByName.mockResolvedValue(null); //mockResolvedValue for sync functions, like API calls
+    validator.validatePath = jest
+      .fn()
+      .mockReturnValue({ title: "validatedPath" }); // mockReturnValue for non-async functions, like in validation
+    mockBikePathDao.createPath.mockResolvedValue({
+      id: "newPath ID",
+    });
+
+    // Action
+    const result = await controller.toggleAddDelete(mockReq);
+
+    // Assertions
+    expect(validator.validatePath).toHaveBeenCalledWith({ title: "title" });
+    expect(mockBikePathDao.createPath).toHaveBeenCalledWith({
+      title: "validatedPath",
+    });
+    expect(mockUserPathDao.savePath).toHaveBeenCalledWith("newPath ID", 2);
+    expect(result).toEqual(mockSavedPath);
   });
 });
