@@ -215,4 +215,132 @@ describe("User paths controller", () => {
     expect(mockUserPathDao.savePath).toHaveBeenCalledWith("newPath ID", 2);
     expect(result).toEqual(mockSavedPath);
   });
+  it("toggleAddDelete: throws error if userId is invalid", async () => {
+    const invalidUserIds = [
+      "-1", // negative number
+      "abc", // non-numeric string
+      "0.5", // float
+      "0", // 0
+      null, // null
+      undefined, // undefined
+    ];
+    for (const id of invalidUserIds) {
+      const mockReq = {
+        json: jest.fn().mockResolvedValue({
+          userId: id,
+          path: {
+            title: "title",
+          },
+        }),
+      };
+      await expect(controller.toggleAddDelete(mockReq)).rejects.toThrow(
+        ValidationError
+      );
+      await expect(controller.toggleAddDelete(mockReq)).rejects.toThrow(
+        "Provide a valid userId"
+      );
+    }
+  });
+  it("toggleAddDelete: throws error if requested path missing title", async () => {
+    const mockReq = {
+      json: jest.fn().mockResolvedValue({
+        userId: 2,
+        path: {
+          id: "Missing title",
+        },
+      }),
+    };
+    await expect(controller.toggleAddDelete(mockReq)).rejects.toThrow(
+      ValidationError
+    );
+    await expect(controller.toggleAddDelete(mockReq)).rejects.toThrow(
+      "Please provide a valid path"
+    );
+  });
+  it("toggleAddDelete: throws an error if validation fails for new path", async () => {
+    const mockReq = {
+      json: jest.fn().mockResolvedValue({
+        userId: 2,
+        path: {
+          title: "title",
+        },
+      }),
+    };
+
+    // mock return values
+    mockBikePathDao.findPathByName.mockResolvedValue(null);
+    validator.validatePath = jest.fn(() => {
+      throw new ValidationError("Invalid path");
+    });
+
+    // Assertions
+    await expect(controller.toggleAddDelete(mockReq)).rejects.toThrow(
+      ValidationError
+    );
+  });
+  it("toggleCompleted: changes path completion", async () => {
+    const mockReq = {
+      json: jest.fn().mockResolvedValue({
+        userId: 2,
+        pathId: 3,
+      }),
+    };
+
+    // mock return values
+    mockUserPathDao.findPathById.mockResolvedValue({
+      tite: "found path by ID",
+      completed: false,
+    });
+    mockUserPathDao.toggleCompleted.mockResolvedValue({
+      title: "toggledPath",
+    });
+
+    // Actions
+    const result = await controller.toggleCompleted(mockReq);
+
+    // Assertions
+    expect(mockUserPathDao.findPathById).toHaveBeenCalledWith(3, 2);
+    expect(mockUserPathDao.toggleCompleted).toHaveBeenCalledWith(3, true);
+    expect(result).toEqual({ title: "toggledPath" });
+  });
+  it("toggleCompleted: throws error if path not found in database", async () => {
+    const mockReq = {
+      json: jest.fn().mockResolvedValue({
+        userId: 2,
+        pathId: 3,
+      }),
+    };
+
+    // mock return values
+    mockUserPathDao.findPathById.mockResolvedValue(null);
+
+    // Assertions
+    await expect(controller.toggleCompleted(mockReq)).rejects.toThrow(
+      new NotFoundError("Path not found.")
+    );
+  });
+  it("toggleCompleted: throws error if invalid user ID or path ID", async () => {
+    const mockReq = {
+      json: jest.fn(),
+    };
+    const invalidCases = [
+      { userId: null, pathId: 1, reason: "userId is null" },
+      { userId: 1, pathId: null, reason: "pathId is null" },
+      { userId: "1", pathId: 1, reason: "userId is a string" },
+      { userId: 1, pathId: "2", reason: "pathId is a string" },
+      { userId: 0, pathId: 1, reason: "userId is zero" },
+      { userId: -1, pathId: 1, reason: "userId is negative" },
+      { userId: 1, pathId: 0, reason: "pathId is zero" },
+      { userId: 1, pathId: -5, reason: "pathId is negative" },
+      { userId: NaN, pathId: 1, reason: "userId is NaN" },
+      { userId: 1, pathId: NaN, reason: "pathId is NaN" },
+    ];
+
+    invalidCases.forEach(async ({ userId, pathId, reason }) => {
+      mockReq.json.mockResolvedValue({ userId, pathId });
+      await expect(controller.toggleCompleted(mockReq)).rejects.toThrow(
+        new ValidationError("Invalid user ID or path ID")
+      );
+    });
+  });
 });

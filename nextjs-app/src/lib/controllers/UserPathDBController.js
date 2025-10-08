@@ -100,7 +100,17 @@ export default class UserPathDBController {
 
   async toggleCompleted(req) {
     const { userId, pathId } = await req.json();
-    const current = await this.dao.findPathById(Number(pathId), userId);
+    // Validate userId and pathId
+    if (
+      !Number.isInteger(userId) ||
+      !Number.isInteger(pathId) ||
+      userId <= 0 ||
+      pathId <= 0
+    )
+      throw new ValidationError("Invalid user ID or path ID");
+
+    const current = await this.dao.findPathById(Number(pathId), Number(userId));
+    if (!current) throw new NotFoundError("Path not found.");
 
     return await this.dao.toggleCompleted(Number(pathId), !current.completed);
   }
