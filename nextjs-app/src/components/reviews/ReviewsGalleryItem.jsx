@@ -17,33 +17,33 @@ import PathsItem from "../PathsItem";
 import EditDeleteDropdown from "./EditDeleteDropdown";
 import { Close, DirectionsBikeOutlined } from "@mui/icons-material";
 import { useUpdateReviewMutation } from "@/services/reviews";
-
-const labels = {
-  0.5: "Useless",
-  1: "Useless+",
-  1.5: "Poor",
-  2: "Poor+",
-  2.5: "Ok",
-  3: "Ok+",
-  3.5: "Good",
-  4: "Good+",
-  4.5: "Excellent",
-  5: "Excellent+",
-};
-
-function getLabelText(value) {
-  return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
-}
+import Alerts from "../Alerts";
 
 export default function ReviewsGalleryItem({ review }) {
   if (!review) return null;
 
   // States for editing function
   const [editingMode, setEditingMode] = useState(false);
-  const [score, setScore] = useState(review?.score ?? 0);
-  const [comment, setComment] = useState(review?.comment ?? "");
+  const [score, setScore] = useState();
+  const [comment, setComment] = useState();
 
-  const [editPost, { data, error, isLoading, isError }] =
+  // set score and comment when editing mode is changed
+  useEffect(() => {
+    if (editingMode) {
+      setScore(review.score ?? 0);
+      setComment(review.comment ?? "");
+    } else {
+      setScore();
+      setComment("");
+    }
+  }, [editingMode]);
+
+  // check how often it remounts
+  useEffect(() => {
+    console.log("ReviewsGalleryItem mounted", review.id);
+  }, []);
+
+  const [editPost, { data, error, isLoading, isError, isSuccess }] =
     useUpdateReviewMutation();
 
   const handleEditingMode = () => {
@@ -88,7 +88,6 @@ export default function ReviewsGalleryItem({ review }) {
           size="medium"
           value={score}
           precision={0.5}
-          getLabelText={getLabelText}
           onChange={(event, newValue) => {
             setScore(newValue);
           }}
@@ -111,7 +110,7 @@ export default function ReviewsGalleryItem({ review }) {
       <TextField
         id="outlined-basic"
         label="Edit review"
-        variant="filled"
+        variant="outlined"
         color="secondary"
         placeholder="Write about your own experience doing this route."
         multiline
@@ -127,6 +126,13 @@ export default function ReviewsGalleryItem({ review }) {
 
   return (
     <Paper height={"auto"} padding={2} elevation={3}>
+      <Alerts
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+        successMsg="Review updated. "
+        errorMsg="Unable to update review. "
+      />
       <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
         <Stack
           direction={{ sm: "column", sm: "row" }}
@@ -159,13 +165,13 @@ export default function ReviewsGalleryItem({ review }) {
           <Box>
             {editingMode ? (
               <Stack
-              gap={3}
-              justifyContent={"space-between"}
-              justifyItems={"stretch"}
-              direction={{
-                xs: 'row-reverse',
-                sm: 'column'
-              }}
+                gap={3}
+                justifyContent={"space-between"}
+                justifyItems={"stretch"}
+                direction={{
+                  xs: "row-reverse",
+                  sm: "column",
+                }}
               >
                 <Button
                   variant="contained"
