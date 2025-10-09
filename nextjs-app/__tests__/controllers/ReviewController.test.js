@@ -54,12 +54,11 @@ describe("Review controller", () => {
     controller = new ReviewController(mockReviewDao);
   });
 
-  it("retrieves all reviews for one path", async () => {
+  it("onePathAllReviews: retrieves all reviews for one path", async () => {
     const result = await controller.onePathAllReviews(1);
     expect(mockReviewDao.onePathAllReviews).toHaveBeenCalledWith(1);
-    console.log(result);
   });
-  it("retrieving all reviews for one path throws an error for invalid bikepathId", async () => {
+  it("onePathAllReviews: retrieving all reviews for one path throws an error for invalid bikepathId", async () => {
     const invalidCases = [0, null, -1, "Invalid"];
     for (const bikepathId of invalidCases) {
       await expect(controller.onePathAllReviews(bikepathId)).rejects.toThrow(
@@ -70,7 +69,7 @@ describe("Review controller", () => {
       );
     }
   });
-  it("retrieves all reviews with all paths", async () => {
+  it("allPathsAllReviews: retrieves all reviews with all paths", async () => {
     const mockReq = {
       url: "http://localhost/api/reviews?limit=5&userId=1",
     };
@@ -78,7 +77,7 @@ describe("Review controller", () => {
     expect(mockReviewDao.allPathsAllReviews).toHaveBeenCalledWith(5, 1);
     expect(result).toEqual(mockedAllPathsAllReviewsResponse);
   });
-  it("retrieving all reviews with all paths throws an error with invalid limit or invalid userId", async () => {
+  it("allPathsAllReviews: throws an error with invalid limit or invalid userId", async () => {
     const invalidCases = [
       "limit=-5&userId=1",
       "limit=5&userId=-1",
@@ -92,16 +91,16 @@ describe("Review controller", () => {
         ValidationError
       );
       await expect(controller.allPathsAllReviews(mockReq)).rejects.toThrow(
-        "Input valid limit and valid userId"
+        "Input valid limit and valid user ID"
       );
     }
   });
-  it("gets review stats for one path", async () => {
+  it("getStats: gets review stats for one path", async () => {
     const result = await controller.getStats(1);
     expect(mockReviewDao.onePathStats).toHaveBeenCalledWith(1);
     expect(result).toEqual(mockedonePathStats);
   });
-  it("creates a new review", async () => {
+  it("createReview: creates a new review", async () => {
     const result = await controller.createReview(5, "Great path!", 1, 1);
 
     expect(mockReviewDao.createNewReview).toHaveBeenCalledWith(
@@ -118,7 +117,7 @@ describe("Review controller", () => {
       bikepathId: 1,
     });
   });
-  it("throws error if invalid score, userId or bikepathId when creating review", async () => {
+  it("createReview: throws error if invalid score, userId or bikepathId when creating review", async () => {
     const invalidCases = [
       // Invalid bikepathId
       { bikepathId: -1, comment: "Great path!", userId: 1, score: 3 },
@@ -144,7 +143,7 @@ describe("Review controller", () => {
       ).rejects.toThrow(ValidationError);
     }
   });
-  it("updates an existing review", async () => {
+  it("updateReview: updates an existing review", async () => {
     const updatedReview = { score: 4, comment: "Updated comment" };
     const result = await controller.updateReview(10, updatedReview);
 
@@ -157,7 +156,7 @@ describe("Review controller", () => {
       bikepathId: 1,
     });
   });
-  it("throws an error if updating review with invalid score or reviewId", async () => {
+  it("updateReview: throws an error if updating review with invalid score or reviewId", async () => {
     const invalidCases = [
       // Invalid reviewId
       {
@@ -189,14 +188,14 @@ describe("Review controller", () => {
       ).rejects.toThrow(ValidationError);
     }
   });
-  it("deletes a review when user is the author", async () => {
+  it("deleteReview: deletes a review when user is the author", async () => {
     const result = await controller.deleteReview(5, 10);
 
     expect(mockReviewDao.onePathOneReview).toHaveBeenCalledWith(10);
     expect(mockReviewDao.deleteReview).toHaveBeenCalledWith(10);
     expect(result).toEqual({ success: true });
   });
-  it("throws an error if deleting review that doesn't exist", async () => {
+  it("deleteReview: throws an error if deleting review that doesn't exist", async () => {
     mockReviewDao.onePathOneReview = jest.fn().mockResolvedValue([]);
     await expect(controller.deleteReview(1, 2)).rejects.toThrow(
       ValidationError

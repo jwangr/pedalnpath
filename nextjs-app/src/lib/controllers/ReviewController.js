@@ -21,11 +21,16 @@ export default class ReviewController {
     const userId_parsed = userId_raw ? parseInt(userId_raw) : null;
 
     // Validate parsed values
-    if (!!limit_parsed && (!Number.isInteger(limit_parsed) || limit_parsed < 0))
-      throw new ValidationError("Input valid limit and valid userId");
+    if (limit_parsed !== null) {
+      if (!Number.isInteger(limit_parsed) || limit_parsed < 0) {
+        throw new ValidationError("Input valid limit and valid user ID");
+      }
+    }
 
-    if (!Number.isInteger(userId_parsed) || userId_parsed < 0)
-      throw new ValidationError("Input valid limit and valid userId");
+    if (userId_parsed !== null) {
+      if (!Number.isInteger(userId_parsed) || userId_parsed < 0)
+        throw new ValidationError("Input valid limit and valid user ID");
+    }
 
     return await this.dao.allPathsAllReviews(limit_parsed, userId_parsed);
   }

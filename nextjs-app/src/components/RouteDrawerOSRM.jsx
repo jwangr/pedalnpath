@@ -187,7 +187,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {storedPath.distanceKm || BikeRoute.distanceKm} km
+              {storedPath?.distanceKm || BikeRoute.distanceKm} km
             </Box>
           </Box>
           <Box
@@ -231,7 +231,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {storedPath.duration || BikeRoute.duration || "--"}
+              {storedPath?.duration || BikeRoute.duration || "--"}
             </Box>
           </Box>
         </Box>
@@ -280,7 +280,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {storedPath.difficulty || BikeRoute.difficulty}
+              {storedPath?.difficulty || BikeRoute.difficulty}
             </Box>
           </Box>
           <Box
@@ -324,7 +324,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {storedPath.suitableFor?.join(", ") || BikeRoute.suitableFor?.join(", ") || "Anyone"}
+              {storedPath?.suitableFor?.join(", ") || BikeRoute.suitableFor?.join(", ") || "Anyone"}
             </Box>
           </Box>
         </Box>
@@ -365,7 +365,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 margin: 0,
               }}
             >
-              {storedPath.highlights?.join(", ") || BikeRoute.highlights?.join(", ") || "To be explored!"}
+              {storedPath?.highlights?.join(", ") || BikeRoute.highlights?.join(", ") || "To be explored!"}
             </Box>
           </Box>
         </CardContent>
@@ -407,7 +407,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 textAlign: "left",
               }}
             >
-              {storedPath.description || BikeRoute.description}
+              {storedPath?.description || BikeRoute.description}
             </Box>
             <Box
               sx={{
@@ -419,7 +419,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 margin: 0,
               }}
             >
-              {storedPath.notes || BikeRoute.notes || "Enjoy the trip"}
+              {storedPath?.notes || BikeRoute.notes || "Enjoy the trip"}
             </Box>
           </Box>
         </CardContent>
