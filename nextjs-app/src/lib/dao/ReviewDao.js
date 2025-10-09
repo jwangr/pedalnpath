@@ -58,8 +58,7 @@ export default class ReviewDao {
   }
 
   async allPathsAllReviews(limit, userId) {
-    return await db.review.findMany({
-      take: limit || undefined,
+    const options = {
       where: userId ? { userId } : {},
       include: {
         user: {
@@ -75,7 +74,12 @@ export default class ReviewDao {
           id: "desc",
         },
       ],
-    });
+    };
+    if (limit) {
+      options.take = limit;
+    }
+
+    return await db.review.findMany(options);
   }
 
   async createNewReview(score, comment, userId, bikepathId) {

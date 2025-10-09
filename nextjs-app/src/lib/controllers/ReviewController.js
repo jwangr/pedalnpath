@@ -21,7 +21,7 @@ export default class ReviewController {
     const userId_parsed = userId_raw ? parseInt(userId_raw) : null;
 
     // Validate parsed values
-    if (!Number.isInteger(limit_parsed) || limit_parsed < 0)
+    if (!!limit_parsed && (!Number.isInteger(limit_parsed) || limit_parsed < 0))
       throw new ValidationError("Input valid limit and valid userId");
 
     if (!Number.isInteger(userId_parsed) || userId_parsed < 0)

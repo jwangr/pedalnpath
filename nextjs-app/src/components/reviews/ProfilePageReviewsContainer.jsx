@@ -18,6 +18,7 @@ import { deepPurple } from "@mui/material/colors";
 import { useState } from "react";
 import PathsItem from "../PathsItem";
 import ReviewsGalleryItem from "./ReviewsGalleryItem";
+import Alerts from "../Alerts";
 
 export default function ProfilePageReviewsContainer({
   user = { id: 4, email: "user@example.com" },
@@ -88,6 +89,13 @@ export default function ProfilePageReviewsContainer({
 
   return (
     <div>
+    <Alerts 
+    isLoading={isLoading}
+    isSuccess={isSuccess}
+    isError={isError}
+    successMsg="Loaded all contributions"
+    errorMsg="Unable to load contributions. "
+    />
       <Button
         onClick={() => {
           setToggleDrawer(true);
