@@ -10,10 +10,9 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 
-export default function AllPathsFilter({ handleFilter, max, handleSort }) {
+export default function AllPathsFilter({ handleFilter, max }) {
   // handleFilter is a callback function that has props: applyFilters(path)
   const [difficulty, setDifficulty] = useState("all");
-  const [sort, setSort] = useState("default");
   const [distance, setDistance] = useState([0, max]);
 
   // Adjust slider/distance
@@ -49,19 +48,19 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
     return false;
   }, [distance]);
 
-  const sortingFunction = useCallback((a, b) => {
-    if (sort === "AZ") {
-      const A = a.title.toUpperCase(); // ignore upper and lowercase
-      const B = b.title.toUpperCase(); // ignore upper and lowercase
+  // const sortingFunction = useCallback((a, b) => {
+  //   if (sort === "AZ") {
+  //     const A = a.title.toUpperCase(); // ignore upper and lowercase
+  //     const B = b.title.toUpperCase(); // ignore upper and lowercase
 
-      if (A < B) return -1;
-      else if (A > B) return 1;
-      else return 0;
-    } else if (sort === "distance") {
-      return a.distanceKm - b.distanceKm; // numerical comparison of distance
-    }
-    return 0; // default sorting
-  }, [sort]);
+  //     if (A < B) return -1;
+  //     else if (A > B) return 1;
+  //     else return 0;
+  //   } else if (sort === "distance") {
+  //     return a.distanceKm - b.distanceKm; // numerical comparison of distance
+  //   }
+  //   return 0; // default sorting
+  // }, [sort]);
 
   const applyFilters = useCallback((path) => {
     return filterDistance(path) && filterDifficulty(path);
@@ -73,11 +72,6 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
     handleFilter(applyFilters);
   }, [applyFilters]);
 
-  // Apply sort when sort value changes
-  useEffect(() => {
-    handleSort(sortingFunction);
-  }, [sortingFunction])
-
   return (
     <div>
       <Grid
@@ -85,27 +79,6 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
         spacing={4}
         sx={{ alignItems: "center", justifyContent: "end", marginBottom: 3 }}
       >
-        <Grid>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            {/* Sort by */}
-            <InputLabel id="sort">Sort</InputLabel>
-            <Select
-              labelId="sort"
-              id="demo-sort"
-              value={sort}
-              label="Sort"
-              onChange={(e) => {
-                setSort(e.target.value);
-              }}
-            >
-              <MenuItem value="default">
-                <em>Default</em>
-              </MenuItem>
-              <MenuItem value="AZ">Alphabetical (A-Z)</MenuItem>
-              <MenuItem value="distance">Distance (low to high)</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
 
         <Grid>
           <FormControl sx={{ m: 1, minWidth: 120 }}>

@@ -42,10 +42,7 @@ export default function PathsContainer({ displayPaths, userId }) {
     console.log(error, userPathsisError, allPathsisError);
   }
 
-  // const [filteredList, setFilteredList] = useState([]);
-
   const [filterFunction, setFilterFunction] = useState(null);
-  const [sortedFunction, setSortedFunction] = useState(null);
 
   // calculate max distance when data is successfully attained
   useEffect(() => {
@@ -69,20 +66,11 @@ export default function PathsContainer({ displayPaths, userId }) {
       result = result.filter(filterFunction)
     }
 
-    // Apply sort
-    if (sortedFunction) {
-      result = result.sort(sortedFunction)
-    }
-
     return result;
-  }, [data, filterFunction, sortedFunction])
+  }, [data, filterFunction])
 
   const handleFilter = (applyFilters) => {
     setFilterFunction(() => applyFilters);
-  };
-
-  const handleSort = (sortingFunction) => {
-    setSortedFunction(() => sortingFunction);
   };
 
   if (data && data.length === 0) {
@@ -104,7 +92,6 @@ export default function PathsContainer({ displayPaths, userId }) {
           <AllPathsFilter
             handleFilter={handleFilter}
             max={max}
-            handleSort={handleSort}
           />
         )}
 
