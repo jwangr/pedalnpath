@@ -135,8 +135,9 @@ describe("Explore page route drawer", () => {
     useGetBikePathsQuery.mockReturnValue({
       data: null,
       isLoading: false,
-      isSuccess: true,
-      isError: false,
+      isSuccess: false,
+      isError: true,
+      error: {data: {message: "Could not find paths called Dunedin Botanic Garden Trail."} },
       refetchBikePaths: jest.fn(),
     });
 

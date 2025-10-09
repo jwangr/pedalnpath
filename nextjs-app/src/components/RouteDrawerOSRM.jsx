@@ -43,8 +43,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
 
   // If route is not in database, add it to the global database.
   useEffect(() => {
-    if (!getExistingPathIsSuccess && !getExistingPathIsError) return;
-    if (getExistingPathIsSuccess && !getExistingPathData) {
+    if (getExistingPathIsError && getExistingPathError.data?.message?.includes("Could not find paths")) {
       console.log(
         "Track not found in global database, creating route now." +
           JSON.stringify(BikeRoute)
@@ -63,7 +62,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
     } else {
       setStoredPath(null);
     }
-  }, [getExistingPathIsSuccess]);
+  }, [getExistingPathIsSuccess, getExistingPathIsError]);
 
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
