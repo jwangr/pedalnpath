@@ -11,6 +11,7 @@ import {
   useGetReviewsQuery,
 } from "@/services/reviews";
 import { useGetUserQuery } from "@/services/Auth";
+import { mockBikePathDao } from "../../__tests__/dao/mockBikePathDao";
 
 jest.mock("../../src/services/bikePaths.js", () => ({
   useCreateBikePathMutation: jest.fn(),
@@ -26,12 +27,32 @@ jest.mock("../../src/services/Auth.js", () => ({
 
 // mock external services
 describe("Explore page route drawer", () => {
-  beforeEach(() => {
-    let validator;
-    let mockCreateRoute = jest
-      .fn()
-      .mockReturnValue({ title: "New route created" });
+  let validator;
+  let mockBikeRouteProp;
+  let mockCreateRoute;
 
+  beforeEach(() => {
+    mockBikeRouteProp = {
+      title: "fake bikeRoute",
+      distanceKm: "fake distance",
+      duration: "fake duration",
+      suitableFor: ["A", "B", "C"],
+      highlights: ["D", "E", "F"],
+      description: "fake description",
+    };
+
+    mockCreateRoute = jest.fn().mockReturnValue({
+      unwrap: jest
+        .fn()
+        .mockResolvedValue({
+          title: "New route created",
+          distanceKm: "fake distance",
+          duration: "fake duration",
+          suitableFor: ["A", "B", "C"],
+          highlights: ["D", "E", "F"],
+          description: "fake description",
+        }),
+    });
     // mock query and mutation function return values
     useGetOverallStatsQuery.mockReturnValue({
       data: { count: 2, rating: { _avg: { score: 2 } } },
@@ -81,6 +102,11 @@ describe("Explore page route drawer", () => {
       <RouteDrawerOSRM
         BikeRoute={{
           title: "fake bikeRoute",
+          distanceKm: "fake distance",
+          duration: "fake duration",
+          suitableFor: ["A", "B", "C"],
+          highlights: ["D", "E", "F"],
+          description: "fake description",
         }}
         userId={1}
       />
@@ -88,9 +114,56 @@ describe("Explore page route drawer", () => {
     expect(useGetBikePathsQuery).toHaveBeenCalledWith({
       title: "fake bikeRoute",
     });
+    expect(
+      screen.getByRole("heading", { name: /fake bikeRoute/i })
+    ).toBeInTheDocument();
 
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      /path found in database already/i
+    );
+    expect(
+      screen.getByText(/fake distance\s*km/i, { exact: false })
+    ).toBeInTheDocument();
+    expect(screen.getByText("fake duration")).toBeInTheDocument();
+    expect(screen.getByText("A, B, C")).toBeInTheDocument();
+    expect(screen.getByText("D, E, F")).toBeInTheDocument();
+    expect(screen.getByText("fake description")).toBeInTheDocument();
   });
 
-  //   it("Should create a new global route if route doesn't exist in database");
-  //   it("Should display newly created route onto screen");
+  it("Should create a new global route if route doesn't exist in database. Then display route onto screen.", async () => {
+    // mocks return values
+    useGetBikePathsQuery.mockReturnValue({
+      data: null,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+      refetchBikePaths: jest.fn(),
+    });
+
+    // render component
+    renderWithTheme(
+      <RouteDrawerOSRM BikeRoute={mockBikeRouteProp} userId={1} />
+    );
+
+    // Assertions
+    expect(mockCreateRoute).toHaveBeenCalledWith(mockBikeRouteProp);
+    // { title: "New route created" }
+        expect(useGetBikePathsQuery).toHaveBeenCalledWith({
+      title: "fake bikeRoute",
+    });
+    expect(
+      screen.getByRole("heading", { name: /fake bikeRoute/i })
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      /added new path to Pedal N' Path/i
+    );
+    expect(
+      screen.getByText(/fake distance\s*km/i, { exact: false })
+    ).toBeInTheDocument();
+    expect(screen.getByText("fake duration")).toBeInTheDocument();
+    expect(screen.getByText("A, B, C")).toBeInTheDocument();
+    expect(screen.getByText("D, E, F")).toBeInTheDocument();
+    expect(screen.getByText("fake description")).toBeInTheDocument();
+  });
 });
