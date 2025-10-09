@@ -7,7 +7,6 @@ import ProfilePageReviewsContainer from "@/components/reviews/ProfilePageReviews
 
 export default async function ProfilePage() {
   const user = await getSession();
-  console.log(user.id, user.email);
 
   if (user) {
     return (
