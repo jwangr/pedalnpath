@@ -60,7 +60,10 @@ export default function TemporaryDrawer({ markerObj, userId }) {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>More Info</Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer
+        open={open}
+        onClose={toggleDrawer(false)}
+      >
         {/* {DrawerList} */}
         {/* <RouteDrawer BikeRoute={markerObj} Loading={loading} toggleLoad={handleLoading}/> */}
         <RouteDrawerOSRM BikeRoute={markerObj} userId={userId} />

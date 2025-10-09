@@ -27,7 +27,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
     isLoading: getExistingPathIsLoading,
     refetch: refetchBikePaths,
   } = useGetBikePathsQuery({
-    title: encodeURI(BikeRoute.title),
+    title: BikeRoute.title,
   });
 
   const [
@@ -43,6 +43,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
 
   // If route is not in database, add it to the global database.
   useEffect(() => {
+    if (!getExistingPathIsSuccess && !getExistingPathIsError) return;
     if (!getExistingPathIsSuccess) {
       console.log(
         "Track not found in global database, creating route now." +
@@ -62,7 +63,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
     } else {
       setStoredPath(null);
     }
-  }, [getExistingPathData]);
+  }, [getExistingPathData, getExistingPathIsSuccess]);
 
   return (
     <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
@@ -186,7 +187,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.distanceKm} km
+              {storedPath.distanceKm || BikeRoute.distanceKm} km
             </Box>
           </Box>
           <Box
@@ -230,7 +231,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.duration || "--"}
+              {storedPath.duration || BikeRoute.duration || "--"}
             </Box>
           </Box>
         </Box>
@@ -279,7 +280,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.difficulty}
+              {storedPath.difficulty || BikeRoute.difficulty}
             </Box>
           </Box>
           <Box
@@ -323,7 +324,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 letterSpacing: "1px",
               }}
             >
-              {BikeRoute.suitableFor?.join(", ") || "Anyone"}
+              {storedPath.suitableFor?.join(", ") || BikeRoute.suitableFor?.join(", ") || "Anyone"}
             </Box>
           </Box>
         </Box>
@@ -364,7 +365,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 margin: 0,
               }}
             >
-              {BikeRoute.highlights?.join(", ") || "To be explored!"}
+              {storedPath.highlights?.join(", ") || BikeRoute.highlights?.join(", ") || "To be explored!"}
             </Box>
           </Box>
         </CardContent>
@@ -406,7 +407,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 textAlign: "left",
               }}
             >
-              {BikeRoute.description}
+              {storedPath.description || BikeRoute.description}
             </Box>
             <Box
               sx={{
@@ -418,7 +419,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
                 margin: 0,
               }}
             >
-              {BikeRoute.notes ? BikeRoute.notes : "Enjoy the trip"}
+              {storedPath.notes || BikeRoute.notes || "Enjoy the trip"}
             </Box>
           </Box>
         </CardContent>
