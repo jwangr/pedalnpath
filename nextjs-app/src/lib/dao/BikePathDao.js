@@ -14,6 +14,9 @@ export default class BikePathDao {
             },
           }
         : {}),
+        orderBy: {
+          title: 'asc',
+        }
     });
   }
 
