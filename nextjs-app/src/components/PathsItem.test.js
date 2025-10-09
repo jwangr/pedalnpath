@@ -72,6 +72,7 @@ describe("Paths Item", () => {
           distanceKm: 3,
           description: "Description",
           id: 3,
+          coordinates: [[0,0], [0,0], [0,0]]
         }}
         userId={3}
         displayUserPathsToggle={true}
