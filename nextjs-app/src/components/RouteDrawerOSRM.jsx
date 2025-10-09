@@ -14,6 +14,7 @@ import { Link, Typography } from "@mui/material";
 import OverallCount from "./reviews/OverallCount";
 import AuthorReviewsContainer from "./reviews/AuthorReviewsContainer";
 import Alerts from "./Alerts";
+import { deepPurple } from "@mui/material/colors";
 
 export default function RouteDrawerOSRM({ BikeRoute, userId }) {
   const [storedPath, setStoredPath] = useState(null);
@@ -65,7 +66,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
   }, [getExistingPathIsSuccess, getExistingPathIsError]);
 
   return (
-    <Box sx={{ width: "50vw" }} className="p-3 " role="presentation">
+    <Box sx={{ width: "50vw", backgroundColor: deepPurple[100] }} className="p-4" role="presentation">
       <Alerts
         isLoading={getExistingPathIsLoading || newPathIsLoading}
         isSuccess={getExistingPathIsSuccess || newPathIsSuccess}
