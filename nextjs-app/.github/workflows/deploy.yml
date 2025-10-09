@@ -1,0 +1,54 @@
+name: Deploy Next.js app to EC2 via Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3️⃣ Build Next.js app
+      - name: Build Next.js app
+        run: |
+          npm ci
+          npm run build
+
+      # 4️⃣ Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      # 5️⃣ Build and push image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: jwangr/pedalnpath-nextjs-app:latest
+
+      # 6️⃣ SSH into EC2 and redeploy
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull jwangr/pedalnpath-nextjs-app:latest
+            docker stop nextapp || true
+            docker rm nextapp || true
+            docker run -d -p 7000:3000 --name nextapp jwangr/pedalnpath-nextjs-app:latest
