@@ -7,7 +7,7 @@ import { useGetBikePathsQuery } from "@/services/bikePaths";
 import { Alert } from "@mui/material";
 import SkeletonPathsContainer from "./skeletons/SkeletonPathsContainer";
 import { useGetUserPathsQuery } from "@/services/userPaths";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import UserPathsFilter from "./filters/UserPathsFilter";
 import AllPathsFilter from "./filters/AllPathsFilter";
 
@@ -42,29 +42,40 @@ export default function PathsContainer({ displayPaths, userId }) {
     console.log(error, userPathsisError, allPathsisError);
   }
 
-  const [filteredList, setFilteredList] = useState([]);
+  // const [filteredList, setFilteredList] = useState([]);
 
   const [filterFunction, setFilterFunction] = useState(null);
   const [sortedFunction, setSortedFunction] = useState(null);
 
+  // calculate max distance when data is successfully attained
   useEffect(() => {
-    if (data) {
-      // find longest distance
+    if (data && data.length > 0) {
       const distances = data.map((route) => route.distanceKm);
       const newMax = Math.ceil(Math.max(...distances));
       setMax(newMax);
-
-      if (filterFunction) {
-        setFilteredList([...data].filter(filterFunction));
-      } else {
-        setFilteredList([...data]);
-      }
-
-      if (sortedFunction) {
-        setFilteredList((prev) => [...prev].sort(sortedFunction));
-      }
     }
-  }, [data, filterFunction, sortedFunction]);
+  })
+
+  // Use useMemo to calculate filtered and sorted list
+  // Similar to useState - but the value here is calculated/derived from other variables
+  // Better than useEffect: which requires useState; and runs after rendering (so needs 2 renders)
+  const filteredList = useMemo(() => {
+    if (!data) return [];
+
+    let result = [...data]
+
+    // Apply filter
+    if (filterFunction) {
+      result = result.filter(filterFunction)
+    }
+
+    // Apply sort
+    if (sortedFunction) {
+      result = result.sort(sortedFunction)
+    }
+
+    return result;
+  }, [data, filterFunction, sortedFunction])
 
   const handleFilter = (applyFilters) => {
     setFilterFunction(() => applyFilters);
