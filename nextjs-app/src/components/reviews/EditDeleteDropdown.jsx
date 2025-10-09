@@ -53,7 +53,10 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function ReviewsGalleryItem({handleEditToggle}) {
+export default function ReviewsGalleryItem({
+  handleEditToggle,
+  triggerDelete,
+}) {
   const [anchorElement, setAnchorElement] = useState(null);
   const open = Boolean(anchorElement);
   const handleClick = (event) => {
@@ -99,7 +102,13 @@ export default function ReviewsGalleryItem({handleEditToggle}) {
           Edit
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            triggerDelete();
+          }}
+          disableRipple
+        >
           <Delete />
           Delete
         </MenuItem>

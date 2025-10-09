@@ -146,58 +146,6 @@ export default function ProfilePageReviewsContainer({
           {isSuccess &&
             !!data.response[0] &&
             data?.response?.map((review) => (
-              // <Paper key={review.id} height={"auto"} padding={2} elevation={3}>
-              //   <CardContent sx={{ pr: 2, background: deepPurple[100] }}>
-              //     <Box mb={0}>
-              //       <Box
-              //         component="h3"
-              //         sx={{
-              //           fontSize: 17,
-              //           fontWeight: "bold",
-              //           letterSpacing: "0.5px",
-              //           marginRight: 1.5,
-              //           display: "inline-block",
-              //         }}
-              //       >
-              //         {review.user?.email} left a review.
-              //       </Box>
-              //       {review.score && (
-              //         <Rating
-              //           name={"rating"}
-              //           value={review.score}
-              //           size={"medium"}
-              //           sx={{ verticalAlign: "text-top" }}
-              //           readOnly
-              //         />
-              //       )}
-              //     </Box>
-              //     <Box
-              //       component="p"
-              //       sx={{ fontSize: 10, textEmphasis: "italics" }}
-              //     >
-              //       {new Date(review.createdAt).toLocaleString()}
-              //     </Box>
-              //     <Box component="p" sx={{ fontSize: 14 }}>
-              //       {review.comment}
-              //     </Box>
-              //   </CardContent>
-
-              //   <Box
-              //     sx={{
-              //       marginBottom: 2,
-              //       background: deepPurple[100],
-              //       paddingX: 3,
-              //       paddingBottom: 2,
-              //     }}
-              //   >
-              //     <PathsItem
-              //       path={review.bikepath}
-              //       userId={review.userId}
-              //       displayMap={false}
-              //     />
-              //   </Box>
-              // </Paper>
-
               <ReviewsGalleryItem review={review} key={review.id} />
             ))}
           {isSuccess && !data.response[0] && (

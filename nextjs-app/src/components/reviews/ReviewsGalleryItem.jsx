@@ -14,7 +14,10 @@ import { useEffect, useState } from "react";
 import PathsItem from "../PathsItem";
 import EditDeleteDropdown from "./EditDeleteDropdown";
 import { Close, DirectionsBikeOutlined } from "@mui/icons-material";
-import { useUpdateReviewMutation } from "@/services/reviews";
+import {
+  useDeleteReviewMutation,
+  useUpdateReviewMutation,
+} from "@/services/reviews";
 import Alerts from "../Alerts";
 
 export default function ReviewsGalleryItem({ review }) {
@@ -39,10 +42,22 @@ export default function ReviewsGalleryItem({ review }) {
   const [editPost, { data, error, isLoading, isError, isSuccess }] =
     useUpdateReviewMutation();
 
+  const [
+    deletePost,
+    {
+      data: deleteData,
+      error: deleteError,
+      isLoading: deleteisLoading,
+      isError: deleteisError,
+      isSuccess: deleteisSuccess,
+    },
+  ] = useDeleteReviewMutation();
+
   const handleEditingMode = () => {
     setEditingMode(true);
   };
 
+  // Update new post
   const handleSubmit = async () => {
     try {
       const response = await editPost({
@@ -62,14 +77,30 @@ export default function ReviewsGalleryItem({ review }) {
     }
   };
 
+  // Delete post
+  const triggerDelete = async () => {
+    try {
+      const response = await deletePost({
+        bikepathId: review.bikepathId,
+        userId: review.userId,
+        reviewId: review.id,
+      }).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Paper height={"auto"} padding={2} elevation={3}>
       <Alerts
-        isLoading={isLoading}
-        isSuccess={isSuccess}
-        isError={isError}
-        successMsg="Review updated. "
-        errorMsg="Unable to update review. "
+        isLoading={isLoading || deleteisLoading}
+        isSuccess={isSuccess || deleteisSuccess}
+        isError={isError || deleteisError}
+        successMsg={data ? "Review updated. " : "Successfully deleted post. "}
+        errorMsg={
+          error ? "Unable to update review. " : "Unable to delete post. "
+        }
       />
       <CardContent sx={{ pr: 2, background: "#f8fbff" }}>
         <Stack
@@ -172,7 +203,10 @@ export default function ReviewsGalleryItem({ review }) {
                 </Button>
               </Stack>
             ) : (
-              <EditDeleteDropdown handleEditToggle={handleEditingMode} />
+              <EditDeleteDropdown
+                handleEditToggle={handleEditingMode}
+                triggerDelete={triggerDelete}
+              />
             )}
           </Box>
         </Stack>
