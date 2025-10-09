@@ -1,37 +1,50 @@
-# Step 1: Use official Node.js LTS image
-FROM node:20-alpine AS builder
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Step 2: Set working directory
-WORKDIR /app
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# Step 3: Copy package.json and package-lock.json
-COPY package*.json ./
+# testing
+/coverage
 
-# Step 4: Install dependencies
-RUN npm ci
+# next.js
+/.next/
+/out/
 
-# Step 5: Copy the rest of the app
-COPY . .
+# production
+/build
 
-# Generate Prisma client (for Linux)
-RUN npx prisma generate
+# misc
+.DS_Store
+*.pem
 
-# Step 6: Build the Next.js app
-RUN npm run build
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# --- Production image ---
-FROM node:20-alpine AS runner
+# env files (can opt-in for committing if needed)
+.env*
 
-WORKDIR /app
+# vercel
+.vercel
 
-# Copy only production files
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
-# Expose the default Next.js port
-EXPOSE 3000
+src/generated/prisma/
+prisma/dev.db
 
-# Start the app
-CMD ["npm", "start"]
+# dummy tests
+testingredux/
+CounterSlice.js
+
+JSONExamples/
