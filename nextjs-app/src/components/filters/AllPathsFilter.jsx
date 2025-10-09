@@ -8,7 +8,7 @@ import {
   Slider,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function AllPathsFilter({ handleFilter, max, handleSort }) {
   // handleFilter is a callback function that has props: applyFilters(path)
@@ -21,8 +21,9 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
     setDistance(newValue);
   };
 
-  // Filter conditions
-  const filterDifficulty = (path) => {
+  // Filter conditions function
+  // want it to be cached and only changed when difficulty actually changes -> use useCallback
+  const filterDifficulty = useCallback((path) => {
     if (path.difficulty) {
       const matchThis = path.difficulty?.toLowerCase();
       switch (difficulty) {
@@ -38,17 +39,17 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
           return true;
       }
     }
-    return true;
-  };
+    return true; // default if path doesn't have a specified difficulty
+  }, [difficulty]);
 
-  const filterDistance = (path) => {
+  const filterDistance = useCallback((path) => {
     if (path.distanceKm) {
       return path.distanceKm >= distance[0] && path.distanceKm <= distance[1];
     }
     return false;
-  };
+  }, [distance]);
 
-  const sortingFunction = (a, b) => {
+  const sortingFunction = useCallback((a, b) => {
     if (sort === "AZ") {
       const A = a.title.toUpperCase(); // ignore upper and lowercase
       const B = b.title.toUpperCase(); // ignore upper and lowercase
@@ -60,21 +61,22 @@ export default function AllPathsFilter({ handleFilter, max, handleSort }) {
       return a.distanceKm - b.distanceKm; // numerical comparison of distance
     }
     return 0; // default sorting
-  };
+  }, [sort]);
 
-  const applyFilters = (path) => {
+  const applyFilters = useCallback((path) => {
     return filterDistance(path) && filterDifficulty(path);
-  };
+  }, [filterDistance, filterDifficulty]);
 
   // Apply filters is called when filter values change
+  // This is a SIDE EFFECT (handleFilter function is an external, e.g. parent-side, component that is called)
   useEffect(() => {
     handleFilter(applyFilters);
-  }, [distance, difficulty]);
+  }, [applyFilters]);
 
   // Apply sort when sort value changes
   useEffect(() => {
     handleSort(sortingFunction);
-  }, [sort])
+  }, [sortingFunction])
 
   return (
     <div>
