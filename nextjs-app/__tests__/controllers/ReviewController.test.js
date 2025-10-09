@@ -73,9 +73,19 @@ describe("Review controller", () => {
     const mockReq = {
       url: "http://localhost/api/reviews?limit=5&userId=1",
     };
-    const result = await controller.allPathsAllReviews(mockReq);
-    expect(mockReviewDao.allPathsAllReviews).toHaveBeenCalledWith(5, 1);
-    expect(result).toEqual(mockedAllPathsAllReviewsResponse);
+    const validMockReq = [
+      {limit: 5, userId: 1},
+      {limit: undefined, userId: undefined},
+    ];
+
+    validMockReq.forEach(async ({limit, userId}) => {
+      const mockReq = {
+        url: `http://localhost/api/reviews?limit=${limit}&userId=${userId}`,
+      };
+      const result = await controller.allPathsAllReviews(mockReq);
+      expect(mockReviewDao.allPathsAllReviews).toHaveBeenCalledWith(limit, userId);
+      expect(result).toEqual(mockedAllPathsAllReviewsResponse);
+    });
   });
   it("allPathsAllReviews: throws an error with invalid limit or invalid userId", async () => {
     const invalidCases = [

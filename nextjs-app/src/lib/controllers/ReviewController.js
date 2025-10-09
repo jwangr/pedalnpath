@@ -17,22 +17,14 @@ export default class ReviewController {
     const limit_raw = searchParams?.get("limit");
     const userId_raw = searchParams?.get("userId");
 
-    const limit_parsed = limit_raw ? parseInt(limit_raw) : null;
-    const userId_parsed = userId_raw ? parseInt(userId_raw) : null;
+    const limit_parsed = limit_raw === 'undefined' ? undefined : parseInt(limit_raw);
+    const userId_parsed = userId_raw === 'undefined' ? undefined : parseInt(userId_raw);
 
     // Validate parsed values
-    if (limit_parsed !== null) {
-      if (!Number.isInteger(limit_parsed) || limit_parsed < 0) {
-        throw new ValidationError("Input valid limit and valid user ID");
-      }
-    }
+    if (limit_parsed !== undefined && (!Number.isInteger(limit_parsed) || limit_parsed <= 0)) throw new ValidationError("Input valid limit and valid user ID")
+    if (userId_parsed !== undefined && (!Number.isInteger(userId_parsed) || userId_parsed <= 0)) throw new ValidationError("Input valid limit and valid user ID")
 
-    if (userId_parsed !== null) {
-      if (!Number.isInteger(userId_parsed) || userId_parsed < 0)
-        throw new ValidationError("Input valid limit and valid user ID");
-    }
-
-    return await this.dao.allPathsAllReviews(limit_parsed, userId_parsed);
+    return await this.dao.allPathsAllReviews(limit_parsed, userId_parsed); // can accept 'undefined' values
   }
 
   async getStats(bikepathId) {
