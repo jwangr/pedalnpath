@@ -74,7 +74,7 @@ export default function PathsContainer({ displayPaths, userId }) {
   };
 
   if (data && data.length === 0) {
-    return <div>No paths found. Head to the explore page for inspiration!</div>;
+    return <div className="m-3 italic">No paths found. Head to the explore page for inspiration!</div>;
   }
 
   return (

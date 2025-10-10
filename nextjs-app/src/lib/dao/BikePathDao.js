@@ -27,12 +27,6 @@ export default class BikePathDao {
   }
 
   async createPath(bikeroute) {
-    // create suitableForCreate array
-    console.log("Dao received" + JSON.stringify(bikeroute));
-    const suitableForCreateArray = bikeroute.suitableFor?.map((element) => ({
-      suitableFor: element,
-    }));
-
     const newPath = await db.bikepath.create({
       data: {
         title: bikeroute.title,

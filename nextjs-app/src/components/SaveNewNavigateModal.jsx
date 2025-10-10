@@ -95,6 +95,7 @@ export default function SaveNewNavigateModal({ path }) {
   const handleSubmit = () => {
     savePath({
       ...path,
+      title,
       highlights: chipsHighlights,
       suitableFor: chipsSuitable,
       trackType,
