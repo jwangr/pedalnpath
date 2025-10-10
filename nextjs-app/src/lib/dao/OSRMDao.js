@@ -4,7 +4,7 @@ export default class OSRMDao {
   async getDirections(coordinates) {
     // coordinates: [waypoint1[], waypoint2[], waypoint3[], waypoint4[] , etc. ]
     const urlQuery = coordinates.join(";");
-    const url = `http://localhost:5000/route/v1/bicycle/${urlQuery}?overview=full&steps=true`;
+    const url = `http://${process.env.OSRM_URL}/route/v1/bicycle/${urlQuery}?overview=full&steps=true`;
 
     const response = await axios.get(url);
     const data = response.data;
