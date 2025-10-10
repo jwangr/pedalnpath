@@ -20,6 +20,7 @@ First, create an account. Then, you can access the different parts of the websit
 - **Write, edit and delete reviews** for any bike path.
 
 ## Architecture Overview
+![Architecture Design](./public//architecture.png)
 
 ### Next.js and Vercel
 
@@ -69,6 +70,16 @@ When a user asks for bike paths around a region, Pedal N' Path processes and sen
     suitableFor: ["", "", ""],
 }]
 ```
+
+# Setup Locally
+In order to set this project up locally, you need to pull the Docker Image from dockerhub:
+[jwangr/pedalnpath-nextjs-app:latest](https://hub.docker.com/layers/jwangr/pedalnpath-nextjs-app/latest/images/sha256:44f7b4c4dbee90f8fec03c114ffcc6d45cd41a17b213e06449dbc42f05f0e8ba?uuid=192CA71C-BB86-4ED0-BA69-BBFEE343635E)
+
+
+From there, you need acces to .env keys, including
+- Gemini_API
+- Database_URL
+- OSRM_URL
 
 # Future Scope
 - Shift to comprehensive external ORM database for geospatial data: e.g. PostGIS (extension of PostgreSQL)
