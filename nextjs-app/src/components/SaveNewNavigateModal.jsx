@@ -4,11 +4,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
-import { Alert, Chip, Link, Stack, TextField } from "@mui/material";
+import { useState } from "react";
+import { Chip, Link, Stack, TextField } from "@mui/material";
 import { DirectionsBikeOutlined, RestartAlt, Save } from "@mui/icons-material";
 import { useCreateBikePathMutation } from "@/services/bikePaths";
-import Loading from "./loadingBikes/Loading";
 import Alerts from "./Alerts";
 
 const style = {
