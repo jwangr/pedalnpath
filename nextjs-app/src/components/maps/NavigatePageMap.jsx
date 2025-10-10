@@ -47,9 +47,6 @@ const MapComponent = () => {
   const [markers, setMarkers] = useState([]);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  // const [loading, setLoading] = useState(false);
-  // const [distance, setDistance] = useState(null);
-  // const [duration, setDuration] = useState("");
   const [path, setPath] = useState(null);
 
   const clearRoute = () => {
@@ -71,10 +68,7 @@ const MapComponent = () => {
       .unwrap()
       .then((data) => {
         if (data?.code === "Ok") {
-          console.log(JSON.stringify(data));
           setCoordinates(data.geometry);
-          // setDistance(data.distanceKm);
-          // setDuration(data.duration);
 
           // set the markers
           const startEnd = [
@@ -110,11 +104,6 @@ const MapComponent = () => {
         });
       }
     };
-    // useMapEvents({
-    //   zoomend: () => {
-    //     setLoading(false);
-    //   },
-    // });
 
     //useEffect to trigger the map fly when markerData changes.
     useEffect(() => {
