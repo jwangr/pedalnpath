@@ -94,7 +94,7 @@ const MapComponent = () => {
           });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.stack));
   }
 
   const ZoomHandler = () => {
