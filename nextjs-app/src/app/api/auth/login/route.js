@@ -34,7 +34,7 @@ export async function POST(req) {
 
   cookieStore.set("sessionId", sessionId, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: false, // once HTTPS access can be done onto EC2 instance // secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
     expires: expiresAt,
