@@ -1,5 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { renderWithTheme } from "@/test/test-utils.js";
+
+// mock PathMapTiles before importing pathsitem
+jest.mock('./maps/PathMapTiles.jsx', () => ({
+  __esModule: true,
+  default: () => <div data-testid="mockedMapTiles">Mocked Map</div>
+}) )
+
 import PathsItem from "./PathsItem";
 import {
   useGetUserPathsQuery,

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import ToggleCompleted from "./ToggleCompleted";
 import UserPathsToggle from "./UserPathsToggle";
-import MapBoxContainer from "./maps/PathsItemMap";
 import OverallCount from "./reviews/OverallCount";
 import dynamic from "next/dynamic";
 
@@ -44,7 +43,7 @@ export default function PathsItem({
         {/* <MapView /> */}
         {!!displayMap && (
           <DynamicMapComponent
-            coordinates={path.coordinates || path.bikepath.coordinates || null}
+            coordinates={path.coordinates ?? path.bikepath?.coordinates ?? null}
           />
         )}
 
