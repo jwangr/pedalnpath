@@ -53,7 +53,6 @@ jobs:
             docker pull jwangr/pedalnpath-nextjs-app:latest
             docker stop nextapp || true
             docker rm nextapp || true
-            docker run -d -p 80:3000 --name nextapp --env-file /home/ec2-user/.env jwangr/pedalnpath-nextjs-app:latest sh -c "
-              npx prisma migrate deploy &&
+            docker run -d -p 80:3000 --name nextapp -v /home/ec2-user/sqlite:/app/prisma --env-file /home/ec2-user/.env jwangr/pedalnpath-nextjs-app:latest sh -c "
               npm run start
             "
