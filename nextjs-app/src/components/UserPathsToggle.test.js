@@ -59,7 +59,6 @@ describe("Toggle complete component", () => {
         id: 123,
         title: "Title",
       },
-      pathId: 123,
     });
   });
 });
