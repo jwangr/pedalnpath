@@ -6,6 +6,7 @@ import {
   MenuItem,
   Select,
   Slider,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export default function AllPathsFilter({ handleFilter, max }) {
   // handleFilter is a callback function that has props: applyFilters(path)
   const [difficulty, setDifficulty] = useState("all");
   const [distance, setDistance] = useState([0, max]);
+  const [search, setSearch] = useState("");
 
   // Adjust slider/distance
   const handleSliderChange = (event, newValue) => {
@@ -22,31 +24,47 @@ export default function AllPathsFilter({ handleFilter, max }) {
 
   // Filter conditions function
   // want it to be cached and only changed when difficulty actually changes -> use useCallback
-  const filterDifficulty = useCallback((path) => {
-    if (path.difficulty) {
-      const matchThis = path.difficulty?.toLowerCase();
-      switch (difficulty) {
-        case "beginner":
-          return matchThis.includes("easy") || matchThis.includes("beginner");
-        case "intermediate":
-          return (
-            matchThis.includes("moderate") || matchThis.includes("intermediate")
-          );
-        case "advanced":
-          return matchThis.includes("advanced") || matchThis.includes("expert");
-        default:
-          return true;
+  const filterDifficulty = useCallback(
+    (path) => {
+      if (path.difficulty) {
+        const matchThis = path.difficulty?.toLowerCase();
+        switch (difficulty) {
+          case "beginner":
+            return matchThis.includes("easy") || matchThis.includes("beginner");
+          case "intermediate":
+            return (
+              matchThis.includes("moderate") ||
+              matchThis.includes("intermediate")
+            );
+          case "advanced":
+            return (
+              matchThis.includes("advanced") || matchThis.includes("expert")
+            );
+          default:
+            return true;
+        }
       }
-    }
-    return true; // default if path doesn't have a specified difficulty
-  }, [difficulty]);
+      return true; // default if path doesn't have a specified difficulty
+    },
+    [difficulty]
+  );
 
-  const filterDistance = useCallback((path) => {
-    if (path.distanceKm) {
-      return path.distanceKm >= distance[0] && path.distanceKm <= distance[1];
-    }
-    return false;
-  }, [distance]);
+  const filterDistance = useCallback(
+    (path) => {
+      if (path.distanceKm) {
+        return path.distanceKm >= distance[0] && path.distanceKm <= distance[1];
+      }
+      return false;
+    },
+    [distance]
+  );
+
+  const filterTitle = useCallback(
+    (path) => {
+        return path.title.toLowerCase().includes(search.toLowerCase())
+    },
+    [search]
+  );
 
   // const sortingFunction = useCallback((a, b) => {
   //   if (sort === "AZ") {
@@ -62,9 +80,12 @@ export default function AllPathsFilter({ handleFilter, max }) {
   //   return 0; // default sorting
   // }, [sort]);
 
-  const applyFilters = useCallback((path) => {
-    return filterDistance(path) && filterDifficulty(path);
-  }, [filterDistance, filterDifficulty]);
+  const applyFilters = useCallback(
+    (path) => {
+      return filterDistance(path) && filterDifficulty(path) && filterTitle(path);
+    },
+    [filterDistance, filterDifficulty, filterTitle]
+  );
 
   // Apply filters is called when filter values change
   // This is a SIDE EFFECT (handleFilter function is an external, e.g. parent-side, component that is called)
@@ -79,6 +100,21 @@ export default function AllPathsFilter({ handleFilter, max }) {
         spacing={4}
         sx={{ alignItems: "center", justifyContent: "end", marginBottom: 3 }}
       >
+        <Grid>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            {/* Filter by difficulty */}
+            <TextField
+              labelId="search"
+              id="demo-search"
+              value={search}
+              color="secondary"
+              label="Search by Title"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+          </FormControl>
+        </Grid>
 
         <Grid>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -103,7 +139,7 @@ export default function AllPathsFilter({ handleFilter, max }) {
           </FormControl>
         </Grid>
 
-        <Box sx={{ width: 300 }}>
+        <Box sx={{ width: 500 }}>
           <Typography id="input-slider" gutterBottom>
             Distance (km)
           </Typography>{" "}
