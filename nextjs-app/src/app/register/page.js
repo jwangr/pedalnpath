@@ -1,7 +1,7 @@
 "use client";
 import Alerts from "@/components/Alerts";
 import { useRegisterUserMutation } from "@/services/Auth";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -83,6 +83,21 @@ export default function Register() {
           </Button>
         </Stack>
       </form>
+      <Box
+        sx={{
+          width: "100%",
+          margin: "auto",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="body1" component={"span"}>
+          Already have an account?
+        </Typography>
+        <span> </span>
+        <Link href={`/login`} underline="hover">
+          Log In Here
+        </Link>
+      </Box>
     </Stack>
   );
 }
