@@ -72,7 +72,7 @@ export default function RouteDrawerOSRM({ BikeRoute, userId }) {
         isSuccess={getExistingPathIsSuccess || newPathIsSuccess}
         isError={newPathIsError}
         successMsg={
-          (getExistingPathIsSuccess && getExistingPathData)
+          (getExistingPathIsSuccess && !newPath)
             ? "Path found in database already. "
             : newPathIsSuccess
             ? "Added new path to Pedal N' Path. "
