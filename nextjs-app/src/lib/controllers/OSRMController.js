@@ -25,9 +25,11 @@ export default class OSRMController {
       // convert to geocode (lat, lon)
       const startGeocode = await this.getGeocode(startChecked);
       const endGeocode = await this.getGeocode(endChecked);
+      console.log(startGeocode, endGeocode)
 
       // convert LatLon geocodes to LonLat;
       coordinates = [startGeocode, endGeocode].map(([lat, lon]) => [lon, lat]);
+      console.log(coordinates)
     } else if (waypoints) {
       coordinates = waypoints.map(([lat, lon]) => [lon, lat]);
       console.log(`Waypoints noted by controller are: `, coordinates);
