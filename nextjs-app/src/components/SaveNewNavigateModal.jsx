@@ -125,7 +125,7 @@ export default function SaveNewNavigateModal({ path }) {
           <Link
             color="inherit"
             underline="hover"
-            href={`/path/${encodeURI(path.title)}`}
+            href={`/path/${encodeURI(title)}`}
           >
             Successfully created new bikepath. View now.
           </Link>
