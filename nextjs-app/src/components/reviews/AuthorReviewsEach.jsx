@@ -1,19 +1,15 @@
 import { useDeleteReviewMutation } from "@/services/reviews";
-import { Create, Delete } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
-  Alert,
   Avatar,
   Box,
   Button,
   Divider,
   Rating,
-  Slide,
-  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import { useEffect, useState } from "react";
 import EditModal from "./EditReviewModal";
 
 const example = {
