@@ -7,16 +7,19 @@ WORKDIR /app
 # Step 3: Copy package.json and package-lock.json
 COPY package*.json ./
 
+# 👇 Also copy Prisma schema early (needed for `prisma generate`)
+COPY prisma ./prisma/
+
 # Step 4: Install dependencies
 RUN npm ci
 
 # Step 5: Copy the rest of the app
 COPY . .
 
-# Generate Prisma client (for Linux)
+# Step 6: Generate Prisma client for Linux
 RUN npx prisma generate
 
-# Step 6: Build the Next.js app
+# Step 7: Build the Next.js app
 RUN npm run build
 
 # --- Production image ---
@@ -24,18 +27,18 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Copy only production files
+# Copy only necessary build outputs and runtime files
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
-
-# Copy Prisma folders (important!)
 COPY --from=builder /app/prisma ./prisma
+
+# Optional: copy src if needed for runtime (only if you import local files at runtime)
 COPY --from=builder /app/src ./src
 
-# Expose the default Next.js port
+# Expose port
 EXPOSE 3000
 
-# Start the app
+# Start the Next.js app
 CMD ["npm", "start"]
