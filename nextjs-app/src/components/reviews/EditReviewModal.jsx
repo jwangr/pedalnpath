@@ -7,15 +7,12 @@ import StarIcon from "@mui/icons-material/Star";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
-import CreateIcon from "@mui/icons-material/Create";
 import { TextField } from "@mui/material";
 import {
   Create,
   DirectionsBikeOutlined,
-  WindowSharp,
 } from "@mui/icons-material";
 import {
-  useCreateReviewMutation,
   useUpdateReviewMutation,
 } from "@/services/reviews";
 
@@ -112,7 +109,7 @@ export default function EditModal({ review }) {
       >
         <Box sx={style}>
           <Typography variant="h5" component="div">
-            {review.bikepath.title || "Unknown title"}
+            {review.bikepath?.title ?? "Unknown title"}
           </Typography>
 
           {/* Star rating */}
