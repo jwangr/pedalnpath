@@ -20,7 +20,7 @@ First, create an account. Then, you can access the different parts of the websit
 - **Write, edit and delete reviews** for any bike path.
 
 ## Architecture Overview
-![Architecture Design](./public//architecture.png)
+![Architecture Design](/nextjs-app/public/architecture.png)
 
 ### Next.js and Vercel
 
