@@ -13,11 +13,13 @@ jest.mock("@/services/Auth.js", () => ({
 }));
 
 // mock components are made to return a mock function
-jest.mock("./AuthorReviewsEach", () => () => {
-  return <div>Each author's reviews</div>;
+jest.mock("./AuthorReviewsEach", () => {
+  const MockAuthorsReview = () => <div>Each authors reviews</div>;
+  return MockAuthorsReview;
 });
 jest.mock("../loadingBikes/Shake", () => () => {
-  return <div>Shaking bike</div>;
+  const MockShaking = () => <div>Shaking bike</div>;
+  return MockShaking;
 });
 
 import AuthorReviewsContainer from "./AuthorReviewsContainer";
@@ -43,7 +45,7 @@ beforeEach(() => {
 
 it("Displays the authors review container when 1+ reviews are successfully found", () => {
   renderWithTheme(<AuthorReviewsContainer bikePathId={bikePathId} />);
-  expect(screen.getAllByText("Each author's reviews")).toHaveLength(2);
+  expect(screen.getAllByText("Each authors reviews")).toHaveLength(2);
 });
 
 it("Displays a message when the author has made 0 reviews", () => {

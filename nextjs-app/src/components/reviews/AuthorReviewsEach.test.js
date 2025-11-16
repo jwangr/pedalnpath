@@ -5,8 +5,9 @@ jest.mock("@/services/reviews", () => ({
 }));
 
 // mock component
-jest.mock("./EditReviewModal", () => () => {
-  return <div>Edit modal</div>;
+jest.mock("./EditReviewModal", () => {
+  const MockEdit = () => <div>Edit modal</div>;
+  return MockEdit;
 });
 
 import AuthorReviewsEach from "./AuthorReviewsEach";

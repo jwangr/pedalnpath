@@ -7,7 +7,6 @@ jest.mock("@/services/reviews", () => ({
 }));
 
 import EditModal from "./EditReviewModal";
-import { act } from "react";
 
 let mockEditPost = jest.fn();
 let review = {
