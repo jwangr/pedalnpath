@@ -34,7 +34,7 @@ export default function LoginPage() {
       router.replace("/home");
       router.refresh();
     }
-  }, [isSuccess, loginData]);
+  }, [isSuccess, loginData, router]);
 
   return (
     <>

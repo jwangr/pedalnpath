@@ -37,7 +37,7 @@ export default function Register() {
       router.replace("/home");
       router.refresh();
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, router]);
 
   return (
     <Stack spacing={2} marginX={10} marginTop={10}>
